@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# IPA exam artifacts — original and derived — are NOT redistributed via this repo.
+# See README for how to regenerate locally.
+download/
+ocr_out/
+dataset/
