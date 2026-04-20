@@ -162,6 +162,18 @@ CATEGORY_MAP = {
     "テクノロジ": "technology",
 }
 
+# 中問 (integrated problem) scenario intro sentence.
+# Pattern: "〜次の記述を読んで，(問X～問Y|四つの問い)に答えよ"
+# Far more reliable than matching the 中問 header itself because OCR frequently
+# mis-reads 中→申 and even the group letter (中問B→申問日, 中問B→中間号, …).
+# The intro sentence is unique to 中問 setups and is consistent across exams.
+SCENARIO_INTRO_RE = re.compile(
+    r"次の記述を読ん[でだ][，、,]?\s*(?:問\s*(\d+)\s*[～〜]\s*問?\s*(\d+)|四つの問い)\s*に答えよ"
+)
+# Used to expand each intro back to the likely 中問 header line for nicer
+# scenario start (includes "中問X" heading if the OCR caught it).
+NAKAMON_MARKER_RE = re.compile(r"(?m)^[#\s]*[中申][間問]\s*\S{0,3}")
+
 
 def detect_category_ranges(md: str) -> list[tuple[int, int, str]]:
     ranges: list[tuple[int, int, str]] = []
@@ -176,6 +188,44 @@ def detect_category_ranges(md: str) -> list[tuple[int, int, str]]:
     return ranges
 
 
+def detect_integrated_groups(
+    md: str, question_positions: list[tuple[int, int]]
+) -> list[tuple[str, str, list[int]]]:
+    """Find 中問 scenarios via the intro sentence, in document order.
+
+    Returns list of (group_letter, scenario_markdown, [sub_question_numbers])
+    assigned A/B/C/D by position (each 中問 exam has 3 or 4 groups in order).
+    """
+    groups: list[tuple[str, str, list[int]]] = []
+    letters = ["A", "B", "C", "D"]
+    intros = list(SCENARIO_INTRO_RE.finditer(md))
+    for i, m in enumerate(intros[:4]):
+        letter = letters[i]
+        intro_pos = m.start()
+        # Start of scenario: prefer the last 中問 marker within the 200 chars
+        # before the intro (so "中問B\n\n〜に関する次の記述を…" keeps the title).
+        back_start = max(0, intro_pos - 200)
+        markers = list(NAKAMON_MARKER_RE.finditer(md, back_start, intro_pos))
+        header_pos = markers[-1].start() if markers else intro_pos
+        # Prefer explicit range if captured by the regex; otherwise take the
+        # next 4 real questions after the intro.
+        if m.group(1) and m.group(2):
+            a, b = int(m.group(1)), int(m.group(2))
+            sub_qs = list(range(a, b + 1))
+        else:
+            sub_qs = [n for n, pos in question_positions if pos > intro_pos][:4]
+        if len(sub_qs) != 4:
+            continue
+        first_q_positions = [
+            pos for n, pos in question_positions if n == sub_qs[0]
+        ]
+        if not first_q_positions:
+            continue
+        scenario = md[header_pos:first_q_positions[0]].strip()
+        groups.append((letter, scenario, sub_qs))
+    return groups
+
+
 def category_for(num: int, ranges: list[tuple[int, int, str]]) -> str | None:
     for a, b, name in ranges:
         if a <= num <= b:
@@ -188,6 +238,28 @@ def category_for(num: int, ranges: list[tuple[int, int, str]]) -> str | None:
         if num > max_end:
             return "integrated"
     return None
+
+
+def _real_question_positions(md: str) -> list[tuple[int, int]]:
+    """Same dedupe rules as split_questions but return (number, start_pos)."""
+    primary = [
+        m for m in Q_HEADER_PRIMARY_RE.finditer(md)
+        if not _is_category_sentence(md, m.start())
+    ]
+    primary_nums = {int(m.group(1)) for m in primary}
+    primary_positions = {m.start() for m in primary}
+    all_matches = list(primary)
+    for m in Q_HEADER_RE.finditer(md):
+        num = int(m.group(1))
+        if m.start() in primary_positions:
+            continue
+        if num in primary_nums:
+            continue
+        if _is_category_sentence(md, m.start()):
+            continue
+        all_matches.append(m)
+    all_matches.sort(key=lambda m: m.start())
+    return [(int(m.group(1)), m.start()) for m in all_matches]
 
 
 def _is_category_sentence(md: str, pos: int) -> bool:
@@ -411,6 +483,18 @@ def parse_year(code: str) -> tuple[list[dict], list[str]]:
     categories = detect_category_ranges(qs_md)
     blocks = split_questions(qs_md)
 
+    # Find 中問 groups + their scenarios so we can attach context to each sub
+    # question. Use the same two-pass filter as split_questions so that
+    # legitimate figure captions (e.g. '図 1 数字の…') don't get treated as
+    # question number 1.
+    question_positions = _real_question_positions(qs_md)
+    integrated_groups = detect_integrated_groups(qs_md, question_positions)
+    num_to_group: dict[int, tuple[str, str]] = {}
+    for letter, scenario, sub_qs in integrated_groups:
+        group_id = f"{code}-{letter}"
+        for n in sub_qs:
+            num_to_group[n] = (group_id, scenario)
+
     items: list[dict] = []
     warnings: list[str] = []
     seen: set[int] = set()
@@ -450,6 +534,7 @@ def parse_year(code: str) -> tuple[list[dict], list[str]]:
             or (choices and len(choices) != 4)
             or ans is None
         )
+        group_info = num_to_group.get(num)
         items.append(
             {
                 "id": f"{code}-{num}",
@@ -465,6 +550,8 @@ def parse_year(code: str) -> tuple[list[dict], list[str]]:
                 "answer": ans,
                 "figures": figures,
                 "choice_format": fmt,
+                "integrated_group_id": group_info[0] if group_info else None,
+                "integrated_context": group_info[1] if group_info else None,
                 "source_pdf": f"{ec.qs_stem}.pdf",
                 "needs_manual_review": needs_review,
             }

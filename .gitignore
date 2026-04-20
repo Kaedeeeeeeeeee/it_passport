@@ -9,3 +9,7 @@ __pycache__/
 download/
 ocr_out/
 dataset/
+
+# Supabase CLI scratch state (project refs, versions, pooler URL)
+supabase/.temp/
+supabase/.branches/
