@@ -26,7 +26,7 @@ export default async function LoginPage({ searchParams }: Props) {
           {decodeURIComponent(error)}
         </p>
       ) : null}
-      <LoginForm nextPath={next ?? "/"} />
+      <LoginForm nextPath={next ?? "/home"} />
       <p className="mt-6 text-[11px] text-ink-3 leading-relaxed">
         ログインすると、進捗が端末間で同期され、Pro 機能（AI 解説・模擬試験・復習・統計）が利用できるようになります。
       </p>

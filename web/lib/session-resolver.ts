@@ -1,6 +1,13 @@
-import { allQuestions, questionById, questionsForExam, sample } from "./questions";
+import { CATEGORY_LABELS, PRACTICE_CATEGORIES } from "./categories";
+import {
+  allQuestions,
+  questionById,
+  questionsByCategory,
+  questionsForExam,
+  sample,
+} from "./questions";
 import { supabaseServer } from "./supabase/server";
-import type { Question } from "./types";
+import type { Category, Question } from "./types";
 
 /** Resolve a session slug from /practice/<sessionId> + search params into the
  *  concrete list of questions to practice, in the order to show.
@@ -8,6 +15,7 @@ import type { Question } from "./types";
  *  Slug forms:
  *    random           → ?n=<count> random questions
  *    exam-<code>      → every question in the exam
+ *    category-<name>  → ?n=<count> random questions from the category
  *    review-<uuid>    → server-side review session; read questionIds from DB
  */
 export async function resolveSession(
@@ -30,6 +38,19 @@ export async function resolveSession(
     const qs = questionsForExam(code).sort((a, b) => a.number - b.number);
     if (qs.length === 0) return null;
     return { label: `${code} · 全100問`, questions: qs };
+  }
+  if (sessionId.startsWith("category-")) {
+    const cat = sessionId.slice(9) as Category;
+    if (!PRACTICE_CATEGORIES.includes(cat)) return null;
+    const raw = search.n;
+    const requested = Number(Array.isArray(raw) ? raw[0] : raw) || 20;
+    const pool = questionsByCategory(cat);
+    if (pool.length === 0) return null;
+    const n = Math.max(1, Math.min(100, Math.min(requested, pool.length)));
+    return {
+      label: `${CATEGORY_LABELS[cat]} · ${n} 問`,
+      questions: sample(pool, n),
+    };
   }
   if (sessionId.startsWith("review-")) {
     const uuid = sessionId.slice(7);

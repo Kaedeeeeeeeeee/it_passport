@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import { AiExplanation } from "@/components/explain/AiExplanation";
 import { FigureImage } from "@/components/FigureImage";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { newSessionId, recordAttempt, saveSession } from "@/lib/progress";
@@ -19,16 +20,15 @@ type Props = {
 
 type Answer = { letter: ChoiceLetter; correct: boolean };
 
-const ADVANCE_DELAY_MS = 260;
-
 export function PracticeClient({ slug, label, questions }: Props) {
   const router = useRouter();
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<(Answer | null)[]>(() =>
     new Array(questions.length).fill(null),
   );
-  const [picked, setPicked] = useState<ChoiceLetter | null>(null);
-  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sessionMetaRef = useRef<{ localId: string; startedAt: number } | null>(
+    null,
+  );
 
   const q = questions[idx];
   const total = questions.length;
@@ -36,36 +36,16 @@ export function PracticeClient({ slug, label, questions }: Props) {
     () => answers.filter((a) => a !== null).length,
     [answers],
   );
-
-  const sessionMetaRef = useRef<{ localId: string; startedAt: number } | null>(
-    null,
+  const current = answers[idx];
+  const correctLetters = useMemo(
+    () => new Set(q.answer.split("/") as ChoiceLetter[]),
+    [q.answer],
   );
+  const isLast = idx + 1 === total;
 
-  useEffect(() => {
-    return () => {
-      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
-    };
-  }, []);
-
-  function clearAdvanceTimer() {
-    if (advanceTimerRef.current) {
-      clearTimeout(advanceTimerRef.current);
-      advanceTimerRef.current = null;
-    }
-  }
-
-  function pick(letter: ChoiceLetter) {
-    setPicked(letter);
-    clearAdvanceTimer();
-    advanceTimerRef.current = setTimeout(() => {
-      advanceTimerRef.current = null;
-      commitAndAdvance(letter);
-    }, ADVANCE_DELAY_MS);
-  }
-
-  function commitAndAdvance(letter: ChoiceLetter) {
-    const acceptedAnswers = q.answer.split("/");
-    const correct = acceptedAnswers.includes(letter);
+  function commitAnswer(letter: ChoiceLetter) {
+    if (current !== null) return;
+    const correct = correctLetters.has(letter);
 
     if (!sessionMetaRef.current) {
       sessionMetaRef.current = {
@@ -84,35 +64,44 @@ export function PracticeClient({ slug, label, questions }: Props) {
       correct,
       timestamp: Date.now(),
     });
+  }
 
-    if (idx + 1 < total) {
-      setIdx(idx + 1);
-      setPicked(nextAnswers[idx + 1]?.letter ?? null);
-    } else {
-      const sessionId = newSessionId();
-      const source =
-        slug === "random"
-          ? { kind: "random" as const }
-          : slug.startsWith("exam-")
-            ? { kind: "exam" as const, examCode: slug.slice(5) }
+  function goNext() {
+    if (idx + 1 < total) setIdx(idx + 1);
+  }
+
+  function goPrev() {
+    if (idx > 0) setIdx(idx - 1);
+  }
+
+  function finishAndSubmit() {
+    const sessionId = newSessionId();
+    const source =
+      slug === "random"
+        ? { kind: "random" as const }
+        : slug.startsWith("exam-")
+          ? { kind: "exam" as const, examCode: slug.slice(5) }
+          : slug.startsWith("category-")
+            ? { kind: "category" as const, category: slug.slice(9) }
             : { kind: "random" as const };
-      saveSession({
-        id: sessionId,
-        createdAt: Date.now(),
-        questionIds: questions.map((x) => x.id),
-        source,
-      });
-      const payload = JSON.stringify(
-        nextAnswers.map((a, i) => ({
-          questionId: questions[i].id,
-          letter: a?.letter ?? null,
-          correct: a?.correct ?? false,
-        })),
-      );
-      sessionStorage.setItem(`itp_answers_${sessionId}`, payload);
+    saveSession({
+      id: sessionId,
+      createdAt: Date.now(),
+      questionIds: questions.map((x) => x.id),
+      source,
+    });
+    const payload = JSON.stringify(
+      answers.map((a, i) => ({
+        questionId: questions[i].id,
+        letter: a?.letter ?? null,
+        correct: a?.correct ?? false,
+      })),
+    );
+    sessionStorage.setItem(`itp_answers_${sessionId}`, payload);
 
-      const meta = sessionMetaRef.current;
-      const correctCount = nextAnswers.filter((a) => a?.correct).length;
+    const meta = sessionMetaRef.current;
+    const correctCount = answers.filter((a) => a?.correct).length;
+    if (meta) {
       void flushPending({
         localId: meta.localId,
         kind: "practice",
@@ -124,9 +113,9 @@ export function PracticeClient({ slug, label, questions }: Props) {
       }).catch(() => {
         /* signed out or network — retried on next page load */
       });
-
-      router.push(`/result/${sessionId}`);
     }
+
+    router.push(`/result/${sessionId}`);
   }
 
   return (
@@ -138,19 +127,31 @@ export function PracticeClient({ slug, label, questions }: Props) {
           <Metadata q={q} />
           <IntegratedContext q={q} />
           <QuestionBody q={q} />
-          <Choices q={q} picked={picked} onPick={pick} />
+          <Choices
+            q={q}
+            answered={current}
+            correctLetters={correctLetters}
+            onPick={commitAnswer}
+          />
+          {current !== null ? (
+            <div className="mt-6">
+              <AiExplanation
+                key={q.id}
+                questionId={q.id}
+                userAnswer={current.letter}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
 
       <FooterBar
         canPrev={idx > 0}
-        isLast={idx + 1 === total}
-        onPrev={() => {
-          if (idx === 0) return;
-          clearAdvanceTimer();
-          setIdx(idx - 1);
-          setPicked(answers[idx - 1]?.letter ?? null);
-        }}
+        answered={current !== null}
+        isLast={isLast}
+        onPrev={goPrev}
+        onNext={goNext}
+        onFinish={finishAndSubmit}
       />
     </div>
   );
@@ -325,40 +326,92 @@ function QuestionBody({ q }: { q: Question }) {
   );
 }
 
+type ChoiceStyle = {
+  background: string;
+  border: string;
+  letterBg: string;
+  letterColor: string;
+};
+
+function choiceStyle(
+  letter: ChoiceLetter,
+  answered: Answer | null,
+  correctLetters: Set<ChoiceLetter>,
+): ChoiceStyle {
+  if (answered === null) {
+    return {
+      background: "var(--surface)",
+      border: "var(--line)",
+      letterBg: "var(--surface-2)",
+      letterColor: "var(--ink-2)",
+    };
+  }
+  const isCorrect = correctLetters.has(letter);
+  const isUserPick = answered.letter === letter;
+  if (isCorrect) {
+    return {
+      background: "var(--accent-soft)",
+      border: "var(--accent)",
+      letterBg: "var(--accent)",
+      letterColor: "#fff",
+    };
+  }
+  if (isUserPick) {
+    return {
+      background: "#f5e4e0",
+      border: "var(--wrong)",
+      letterBg: "var(--wrong)",
+      letterColor: "#fff",
+    };
+  }
+  return {
+    background: "var(--surface)",
+    border: "var(--line)",
+    letterBg: "var(--surface-2)",
+    letterColor: "var(--ink-3)",
+  };
+}
+
 function Choices({
   q,
-  picked,
+  answered,
+  correctLetters,
   onPick,
 }: {
   q: Question;
-  picked: ChoiceLetter | null;
+  answered: Answer | null;
+  correctLetters: Set<ChoiceLetter>;
   onPick: (letter: ChoiceLetter) => void;
 }) {
   const isFigureChoice = q.choice_format === "figure_choices";
   const isSeeFigure = q.choice_format === "see_figure";
+  const locked = answered !== null;
 
   if (isSeeFigure) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {CHOICE_LETTERS.map((letter) => {
-          const active = picked === letter;
+          const s = choiceStyle(letter, answered, correctLetters);
           return (
             <button
               key={letter}
               type="button"
               onClick={() => onPick(letter)}
+              disabled={locked}
+              style={{ background: s.background, borderColor: s.border }}
               className={
                 "p-4 rounded-[var(--radius-lg)] border transition-colors " +
-                (active
-                  ? "bg-accent-soft border-accent"
-                  : "bg-surface border-line hover:bg-surface-2")
+                (locked ? "cursor-default" : "hover:bg-surface-2")
               }
             >
               <span
-                className={
-                  "t-serif text-xl font-semibold " +
-                  (active ? "text-accent-ink" : "text-ink")
-                }
+                className="t-serif text-xl font-semibold"
+                style={{
+                  color:
+                    locked && correctLetters.has(letter)
+                      ? "var(--accent-ink)"
+                      : "var(--ink)",
+                }}
               >
                 {letter}
               </span>
@@ -374,24 +427,22 @@ function Choices({
       {CHOICE_LETTERS.map((letter) => {
         const raw = q.choices[letter] ?? "";
         const isFigRef = raw.startsWith("figure:");
-        const active = picked === letter;
+        const s = choiceStyle(letter, answered, correctLetters);
         return (
           <button
             key={letter}
             type="button"
             onClick={() => onPick(letter)}
+            disabled={locked}
+            style={{ background: s.background, borderColor: s.border }}
             className={
               "flex items-start gap-4 text-left p-4 sm:px-5 rounded-[var(--radius-lg)] border transition-colors " +
-              (active
-                ? "bg-accent-soft border-accent"
-                : "bg-surface border-line hover:bg-surface-2")
+              (locked ? "cursor-default" : "hover:bg-surface-2")
             }
           >
             <span
-              className={
-                "grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0 " +
-                (active ? "bg-accent text-white" : "bg-surface-2 text-ink-2")
-              }
+              className="grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0"
+              style={{ background: s.letterBg, color: s.letterColor }}
             >
               {letter}
             </span>
@@ -418,12 +469,18 @@ function Choices({
 
 function FooterBar({
   canPrev,
+  answered,
   isLast,
   onPrev,
+  onNext,
+  onFinish,
 }: {
   canPrev: boolean;
+  answered: boolean;
   isLast: boolean;
   onPrev: () => void;
+  onNext: () => void;
+  onFinish: () => void;
 }) {
   return (
     <div className="flex justify-between items-center gap-3 px-5 sm:px-8 py-3.5 border-t border-line bg-surface-2">
@@ -435,9 +492,29 @@ function FooterBar({
       >
         ← 前の問題
       </button>
-      <div className="t-mono text-[11px] text-ink-3">
-        {isLast ? "選択すると採点します" : "選択すると次へ進みます"}
-      </div>
+      {answered ? (
+        isLast ? (
+          <button
+            type="button"
+            onClick={onFinish}
+            className="btn btn-primary !text-[13px]"
+          >
+            採点する →
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onNext}
+            className="btn btn-primary !text-[13px]"
+          >
+            次の問題へ →
+          </button>
+        )
+      ) : (
+        <div className="t-mono text-[11px] text-ink-3">
+          選択すると正誤を確認
+        </div>
+      )}
     </div>
   );
 }

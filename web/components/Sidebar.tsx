@@ -13,7 +13,7 @@ type Item = {
 };
 
 const ITEMS: Item[] = [
-  { href: "/", label: "ホーム", sub: "Dashboard", icon: "home" },
+  { href: "/home", label: "ホーム", sub: "Dashboard", icon: "home" },
   { href: "/library", label: "問題集", sub: "Library", icon: "book" },
   { href: "/exam", label: "模擬試験", sub: "Mock exam", icon: "exam", pro: true },
   { href: "/review", label: "復習", sub: "Review", icon: "bookmark", pro: true },
@@ -21,7 +21,6 @@ const ITEMS: Item[] = [
 ];
 
 function isActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(href + "/");
 }
 
@@ -36,7 +35,7 @@ export function Sidebar({ user }: Props) {
   return (
     <aside className="w-[212px] shrink-0 border-r border-line bg-surface-2 py-6 px-4 hidden md:flex flex-col">
       <Link
-        href="/"
+        href="/home"
         className="flex items-baseline gap-2 px-2.5 pb-6 no-underline text-ink"
       >
         <span className="grid h-[22px] w-[22px] place-items-center rounded-sm bg-accent text-white text-[11px] font-bold t-mono">

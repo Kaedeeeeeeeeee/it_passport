@@ -39,6 +39,15 @@ export function isPro(status: ProfileRow["subscription_status"] | undefined) {
   return status === "trialing" || status === "active";
 }
 
+/** Server-component guard. Redirects to /login if unauthenticated. */
+export async function requireAuth(origin: string): Promise<ProfileRow> {
+  const profile = await getProfile();
+  if (!profile) {
+    redirect(`/login?next=${encodeURIComponent(origin)}`);
+  }
+  return profile;
+}
+
 /** Server-component guard. Redirects to /login if unauthenticated,
  *  or /pricing?from=<origin> if authenticated but not Pro. */
 export async function requirePro(origin: string): Promise<ProfileRow> {
