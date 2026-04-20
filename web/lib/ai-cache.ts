@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "./supabase";
+import { supabaseAdmin } from "./supabase/admin";
 
 const TABLE = "ai_explanations";
 

@@ -24,8 +24,34 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IT Passport 練習ノート",
-  description: "ITパスポート試験の過去問練習 · AI解説付き",
+  title: {
+    default: "IT Passport 練習ノート",
+    template: "%s · IT Passport 練習ノート",
+  },
+  description:
+    "ITパスポート試験（iパス）の公式過去問 28 年分・2,800 問を AI 解説付きで練習できるサイト。",
+  applicationName: "IT Passport 練習ノート",
+  keywords: [
+    "ITパスポート",
+    "iパス",
+    "IT Passport",
+    "過去問",
+    "AI 解説",
+    "IPA",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "IT Passport 練習ノート",
+    title: "IT Passport 練習ノート",
+    description:
+      "ITパスポート試験の過去問 28 年分・2,800 問を AI 解説付きで練習。",
+    locale: "ja_JP",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IT Passport 練習ノート",
+    description: "過去問 28 年分・2,800 問 · AI 解説つき",
+  },
 };
 
 export default function RootLayout({

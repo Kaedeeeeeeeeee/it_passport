@@ -10,7 +10,7 @@ type Props = {
 export default async function PracticePage({ params, searchParams }: Props) {
   const { sessionId } = await params;
   const search = await searchParams;
-  const resolved = resolveSession(sessionId, search);
+  const resolved = await resolveSession(sessionId, search);
   if (!resolved) notFound();
   return (
     <PracticeClient

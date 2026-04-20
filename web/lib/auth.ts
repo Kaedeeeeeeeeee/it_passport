@@ -1,0 +1,71 @@
+import { redirect } from "next/navigation";
+import { supabaseServer } from "./supabase/server";
+import type { User } from "@supabase/supabase-js";
+
+export type ProfileRow = {
+  id: string;
+  email: string;
+  stripe_customer_id: string | null;
+  subscription_status:
+    | "free"
+    | "trialing"
+    | "active"
+    | "past_due"
+    | "canceled";
+  trial_ends_at: string | null;
+  current_period_end: string | null;
+};
+
+export async function getUser(): Promise<User | null> {
+  const sb = await supabaseServer();
+  const { data } = await sb.auth.getUser();
+  return data.user;
+}
+
+export async function getProfile(): Promise<ProfileRow | null> {
+  const sb = await supabaseServer();
+  const { data: auth } = await sb.auth.getUser();
+  if (!auth.user) return null;
+  const { data } = await sb
+    .from("profiles")
+    .select("*")
+    .eq("id", auth.user.id)
+    .maybeSingle();
+  return (data as ProfileRow | null) ?? null;
+}
+
+export function isPro(status: ProfileRow["subscription_status"] | undefined) {
+  if (process.env.DEV_FORCE_PRO === "true") return true;
+  return status === "trialing" || status === "active";
+}
+
+/** Server-component guard. Redirects to /login if unauthenticated,
+ *  or /pricing?from=<origin> if authenticated but not Pro. */
+export async function requirePro(origin: string): Promise<ProfileRow> {
+  const profile = await getProfile();
+  if (!profile) {
+    redirect(`/login?next=${encodeURIComponent(origin)}`);
+  }
+  if (!isPro(profile.subscription_status)) {
+    redirect(`/pricing?from=${encodeURIComponent(origin)}`);
+  }
+  return profile;
+}
+
+/** Route-handler guard. Throws a Response if not Pro. */
+export async function ensurePro(): Promise<ProfileRow> {
+  const profile = await getProfile();
+  if (!profile) {
+    throw new Response(
+      JSON.stringify({ error: "authentication required" }),
+      { status: 401, headers: { "content-type": "application/json" } },
+    );
+  }
+  if (!isPro(profile.subscription_status)) {
+    throw new Response(
+      JSON.stringify({ error: "Pro membership required" }),
+      { status: 402, headers: { "content-type": "application/json" } },
+    );
+  }
+  return profile;
+}

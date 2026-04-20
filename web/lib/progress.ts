@@ -7,15 +7,36 @@ export type AttemptRecord = {
   timestamp: number;     // ms
 };
 
+/** v2 is append-only: every attempt is kept so we can reconstruct history and
+ *  ingest into Supabase. `syncedUpTo` is a watermark timestamp — attempts with
+ *  `timestamp <= syncedUpTo` have been confirmed landed in the DB. */
 export type ProgressState = {
+  version: 2;
+  attempts: AttemptRecord[];
+  syncedUpTo: number; // 0 = nothing synced yet
+};
+
+type ProgressStateV1 = {
   version: 1;
-  attempts: Record<string, AttemptRecord>; // keyed by questionId (last attempt wins)
+  attempts: Record<string, AttemptRecord>;
 };
 
 const KEY = "itp_progress_v1";
 
 function empty(): ProgressState {
-  return { version: 1, attempts: {} };
+  return { version: 2, attempts: [], syncedUpTo: 0 };
+}
+
+function migrateV1(v1: ProgressStateV1): ProgressState {
+  const attempts = Object.values(v1.attempts ?? {}).sort(
+    (a, b) => a.timestamp - b.timestamp,
+  );
+  return { version: 2, attempts, syncedUpTo: 0 };
+}
+
+function saveState(state: ProgressState) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(KEY, JSON.stringify(state));
 }
 
 export function loadProgress(): ProgressState {
@@ -23,9 +44,14 @@ export function loadProgress(): ProgressState {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return empty();
-    const parsed = JSON.parse(raw) as ProgressState;
-    if (parsed?.version !== 1) return empty();
-    return parsed;
+    const parsed = JSON.parse(raw) as ProgressState | ProgressStateV1;
+    if (parsed?.version === 2) return parsed;
+    if (parsed?.version === 1) {
+      const migrated = migrateV1(parsed);
+      saveState(migrated);
+      return migrated;
+    }
+    return empty();
   } catch {
     return empty();
   }
@@ -33,17 +59,42 @@ export function loadProgress(): ProgressState {
 
 export function recordAttempt(rec: AttemptRecord): ProgressState {
   const state = loadProgress();
-  state.attempts[rec.questionId] = rec;
-  if (typeof window !== "undefined") {
-    localStorage.setItem(KEY, JSON.stringify(state));
+  state.attempts.push(rec);
+  saveState(state);
+  return state;
+}
+
+export function pendingAttempts(state: ProgressState): AttemptRecord[] {
+  return state.attempts.filter((a) => a.timestamp > state.syncedUpTo);
+}
+
+/** Mark every attempt with timestamp <= watermark as synced. */
+export function markSynced(watermark: number): ProgressState {
+  const state = loadProgress();
+  if (watermark > state.syncedUpTo) {
+    state.syncedUpTo = watermark;
+    saveState(state);
   }
   return state;
 }
 
+/** Latest attempt per question, keyed by questionId. Used by ProgressSummary
+ *  and anything else that wants the "current state" view. */
+export function latestByQuestion(
+  state: ProgressState,
+): Record<string, AttemptRecord> {
+  const out: Record<string, AttemptRecord> = {};
+  for (const a of state.attempts) {
+    const existing = out[a.questionId];
+    if (!existing || a.timestamp > existing.timestamp) out[a.questionId] = a;
+  }
+  return out;
+}
+
 export function summarize(state: ProgressState) {
-  const items = Object.values(state.attempts);
-  const seen = items.length;
-  const correct = items.filter((a) => a.correct).length;
+  const latest = Object.values(latestByQuestion(state));
+  const seen = latest.length;
+  const correct = latest.filter((a) => a.correct).length;
   const accuracy = seen ? correct / seen : 0;
   return { seen, correct, accuracy };
 }
@@ -55,7 +106,8 @@ export type SessionSpec = {
   source:
     | { kind: "exam"; examCode: string }
     | { kind: "category"; category: string }
-    | { kind: "random" };
+    | { kind: "random" }
+    | { kind: "review"; strategy: string };
 };
 
 const SESSION_PREFIX = "itp_session_";

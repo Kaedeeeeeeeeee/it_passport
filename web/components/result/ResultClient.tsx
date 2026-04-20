@@ -15,9 +15,12 @@ type AnswerRec = {
 
 type Props = {
   sessionId: string;
+  /** When true, skips the page chrome (top bar + outer flex container) so the
+   *  component can be embedded inside another result page (e.g. exam). */
+  embedded?: boolean;
 };
 
-export function ResultClient({ sessionId }: Props) {
+export function ResultClient({ sessionId, embedded = false }: Props) {
   const [answers, setAnswers] = useState<AnswerRec[] | null>(null);
 
   useEffect(() => {
@@ -39,7 +42,13 @@ export function ResultClient({ sessionId }: Props) {
 
   if (answers === null) {
     return (
-      <div className="flex-1 flex items-center justify-center text-ink-3">
+      <div
+        className={
+          embedded
+            ? "text-ink-3 p-6 text-center"
+            : "flex-1 flex items-center justify-center text-ink-3"
+        }
+      >
         読み込み中…
       </div>
     );
@@ -49,6 +58,17 @@ export function ResultClient({ sessionId }: Props) {
   const total = questions.length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
   const passed = accuracy >= 60;
+
+  if (embedded) {
+    return (
+      <div className="rounded-[var(--radius-lg)] border border-line bg-surface overflow-hidden">
+        {questions.map((q, i) => {
+          const a = answers[i];
+          return <ResultRow key={q.id} q={q} answer={a} idx={i} />;
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -312,7 +332,12 @@ function AiExplanation({
   if (state.kind === "ready") {
     return (
       <div className="rounded-[var(--radius)] border border-line bg-surface p-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
-        <div className="t-label mb-2">AI 解説</div>
+        <div className="t-label mb-2 flex items-center gap-2">
+          AI 解説
+          <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
+            PRO
+          </span>
+        </div>
         {state.text}
       </div>
     );
@@ -321,7 +346,12 @@ function AiExplanation({
   return (
     <div className="rounded-[var(--radius)] border border-line bg-surface p-4">
       <div className="flex items-center gap-3">
-        <div className="t-label flex-1">AI 解説</div>
+        <div className="t-label flex-1 flex items-center gap-2">
+          AI 解説
+          <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
+            PRO
+          </span>
+        </div>
         {state.kind === "idle" ? (
           <button
             type="button"

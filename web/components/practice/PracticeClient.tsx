@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { Icon } from "@/components/Icon";
+import { useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
 import { FigureImage } from "@/components/FigureImage";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { newSessionId, recordAttempt, saveSession } from "@/lib/progress";
-import type { ChoiceLetter, Question } from "@/lib/types";
+import { flushPending } from "@/lib/sync";
+import type { ChoiceLetter, Figure, Question } from "@/lib/types";
 
 type Props = {
   slug: string;
@@ -16,6 +19,8 @@ type Props = {
 
 type Answer = { letter: ChoiceLetter; correct: boolean };
 
+const ADVANCE_DELAY_MS = 260;
+
 export function PracticeClient({ slug, label, questions }: Props) {
   const router = useRouter();
   const [idx, setIdx] = useState(0);
@@ -23,6 +28,7 @@ export function PracticeClient({ slug, label, questions }: Props) {
     new Array(questions.length).fill(null),
   );
   const [picked, setPicked] = useState<ChoiceLetter | null>(null);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const q = questions[idx];
   const total = questions.length;
@@ -31,22 +37,50 @@ export function PracticeClient({ slug, label, questions }: Props) {
     [answers],
   );
 
-  function pick(letter: ChoiceLetter) {
-    setPicked(letter);
+  const sessionMetaRef = useRef<{ localId: string; startedAt: number } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
+    };
+  }, []);
+
+  function clearAdvanceTimer() {
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
   }
 
-  function commitAndAdvance() {
-    if (!picked) return;
+  function pick(letter: ChoiceLetter) {
+    setPicked(letter);
+    clearAdvanceTimer();
+    advanceTimerRef.current = setTimeout(() => {
+      advanceTimerRef.current = null;
+      commitAndAdvance(letter);
+    }, ADVANCE_DELAY_MS);
+  }
+
+  function commitAndAdvance(letter: ChoiceLetter) {
     const acceptedAnswers = q.answer.split("/");
-    const correct = acceptedAnswers.includes(picked);
+    const correct = acceptedAnswers.includes(letter);
+
+    if (!sessionMetaRef.current) {
+      sessionMetaRef.current = {
+        localId: newSessionId(),
+        startedAt: Date.now(),
+      };
+    }
 
     const nextAnswers = answers.slice();
-    nextAnswers[idx] = { letter: picked, correct };
+    nextAnswers[idx] = { letter, correct };
     setAnswers(nextAnswers);
 
     recordAttempt({
       questionId: q.id,
-      answer: picked,
+      answer: letter,
       correct,
       timestamp: Date.now(),
     });
@@ -56,16 +90,17 @@ export function PracticeClient({ slug, label, questions }: Props) {
       setPicked(nextAnswers[idx + 1]?.letter ?? null);
     } else {
       const sessionId = newSessionId();
+      const source =
+        slug === "random"
+          ? { kind: "random" as const }
+          : slug.startsWith("exam-")
+            ? { kind: "exam" as const, examCode: slug.slice(5) }
+            : { kind: "random" as const };
       saveSession({
         id: sessionId,
         createdAt: Date.now(),
         questionIds: questions.map((x) => x.id),
-        source:
-          slug === "random"
-            ? { kind: "random" }
-            : slug.startsWith("exam-")
-              ? { kind: "exam", examCode: slug.slice(5) }
-              : { kind: "random" },
+        source,
       });
       const payload = JSON.stringify(
         nextAnswers.map((a, i) => ({
@@ -75,6 +110,21 @@ export function PracticeClient({ slug, label, questions }: Props) {
         })),
       );
       sessionStorage.setItem(`itp_answers_${sessionId}`, payload);
+
+      const meta = sessionMetaRef.current;
+      const correctCount = nextAnswers.filter((a) => a?.correct).length;
+      void flushPending({
+        localId: meta.localId,
+        kind: "practice",
+        source,
+        startedAt: meta.startedAt,
+        completedAt: Date.now(),
+        questionCount: total,
+        correctCount,
+      }).catch(() => {
+        /* signed out or network — retried on next page load */
+      });
+
       router.push(`/result/${sessionId}`);
     }
   }
@@ -93,15 +143,14 @@ export function PracticeClient({ slug, label, questions }: Props) {
       </div>
 
       <FooterBar
-        canNext={picked !== null}
         canPrev={idx > 0}
         isLast={idx + 1 === total}
         onPrev={() => {
           if (idx === 0) return;
+          clearAdvanceTimer();
           setIdx(idx - 1);
           setPicked(answers[idx - 1]?.letter ?? null);
         }}
-        onNext={commitAndAdvance}
       />
     </div>
   );
@@ -183,20 +232,89 @@ function IntegratedContext({ q }: { q: Question }) {
   );
 }
 
+function resolveFigure(src: string, figures: Figure[]): Figure | undefined {
+  const normalized = src.replace(/^\.\.\/figures\//, "figures/");
+  const filename = normalized.split("/").pop() ?? "";
+  if (!filename) return undefined;
+  return figures.find((f) => f.path.endsWith(filename));
+}
+
+function buildMarkdownComponents(figures: Figure[]): Components {
+  return {
+    p: ({ children }) => (
+      <p className="mb-3 last:mb-0">{children}</p>
+    ),
+    img: ({ src }) => {
+      const fig = resolveFigure(typeof src === "string" ? src : "", figures);
+      return fig ? <FigureImage figure={fig} /> : null;
+    },
+    table: ({ children }) => (
+      <div className="my-4 overflow-x-auto rounded-[var(--radius)] border border-line">
+        <table className="w-full border-collapse text-[13.5px] leading-[1.6]">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }) => (
+      <thead className="bg-surface-2 text-ink-2">{children}</thead>
+    ),
+    tr: ({ children }) => (
+      <tr className="border-b border-line last:border-b-0">{children}</tr>
+    ),
+    th: ({ children }) => (
+      <th className="border-r border-line px-3 py-2 text-left font-semibold last:border-r-0">
+        {children}
+      </th>
+    ),
+    td: ({ children }) => (
+      <td className="border-r border-line px-3 py-2 align-top last:border-r-0">
+        {children}
+      </td>
+    ),
+    ul: ({ children }) => (
+      <ul className="mb-3 list-disc space-y-1 pl-6">{children}</ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="mb-3 list-decimal space-y-1 pl-6">{children}</ol>
+    ),
+    code: ({ className, children }) => {
+      const isBlock = /language-/.test(className ?? "");
+      if (isBlock) {
+        return (
+          <code className={"t-mono text-[13px] " + (className ?? "")}>
+            {children}
+          </code>
+        );
+      }
+      return (
+        <code className="t-mono rounded bg-surface-2 px-1 py-0.5 text-[0.92em]">
+          {children}
+        </code>
+      );
+    },
+    pre: ({ children }) => (
+      <pre className="my-3 overflow-x-auto rounded-[var(--radius)] bg-surface-2 p-3">
+        {children}
+      </pre>
+    ),
+  };
+}
+
 function QuestionBody({ q }: { q: Question }) {
+  const hasInlineImage = /!\[[^\]]*\]\([^)]+\)/.test(q.question);
+  const components = useMemo(
+    () => buildMarkdownComponents(q.figures),
+    [q.figures],
+  );
   return (
-    <div className="t-serif text-[16px] sm:text-[17px] leading-[1.85] mb-6 whitespace-pre-wrap">
-      {q.question.split(/(!\[[^\]]*\]\([^)]+\))/).map((chunk, i) => {
-        const m = /!\[[^\]]*\]\(([^)]+)\)/.exec(chunk);
-        if (m) {
-          const path = m[1].replace(/^\.\.\/figures\//, "figures/");
-          const fig = q.figures.find((f) => f.path.endsWith(path.split("/").pop()!));
-          if (fig) return <FigureImage key={i} figure={fig} />;
-          return null;
-        }
-        return <span key={i}>{chunk}</span>;
-      })}
-      {q.figures.length > 0 && !q.question.includes("![") ? (
+    <div className="t-serif mb-6 text-[16px] leading-[1.85] sm:text-[17px]">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        components={components}
+      >
+        {q.question}
+      </ReactMarkdown>
+      {q.figures.length > 0 && !hasInlineImage ? (
         <div className="mt-2">
           {q.figures.map((f) => (
             <FigureImage key={f.path} figure={f} />
@@ -299,17 +417,13 @@ function Choices({
 }
 
 function FooterBar({
-  canNext,
   canPrev,
   isLast,
   onPrev,
-  onNext,
 }: {
-  canNext: boolean;
   canPrev: boolean;
   isLast: boolean;
   onPrev: () => void;
-  onNext: () => void;
 }) {
   return (
     <div className="flex justify-between items-center gap-3 px-5 sm:px-8 py-3.5 border-t border-line bg-surface-2">
@@ -321,15 +435,9 @@ function FooterBar({
       >
         ← 前の問題
       </button>
-      <button
-        type="button"
-        onClick={onNext}
-        disabled={!canNext}
-        className="btn btn-primary flex items-center gap-2"
-      >
-        {isLast ? "採点する" : "回答して次へ"}
-        {!isLast && <Icon name="arrow" size={14} />}
-      </button>
+      <div className="t-mono text-[11px] text-ink-3">
+        {isLast ? "選択すると採点します" : "選択すると次へ進みます"}
+      </div>
     </div>
   );
 }

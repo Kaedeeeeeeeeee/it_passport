@@ -37,8 +37,8 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <Topbar
-        subtitle={`${formatToday()} · おかえりなさい`}
-        title="今日も、少しずつ。"
+        subtitle={`${formatToday()} · 今日も、少しずつ。`}
+        title="ITパスポート試験 練習"
         right={
           <Link href="/library" className="btn btn-primary no-underline">
             問題集から選ぶ →
