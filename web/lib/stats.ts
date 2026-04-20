@@ -2,7 +2,7 @@ import { supabaseServer } from "./supabase/server";
 import { questionById, exams } from "./questions";
 import type { Category } from "./types";
 
-type AttemptRow = {
+export type AttemptRow = {
   question_id: string;
   correct: boolean;
   attempted_at: string; // ISO timestamp
@@ -24,10 +24,17 @@ function dayKey(iso: string): string {
   return iso.slice(0, 10);
 }
 
-/** Overview tiles: total attempts, unique questions seen, overall accuracy,
- *  and the current consecutive-day streak ending today (JST-agnostic). */
-export async function getOverview(userId: string) {
-  const rows = await fetchAttempts(userId);
+export type Overview = {
+  total: number;
+  correct: number;
+  accuracy: number;
+  seen: number;
+  masteredCount: number;
+  streak: number;
+};
+
+/** Pure core of getOverview. `now` is injected so tests can pin a date. */
+export function computeOverview(rows: AttemptRow[], now: Date): Overview {
   const total = rows.length;
   const correct = rows.filter((r) => r.correct).length;
   const accuracy = total ? correct / total : 0;
@@ -41,20 +48,28 @@ export async function getOverview(userId: string) {
 
   const days = new Set(rows.map((r) => dayKey(r.attempted_at)));
   let streak = 0;
-  const today = new Date();
+  const cursor = new Date(now);
   for (;;) {
-    const k = today.toISOString().slice(0, 10);
+    const k = cursor.toISOString().slice(0, 10);
     if (!days.has(k)) break;
     streak += 1;
-    today.setUTCDate(today.getUTCDate() - 1);
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
   }
 
   return { total, correct, accuracy, seen, masteredCount, streak };
 }
 
-/** Attempts-per-day + daily accuracy for the last `days` days. */
-export async function getRecentDaily(userId: string, days = 30) {
-  const rows = await fetchAttempts(userId);
+export async function getOverview(userId: string) {
+  return computeOverview(await fetchAttempts(userId), new Date());
+}
+
+export type DailyBucket = { date: string; total: number; correct: number };
+
+export function computeRecentDaily(
+  rows: AttemptRow[],
+  days: number,
+  now: Date,
+): DailyBucket[] {
   const byDay = new Map<string, { total: number; correct: number }>();
   for (const r of rows) {
     const k = dayKey(r.attempted_at);
@@ -63,8 +78,8 @@ export async function getRecentDaily(userId: string, days = 30) {
     if (r.correct) cur.correct += 1;
     byDay.set(k, cur);
   }
-  const out: Array<{ date: string; total: number; correct: number }> = [];
-  const cursor = new Date();
+  const out: DailyBucket[] = [];
+  const cursor = new Date(now);
   for (let i = 0; i < days; i++) {
     const k = cursor.toISOString().slice(0, 10);
     const agg = byDay.get(k) ?? { total: 0, correct: 0 };
@@ -74,6 +89,10 @@ export async function getRecentDaily(userId: string, days = 30) {
   return out.reverse();
 }
 
+export async function getRecentDaily(userId: string, days = 30) {
+  return computeRecentDaily(await fetchAttempts(userId), days, new Date());
+}
+
 export type CategoryStat = {
   category: Category | "unknown";
   total: number;
@@ -81,10 +100,7 @@ export type CategoryStat = {
   accuracy: number;
 };
 
-export async function getByCategory(
-  userId: string,
-): Promise<CategoryStat[]> {
-  const rows = await fetchAttempts(userId);
+export function computeByCategory(rows: AttemptRow[]): CategoryStat[] {
   const buckets = new Map<string, { total: number; correct: number }>();
   for (const r of rows) {
     const q = questionById.get(r.question_id);
@@ -102,6 +118,10 @@ export async function getByCategory(
   }));
 }
 
+export async function getByCategory(userId: string): Promise<CategoryStat[]> {
+  return computeByCategory(await fetchAttempts(userId));
+}
+
 export type ExamStat = {
   exam_code: string;
   year: number;
@@ -110,8 +130,7 @@ export type ExamStat = {
   accuracy: number;
 };
 
-export async function getByExam(userId: string): Promise<ExamStat[]> {
-  const rows = await fetchAttempts(userId);
+export function computeByExam(rows: AttemptRow[]): ExamStat[] {
   const buckets = new Map<string, { total: number; correct: number }>();
   for (const r of rows) {
     const q = questionById.get(r.question_id);
@@ -133,5 +152,11 @@ export async function getByExam(userId: string): Promise<ExamStat[]> {
       accuracy: v.total ? v.correct / v.total : 0,
     });
   }
-  return list.sort((a, b) => b.year - a.year || a.exam_code.localeCompare(b.exam_code));
+  return list.sort(
+    (a, b) => b.year - a.year || a.exam_code.localeCompare(b.exam_code),
+  );
+}
+
+export async function getByExam(userId: string): Promise<ExamStat[]> {
+  return computeByExam(await fetchAttempts(userId));
 }

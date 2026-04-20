@@ -16,7 +16,7 @@ export type ProgressState = {
   syncedUpTo: number; // 0 = nothing synced yet
 };
 
-type ProgressStateV1 = {
+export type ProgressStateV1 = {
   version: 1;
   attempts: Record<string, AttemptRecord>;
 };
@@ -27,7 +27,7 @@ function empty(): ProgressState {
   return { version: 2, attempts: [], syncedUpTo: 0 };
 }
 
-function migrateV1(v1: ProgressStateV1): ProgressState {
+export function migrateV1(v1: ProgressStateV1): ProgressState {
   const attempts = Object.values(v1.attempts ?? {}).sort(
     (a, b) => a.timestamp - b.timestamp,
   );

@@ -32,7 +32,7 @@ export const REVIEW_META: Record<
   },
 };
 
-type AttemptRow = {
+export type AttemptRow = {
   question_id: string;
   correct: boolean;
   attempted_at: string;
@@ -51,11 +51,11 @@ async function fetchAttempts(userId: string): Promise<AttemptRow[]> {
 
 const MS_DAY = 86_400_000;
 
-function candidateIds(
+export function selectReviewCandidates(
   rows: AttemptRow[],
   strategy: ReviewStrategy,
+  now: number = Date.now(),
 ): string[] {
-  const now = Date.now();
   const byQ = new Map<string, AttemptRow[]>();
   for (const r of rows) {
     const arr = byQ.get(r.question_id) ?? [];
@@ -85,7 +85,7 @@ export async function getReviewCandidates(
   strategy: ReviewStrategy,
 ): Promise<string[]> {
   const rows = await fetchAttempts(userId);
-  return candidateIds(rows, strategy);
+  return selectReviewCandidates(rows, strategy);
 }
 
 export async function getAllCandidateCounts(
@@ -93,8 +93,8 @@ export async function getAllCandidateCounts(
 ): Promise<Record<ReviewStrategy, number>> {
   const rows = await fetchAttempts(userId);
   return {
-    "wrong-recent": candidateIds(rows, "wrong-recent").length,
-    "frequent-miss": candidateIds(rows, "frequent-miss").length,
-    stale: candidateIds(rows, "stale").length,
+    "wrong-recent": selectReviewCandidates(rows, "wrong-recent").length,
+    "frequent-miss": selectReviewCandidates(rows, "frequent-miss").length,
+    stale: selectReviewCandidates(rows, "stale").length,
   };
 }
