@@ -11,27 +11,6 @@ export const REVIEW_STRATEGIES: ReviewStrategy[] = [
   "stale",
 ];
 
-export const REVIEW_META: Record<
-  ReviewStrategy,
-  { title: string; subtitle: string; hint: string }
-> = {
-  "wrong-recent": {
-    title: "最近間違えた",
-    subtitle: "直近 2 週間で間違えた問題",
-    hint: "記憶が新しいうちに復習しましょう。",
-  },
-  "frequent-miss": {
-    title: "繰り返し間違える",
-    subtitle: "2 回以上間違えた問題",
-    hint: "苦手ポイントを集中攻略します。",
-  },
-  stale: {
-    title: "久しく解いていない",
-    subtitle: "7 日以上前に答えた問題",
-    hint: "忘却曲線に合わせて再確認。",
-  },
-};
-
 export type AttemptRow = {
   question_id: string;
   correct: boolean;

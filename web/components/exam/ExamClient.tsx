@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
-import remarkBreaks from "remark-breaks";
-import remarkGfm from "remark-gfm";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FigureImage } from "@/components/FigureImage";
+import { Markdown } from "@/components/md/Markdown";
+import { useRouter } from "@/i18n/navigation";
+import { categoryLabel } from "@/lib/exam-terms";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { recordAttempt } from "@/lib/progress";
-import type { ChoiceLetter, Figure, Question } from "@/lib/types";
+import type { ChoiceLetter, Question } from "@/lib/types";
 
 type Props = {
   sessionId: string;
@@ -34,10 +34,7 @@ function lsKey(sessionId: string) {
   return `itp_exam_${sessionId}`;
 }
 
-function loadLocal(
-  sessionId: string,
-  total: number,
-): LocalState | null {
+function loadLocal(sessionId: string, total: number): LocalState | null {
   if (typeof window === "undefined") return null;
   const raw = localStorage.getItem(lsKey(sessionId));
   if (!raw) return null;
@@ -71,6 +68,7 @@ function formatRemaining(ms: number): string {
 
 export function ExamClient({ sessionId, label, questions, startedAt }: Props) {
   const router = useRouter();
+  const t = useTranslations("exam");
   const total = questions.length;
   const endsAt = startedAt + EXAM_DURATION_MS;
 
@@ -182,9 +180,7 @@ export function ExamClient({ sessionId, label, questions, startedAt }: Props) {
 
   function confirmSubmit() {
     if (answered < total) {
-      const ok = confirm(
-        `未回答の問題が ${total - answered} 問あります。終了しますか？`,
-      );
+      const ok = confirm(t("confirmExit", { n: total - answered }));
       if (!ok) return;
     }
     void submit("manual");
@@ -238,6 +234,7 @@ function ExamTopbar({
   remaining: number;
   onEnd: () => void;
 }) {
+  const t = useTranslations("exam");
   const low = remaining <= 5 * 60 * 1000;
   return (
     <div className="flex items-center gap-4 sm:gap-5 px-4 sm:px-8 py-4 border-b border-line bg-surface-2">
@@ -257,7 +254,7 @@ function ExamTopbar({
           "t-mono text-[14px] font-semibold tabular-nums " +
           (low ? "text-wrong" : "text-ink")
         }
-        aria-label="残り時間"
+        aria-label={t("remainingTime")}
       >
         {formatRemaining(remaining)}
       </div>
@@ -266,7 +263,7 @@ function ExamTopbar({
         onClick={onEnd}
         className="btn !text-[12px] !px-3 !py-1.5"
       >
-        終了する
+        {t("endButton")}
       </button>
     </div>
   );
@@ -289,6 +286,7 @@ function ExamFooter({
   answers: (Answer | null)[];
   submitting: boolean;
 }) {
+  const t = useTranslations("exam");
   const [navOpen, setNavOpen] = useState(false);
   return (
     <div className="border-t border-line bg-surface-2">
@@ -329,14 +327,14 @@ function ExamFooter({
           disabled={idx === 0 || submitting}
           className="btn btn-ghost !text-[13px]"
         >
-          ← 前
+          {t("prev")}
         </button>
         <button
           type="button"
           onClick={() => setNavOpen((x) => !x)}
           className="btn btn-ghost !text-[12px]"
         >
-          {navOpen ? "閉じる" : "問題一覧"}
+          {navOpen ? t("navClose") : t("navOpen")}
         </button>
         <button
           type="button"
@@ -344,7 +342,7 @@ function ExamFooter({
           disabled={idx + 1 >= total || submitting}
           className="btn btn-ghost !text-[13px]"
         >
-          次 →
+          {t("next")}
         </button>
       </div>
     </div>
@@ -352,26 +350,26 @@ function ExamFooter({
 }
 
 function Metadata({ q }: { q: Question }) {
-  const categoryLabel: Record<string, string> = {
-    strategy: "ストラテジ系",
-    management: "マネジメント系",
-    technology: "テクノロジ系",
-    integrated: "中問",
-  };
+  const exam = useTranslations("exam");
+  const examTerms = useTranslations("examTerms");
   return (
     <div className="flex items-center gap-2.5 flex-wrap mb-5">
       {q.category ? (
-        <span className="chip chip-accent">{categoryLabel[q.category]}</span>
+        <span className="chip chip-accent">
+          {categoryLabel(q.category, examTerms)}
+        </span>
       ) : null}
       <span className="chip">
-        {q.exam_code} · 問{q.number}
+        {q.exam_code} · {exam("questionLabel", { n: q.number })}
       </span>
     </div>
   );
 }
 
 function IntegratedContext({ q }: { q: Question }) {
+  const t = useTranslations("exam");
   if (!q.integrated_context) return null;
+  const groupLetter = q.integrated_group_id?.split("-").pop() ?? "";
   return (
     <details
       className="mb-6 rounded-[var(--radius)] border border-line bg-surface-2 overflow-hidden"
@@ -379,77 +377,22 @@ function IntegratedContext({ q }: { q: Question }) {
     >
       <summary className="cursor-pointer list-none px-5 py-3 flex items-center justify-between text-[12px] text-ink-3 bg-surface">
         <span className="t-label">
-          中問 {q.integrated_group_id?.split("-").pop()} — 共通の設問
+          {t("integratedGroupLabel", { group: groupLetter })}
         </span>
-        <span className="text-[11px]">▼ 折りたたむ</span>
+        <span className="text-[11px]">{t("collapse")}</span>
       </summary>
-      <div className="px-5 py-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
-        {q.integrated_context}
+      <div className="px-5 py-4 text-[13px] leading-[1.85] text-ink-2">
+        <Markdown figures={q.figures}>{q.integrated_context}</Markdown>
       </div>
     </details>
   );
 }
 
-function resolveFigure(src: string, figures: Figure[]): Figure | undefined {
-  const normalized = src.replace(/^\.\.\/figures\//, "figures/");
-  const filename = normalized.split("/").pop() ?? "";
-  if (!filename) return undefined;
-  return figures.find((f) => f.path.endsWith(filename));
-}
-
-function buildMarkdownComponents(figures: Figure[]): Components {
-  return {
-    p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
-    img: ({ src }) => {
-      const fig = resolveFigure(typeof src === "string" ? src : "", figures);
-      return fig ? <FigureImage figure={fig} /> : null;
-    },
-    table: ({ children }) => (
-      <div className="my-4 overflow-x-auto rounded-[var(--radius)] border border-line">
-        <table className="w-full border-collapse text-[13.5px] leading-[1.6]">
-          {children}
-        </table>
-      </div>
-    ),
-    thead: ({ children }) => (
-      <thead className="bg-surface-2 text-ink-2">{children}</thead>
-    ),
-    tr: ({ children }) => (
-      <tr className="border-b border-line last:border-b-0">{children}</tr>
-    ),
-    th: ({ children }) => (
-      <th className="border-r border-line px-3 py-2 text-left font-semibold last:border-r-0">
-        {children}
-      </th>
-    ),
-    td: ({ children }) => (
-      <td className="border-r border-line px-3 py-2 align-top last:border-r-0">
-        {children}
-      </td>
-    ),
-    ul: ({ children }) => (
-      <ul className="mb-3 list-disc space-y-1 pl-6">{children}</ul>
-    ),
-    ol: ({ children }) => (
-      <ol className="mb-3 list-decimal space-y-1 pl-6">{children}</ol>
-    ),
-  };
-}
-
 function QuestionBody({ q }: { q: Question }) {
   const hasInlineImage = /!\[[^\]]*\]\([^)]+\)/.test(q.question);
-  const components = useMemo(
-    () => buildMarkdownComponents(q.figures),
-    [q.figures],
-  );
   return (
     <div className="t-serif mb-6 text-[16px] leading-[1.85] sm:text-[17px]">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
-        components={components}
-      >
-        {q.question}
-      </ReactMarkdown>
+      <Markdown figures={q.figures}>{q.question}</Markdown>
       {q.figures.length > 0 && !hasInlineImage ? (
         <div className="mt-2">
           {q.figures.map((f) => (
@@ -512,12 +455,19 @@ function Choices({
         const isFigRef = raw.startsWith("figure:");
         const active = picked === letter;
         return (
-          <button
+          <div
             key={letter}
-            type="button"
+            role="button"
+            tabIndex={0}
             onClick={() => onPick(letter)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onPick(letter);
+              }
+            }}
             className={
-              "flex items-start gap-4 text-left p-4 sm:px-5 rounded-[var(--radius-lg)] border transition-colors " +
+              "flex items-start gap-4 text-left p-4 sm:px-5 rounded-[var(--radius-lg)] border transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent/50 " +
               (active
                 ? "bg-accent-soft border-accent"
                 : "bg-surface border-line hover:bg-surface-2")
@@ -525,13 +475,13 @@ function Choices({
           >
             <span
               className={
-                "grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0 " +
+                "grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0 mt-0.5 " +
                 (active ? "bg-accent text-white" : "bg-surface-2 text-ink-2")
               }
             >
               {letter}
             </span>
-            <span className="flex-1 pt-0.5 text-[13.5px] leading-[1.7] text-ink">
+            <div className="flex-1 pt-0.5 text-[13.5px] leading-[1.7] text-ink">
               {isFigRef || isFigureChoice ? (
                 <FigureImage
                   figure={{
@@ -542,12 +492,13 @@ function Choices({
                   maxWidth={320}
                 />
               ) : (
-                raw
+                <Markdown figures={q.figures}>{raw}</Markdown>
               )}
-            </span>
-          </button>
+            </div>
+          </div>
         );
       })}
     </div>
   );
 }
+

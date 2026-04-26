@@ -121,7 +121,10 @@
     "integratedGroupLabel": "中問 {group} — 公共题干",
     "collapse": "▼ 收起",
     "questionLabel": "第{n}题",
-    "integratedChip": "{group} 组"
+    "integratedChip": "{group} 组",
+    "randomSessionLabel": "随机 {n} 题",
+    "examSessionLabel": "{code} · 全 100 题",
+    "categorySessionLabel": "{label} · {n} 题"
   },
   "result": {
     "loading": "加载中…",
@@ -155,5 +158,138 @@
     "ja": "日本語",
     "zh": "简体中文",
     "en": "English"
+  },
+  "exam": {
+    "subtitle": "全真模拟 · 100 题 · 100 分钟 · 60% 合格",
+    "title": "模拟考试",
+    "randomLabel": "随机",
+    "randomTitle": "随机 100 题",
+    "randomBody": "从全 2,800 道题中随机抽 100 题。题型分布均衡，能反映真实水平。",
+    "startButton": "开始",
+    "pastTitle": "真题模式",
+    "pastCount": "共 {count} 次",
+    "examMeta": "100 题 · 100 分钟",
+    "remainingTime": "剩余时间",
+    "endButton": "交卷",
+    "navOpen": "题号导航",
+    "navClose": "收起",
+    "prev": "← 上一题",
+    "next": "下一题 →",
+    "confirmExit": "还有 {n} 题未作答，确定交卷吗？",
+    "questionLabel": "第{n}题",
+    "integratedGroupLabel": "中問 {group} — 公共题干",
+    "collapse": "▼ 收起",
+    "backToList": "← 模拟考试列表",
+    "scoreLabel": "得分",
+    "passNote": "合格线 60% · ",
+    "passed": "已超过合格线 🎉",
+    "almost": "还差一点",
+    "accuracyLabel": "正确率",
+    "outOfHundred": "（100 题）",
+    "wrongLabel": "错题",
+    "reviewWrong": "复习错题 →",
+    "perfect": "满分",
+    "explanationsHeader": "解析",
+    "explanationsTitle": "逐题回顾",
+    "examWrongLabel": "{label} 的错题"
+  },
+  "stats": {
+    "subtitle": "学习轨迹",
+    "title": "统计",
+    "totalAttemptsLabel": "累计答题",
+    "totalAttemptsSuffix": "次",
+    "noData": "暂无数据",
+    "correctCount": "答对 {count} 次",
+    "accuracyLabel": "正确率",
+    "passingHigh": "已超过合格线",
+    "passingLow": "尚未达 60%",
+    "needAttempts": "做满一题后显示",
+    "seenLabel": "已学题数",
+    "seenSuffix": "题",
+    "masteredCount": "其中已掌握 {count} 题",
+    "streakLabel": "连续打卡",
+    "streakSuffix": "天",
+    "streakZero": "今天还没开始",
+    "streakOne": "今天起航",
+    "streakMany": "持续中",
+    "categoryEmptyLabel": "分领域",
+    "categoryEmptyHint": "暂无数据。开始练习后会显示。",
+    "categoryAccuracyTitle": "分领域正确率",
+    "trendLabel": "近 30 天",
+    "trendSummary": "{count} 次 / 30 天",
+    "trendTooltip": "{date} · {correct}/{total}",
+    "examEmptyLabel": "按年份",
+    "examEmptyHint": "做了真题模式后这里会显示成绩。",
+    "examAccuracyTitle": "按年份的正确率",
+    "examShortSeasonAutumn": "秋",
+    "examShortSeasonSpring": "春",
+    "examShortSeasonOctober": "10",
+    "examShortSeasonSpecial": "特"
+  },
+  "review": {
+    "subtitle": "针对错题集中复习",
+    "title": "复习",
+    "sessionPrefix": "复习",
+    "candidates": "候选 {n} 题",
+    "noCandidates": "暂无候选",
+    "startButton": "开始",
+    "strategy": {
+      "wrong-recent": {
+        "title": "最近错过",
+        "subtitle": "近两周内做错的题目",
+        "hint": "趁记忆鲜活时复习。"
+      },
+      "frequent-miss": {
+        "title": "反复错",
+        "subtitle": "错过 2 次以上的题目",
+        "hint": "集中攻克薄弱点。"
+      },
+      "stale": {
+        "title": "久未练习",
+        "subtitle": "7 天以上没碰过的题目",
+        "hint": "按遗忘曲线复习。"
+      }
+    }
+  },
+  "account": {
+    "subtitle": "账户",
+    "title": "会员",
+    "accountLabel": "账户",
+    "planLabel": "套餐",
+    "nextBilling": "下次续费",
+    "trialEnd": "试用结束",
+    "managePayment": "支付管理",
+    "subscribePro": "升级 Pro",
+    "signOutLabel": "退出登录",
+    "signOutBody": "退出后此浏览器会取消登录状态。再次登录后进度仍会保留。",
+    "signOutButton": "退出登录",
+    "status": {
+      "free": "免费方案",
+      "trialing": "免费试用中",
+      "active": "Pro 会员",
+      "past_due": "支付失败（请更新）",
+      "canceled": "已取消"
+    }
+  },
+  "settings": {
+    "subtitle": "练习设置",
+    "title": "设置",
+    "note": "v2 版本会加上：主题、信息密度等可定制项。"
+  },
+  "comingSoon": {
+    "proLabel": "Pro 会员专享",
+    "preparing": "即将上线 · 准备中"
+  },
+  "progress": {
+    "seenLabel": "已学题数",
+    "seenSuffix": "题",
+    "noAttempts": "开始你的第一题吧",
+    "correctCount": "答对 {count} 题",
+    "accuracyLabel": "正确率",
+    "passingHigh": "已超过合格线",
+    "passingLow": "尚未达 60%",
+    "needAttempts": "做满一题后显示",
+    "untouchedLabel": "未触碰",
+    "untouchedSub": "全 {total} 题中"
   }
 }

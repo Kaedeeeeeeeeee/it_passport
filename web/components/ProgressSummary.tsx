@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { loadProgress, summarize } from "@/lib/progress";
 import { Icon, type IconName } from "./Icon";
@@ -12,41 +13,45 @@ type Stat = {
   icon: IconName;
 };
 
+const TOTAL_QUESTIONS = 2800;
+
 export function ProgressSummary() {
+  const t = useTranslations("progress");
   const [stats, setStats] = useState<Stat[] | null>(null);
 
   useEffect(() => {
     const s = summarize(loadProgress());
     setStats([
       {
-        label: "学習した問題",
+        label: t("seenLabel"),
         value: String(s.seen),
-        suffix: "問",
-        sub: s.seen === 0 ? "さあ、始めましょう" : `正解 ${s.correct}問`,
+        suffix: t("seenSuffix") || undefined,
+        sub:
+          s.seen === 0
+            ? t("noAttempts")
+            : t("correctCount", { count: s.correct }),
         icon: "check",
       },
       {
-        label: "正答率",
-        value: s.seen
-          ? Math.round(s.accuracy * 100).toString()
-          : "—",
+        label: t("accuracyLabel"),
+        value: s.seen ? Math.round(s.accuracy * 100).toString() : "—",
         suffix: s.seen ? "%" : undefined,
         sub: s.seen
           ? s.accuracy >= 0.6
-            ? "合格ラインを超えています"
-            : "まだ 60% 未満"
-          : "1問以上解くと表示されます",
+            ? t("passingHigh")
+            : t("passingLow")
+          : t("needAttempts"),
         icon: "chart",
       },
       {
-        label: "未着手",
-        value: String(2800 - s.seen),
-        suffix: "問",
-        sub: "全 2,800 問のうち",
+        label: t("untouchedLabel"),
+        value: String(TOTAL_QUESTIONS - s.seen),
+        suffix: t("seenSuffix") || undefined,
+        sub: t("untouchedSub", { total: TOTAL_QUESTIONS.toLocaleString() }),
         icon: "book",
       },
     ]);
-  }, []);
+  }, [t]);
 
   return (
     <div className="card !p-0 overflow-hidden">

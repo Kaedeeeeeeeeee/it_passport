@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon, type IconName } from "@/components/Icon";
 
 type Tile = {
@@ -20,45 +23,47 @@ export function Overview({
     streak: number;
   };
 }) {
+  const t = useTranslations("stats");
+
   const tiles: Tile[] = [
     {
-      label: "累計回答",
+      label: t("totalAttemptsLabel"),
       value: String(stats.total),
-      suffix: "回",
+      suffix: t("totalAttemptsSuffix") || undefined,
       sub:
         stats.total === 0
-          ? "まだデータがありません"
-          : `正解 ${stats.correct} 回`,
+          ? t("noData")
+          : t("correctCount", { count: stats.correct }),
       icon: "check",
     },
     {
-      label: "正答率",
+      label: t("accuracyLabel"),
       value: stats.total ? Math.round(stats.accuracy * 100).toString() : "—",
       suffix: stats.total ? "%" : undefined,
       sub: stats.total
         ? stats.accuracy >= 0.6
-          ? "合格ラインを超えています"
-          : "まだ 60% 未満"
-        : "1 問以上解くと表示されます",
+          ? t("passingHigh")
+          : t("passingLow")
+        : t("needAttempts"),
       icon: "chart",
     },
     {
-      label: "学習した問題",
+      label: t("seenLabel"),
       value: String(stats.seen),
-      suffix: "問",
-      sub: `うち正解済 ${stats.masteredCount} 問`,
+      suffix: t("seenSuffix") || undefined,
+      sub: t("masteredCount", { count: stats.masteredCount }),
       icon: "book",
     },
     {
-      label: "連続学習",
+      label: t("streakLabel"),
       value: String(stats.streak),
-      suffix: "日",
+      suffix: t("streakSuffix") || undefined,
       sub:
         stats.streak === 0
-          ? "今日はまだです"
+          ? t("streakZero")
           : stats.streak === 1
-            ? "今日から始まりました"
-            : "継続中",
+            ? t("streakOne")
+            : t("streakMany"),
       icon: "chart",
     },
   ];

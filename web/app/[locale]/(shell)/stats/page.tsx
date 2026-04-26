@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Topbar } from "@/components/Topbar";
 import { CategoryBreakdown } from "@/components/stats/CategoryBreakdown";
 import { DailyTrend } from "@/components/stats/DailyTrend";
@@ -15,6 +16,7 @@ export const dynamic = "force-dynamic";
 
 export default async function StatsPage() {
   const profile = await requirePro("/stats");
+  const t = await getTranslations("stats");
 
   const [overview, daily, byCat, byExam] = await Promise.all([
     getOverview(profile.id),
@@ -25,7 +27,7 @@ export default async function StatsPage() {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <Topbar subtitle="学習の軌跡" title="統計" />
+      <Topbar subtitle={t("subtitle")} title={t("title")} />
       <div className="flex-1 overflow-auto p-5 sm:p-7 space-y-6">
         <Overview stats={overview} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

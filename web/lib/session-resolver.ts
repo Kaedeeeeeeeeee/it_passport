@@ -1,4 +1,6 @@
-import { CATEGORY_LABELS, PRACTICE_CATEGORIES } from "./categories";
+import { getTranslations } from "next-intl/server";
+import { PRACTICE_CATEGORIES } from "./categories";
+import { categoryLabel } from "./exam-terms";
 import {
   allQuestions,
   questionById,
@@ -22,6 +24,8 @@ export async function resolveSession(
   sessionId: string,
   search: Record<string, string | string[] | undefined>,
 ): Promise<{ label: string; questions: Question[] } | null> {
+  const practice = await getTranslations("practice");
+
   if (sessionId === "random") {
     const raw = search.n;
     const n = Math.max(
@@ -29,7 +33,7 @@ export async function resolveSession(
       Math.min(100, Number(Array.isArray(raw) ? raw[0] : raw) || 10),
     );
     return {
-      label: `ランダム ${n} 問`,
+      label: practice("randomSessionLabel", { n }),
       questions: sample(allQuestions.slice(), n),
     };
   }
@@ -37,7 +41,10 @@ export async function resolveSession(
     const code = sessionId.slice(5);
     const qs = questionsForExam(code).sort((a, b) => a.number - b.number);
     if (qs.length === 0) return null;
-    return { label: `${code} · 全100問`, questions: qs };
+    return {
+      label: practice("examSessionLabel", { code }),
+      questions: qs,
+    };
   }
   if (sessionId.startsWith("category-")) {
     const cat = sessionId.slice(9) as Category;
@@ -47,8 +54,12 @@ export async function resolveSession(
     const pool = questionsByCategory(cat);
     if (pool.length === 0) return null;
     const n = Math.max(1, Math.min(100, Math.min(requested, pool.length)));
+    const examTerms = await getTranslations("examTerms");
     return {
-      label: `${CATEGORY_LABELS[cat]} · ${n} 問`,
+      label: practice("categorySessionLabel", {
+        label: categoryLabel(cat, examTerms),
+        n,
+      }),
       questions: sample(pool, n),
     };
   }
@@ -89,9 +100,11 @@ async function resolveReviewSession(
   }
   if (questions.length === 0) return null;
 
+  const review = await getTranslations("review");
+  const prefix = review("sessionPrefix");
   const label =
     typeof source?.label === "string"
-      ? `復習 · ${source.label}`
-      : "復習";
+      ? `${prefix} · ${source.label}`
+      : prefix;
   return { label, questions };
 }

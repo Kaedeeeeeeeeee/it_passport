@@ -1,11 +1,13 @@
+import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/ComingSoon";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const t = await getTranslations("settings");
   return (
     <ComingSoon
-      subtitle="練習設定"
-      title="設定"
-      note="v2 で追加予定です。テーマ・情報密度などのカスタマイズができるようになります。"
+      subtitle={t("subtitle")}
+      title={t("title")}
+      note={t("note")}
     />
   );
 }

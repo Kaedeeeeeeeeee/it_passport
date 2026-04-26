@@ -1,8 +1,8 @@
+import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { requirePro } from "@/lib/auth";
 import { sample } from "@/lib/questions";
 import {
-  REVIEW_META,
   REVIEW_STRATEGIES,
   getReviewCandidates,
   type ReviewStrategy,
@@ -25,6 +25,7 @@ export default async function ReviewLauncher({ params }: Props) {
   if (candidates.length === 0) redirect("/review");
 
   const picked = sample(candidates, Math.min(candidates.length, MAX_QUESTIONS));
+  const t = await getTranslations("review");
 
   const { data, error } = await supabaseAdmin()
     .from("sessions")
@@ -34,7 +35,7 @@ export default async function ReviewLauncher({ params }: Props) {
       source: {
         kind: "review",
         strategy: key,
-        label: REVIEW_META[key].title,
+        label: t(`strategy.${key}.title`),
         questionIds: picked,
       },
       question_count: picked.length,

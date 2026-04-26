@@ -121,7 +121,10 @@
     "integratedGroupLabel": "中問 {group} — shared stem",
     "collapse": "▼ Collapse",
     "questionLabel": "Q{n}",
-    "integratedChip": "Group {group}"
+    "integratedChip": "Group {group}",
+    "randomSessionLabel": "Random {n}",
+    "examSessionLabel": "{code} · 100 questions",
+    "categorySessionLabel": "{label} · {n}"
   },
   "result": {
     "loading": "Loading…",
@@ -155,5 +158,138 @@
     "ja": "日本語",
     "zh": "简体中文",
     "en": "English"
+  },
+  "exam": {
+    "subtitle": "100 questions · 100 minutes · 60% to pass — same as the real thing",
+    "title": "Mock exam",
+    "randomLabel": "Random",
+    "randomTitle": "Random 100 questions",
+    "randomBody": "100 questions drawn at random from all 2,800. Balanced across categories — a fair gauge of where you stand.",
+    "startButton": "Start",
+    "pastTitle": "Past exams",
+    "pastCount": "{count} exams",
+    "examMeta": "100 Q · 100 min",
+    "remainingTime": "Time remaining",
+    "endButton": "Finish",
+    "navOpen": "Question grid",
+    "navClose": "Close",
+    "prev": "← Prev",
+    "next": "Next →",
+    "confirmExit": "{n} unanswered. Finish anyway?",
+    "questionLabel": "Q{n}",
+    "integratedGroupLabel": "中問 {group} — shared stem",
+    "collapse": "▼ Collapse",
+    "backToList": "← Mock exam list",
+    "scoreLabel": "Score",
+    "passNote": "Pass line 60% · ",
+    "passed": "Above the pass line 🎉",
+    "almost": "Almost there",
+    "accuracyLabel": "Accuracy",
+    "outOfHundred": "out of 100",
+    "wrongLabel": "Wrong",
+    "reviewWrong": "Review wrong answers →",
+    "perfect": "Perfect score",
+    "explanationsHeader": "Explanations",
+    "explanationsTitle": "Question-by-question review",
+    "examWrongLabel": "Wrong from {label}"
+  },
+  "stats": {
+    "subtitle": "Your learning trail",
+    "title": "Stats",
+    "totalAttemptsLabel": "Total attempts",
+    "totalAttemptsSuffix": "",
+    "noData": "No data yet",
+    "correctCount": "{count} correct",
+    "accuracyLabel": "Accuracy",
+    "passingHigh": "Above the pass line",
+    "passingLow": "Below 60%",
+    "needAttempts": "Answer at least 1 question to see this",
+    "seenLabel": "Questions seen",
+    "seenSuffix": "",
+    "masteredCount": "{count} mastered",
+    "streakLabel": "Daily streak",
+    "streakSuffix": "days",
+    "streakZero": "Not yet today",
+    "streakOne": "Day one!",
+    "streakMany": "On a roll",
+    "categoryEmptyLabel": "By category",
+    "categoryEmptyHint": "No data yet. Start practicing to see this.",
+    "categoryAccuracyTitle": "Accuracy by category",
+    "trendLabel": "Last 30 days",
+    "trendSummary": "{count} attempts / 30 days",
+    "trendTooltip": "{date} · {correct}/{total}",
+    "examEmptyLabel": "By year",
+    "examEmptyHint": "Take an exam in past mode to populate this.",
+    "examAccuracyTitle": "Accuracy by year",
+    "examShortSeasonAutumn": "A",
+    "examShortSeasonSpring": "S",
+    "examShortSeasonOctober": "Oct",
+    "examShortSeasonSpecial": "Sp"
+  },
+  "review": {
+    "subtitle": "Drill the questions you missed",
+    "title": "Review",
+    "sessionPrefix": "Review",
+    "candidates": "{n} candidate(s)",
+    "noCandidates": "No candidates",
+    "startButton": "Start",
+    "strategy": {
+      "wrong-recent": {
+        "title": "Recently wrong",
+        "subtitle": "Wrong in the last 2 weeks",
+        "hint": "Revisit while it's still fresh."
+      },
+      "frequent-miss": {
+        "title": "Frequently missed",
+        "subtitle": "Wrong twice or more",
+        "hint": "Hammer down your weak spots."
+      },
+      "stale": {
+        "title": "Long unseen",
+        "subtitle": "Last seen over 7 days ago",
+        "hint": "Refresh along the forgetting curve."
+      }
+    }
+  },
+  "account": {
+    "subtitle": "Account",
+    "title": "Membership",
+    "accountLabel": "Account",
+    "planLabel": "Plan",
+    "nextBilling": "Next billing",
+    "trialEnd": "Trial ends",
+    "managePayment": "Manage payment",
+    "subscribePro": "Subscribe to Pro",
+    "signOutLabel": "Sign out",
+    "signOutBody": "Signing out only clears the session in this browser. Sign back in any time to recover your progress.",
+    "signOutButton": "Sign out",
+    "status": {
+      "free": "Free plan",
+      "trialing": "Free trial",
+      "active": "Pro member",
+      "past_due": "Payment failed (please update)",
+      "canceled": "Canceled"
+    }
+  },
+  "settings": {
+    "subtitle": "Practice settings",
+    "title": "Settings",
+    "note": "Coming in v2 — themes, information density, and more."
+  },
+  "comingSoon": {
+    "proLabel": "Pro member exclusive",
+    "preparing": "Launching soon · we're working on it"
+  },
+  "progress": {
+    "seenLabel": "Questions seen",
+    "seenSuffix": "",
+    "noAttempts": "Start your first question",
+    "correctCount": "{count} correct",
+    "accuracyLabel": "Accuracy",
+    "passingHigh": "Above the pass line",
+    "passingLow": "Below 60%",
+    "needAttempts": "Answer at least 1 question to see this",
+    "untouchedLabel": "Not yet seen",
+    "untouchedSub": "of {total} total"
   }
 }

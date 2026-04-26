@@ -1,35 +1,51 @@
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
+import { Link } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 import { getProfile, isPro } from "@/lib/auth";
 
-function fmtDate(iso: string | null): string {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-}
-
-const STATUS_LABEL: Record<string, string> = {
-  free: "無料プラン",
-  trialing: "無料トライアル中",
-  active: "Pro メンバー",
-  past_due: "支払い失敗（要更新）",
-  canceled: "解約済み",
+const LOCALE_DATE_TAG: Record<Locale, string> = {
+  ja: "ja-JP",
+  zh: "zh-CN",
+  en: "en-US",
 };
+
+function fmtDate(iso: string | null, locale: Locale): string {
+  if (!iso) return "—";
+  return new Intl.DateTimeFormat(LOCALE_DATE_TAG[locale], {
+    dateStyle: "medium",
+  }).format(new Date(iso));
+}
 
 export default async function AccountPage() {
   const profile = await getProfile();
   if (!profile) redirect("/login?next=/account");
 
+  const t = await getTranslations("account");
+  const common = await getTranslations("common");
+  const locale = (await getLocale()) as Locale;
+
   const pro = isPro(profile.subscription_status);
+  const statusLabel =
+    profile.subscription_status &&
+    [
+      "free",
+      "trialing",
+      "active",
+      "past_due",
+      "canceled",
+    ].includes(profile.subscription_status)
+      ? t(`status.${profile.subscription_status}`)
+      : profile.subscription_status;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <Topbar subtitle="アカウント" title="メンバーシップ" />
+      <Topbar subtitle={t("subtitle")} title={t("title")} />
 
       <div className="flex-1 overflow-auto p-5 sm:p-8 space-y-5 max-w-[720px] w-full mx-auto">
         <div className="card">
-          <div className="t-label mb-2">アカウント</div>
+          <div className="t-label mb-2">{t("accountLabel")}</div>
           <div className="t-serif text-lg font-semibold">{profile.email}</div>
           <div className="text-[11px] text-ink-3 mt-1 t-mono">{profile.id}</div>
         </div>
@@ -37,25 +53,31 @@ export default async function AccountPage() {
         <div className="card">
           <div className="flex items-center justify-between gap-4 mb-3">
             <div>
-              <div className="t-label">プラン</div>
+              <div className="t-label">{t("planLabel")}</div>
               <div className="t-serif text-lg font-semibold mt-1">
-                {STATUS_LABEL[profile.subscription_status] ?? profile.subscription_status}
+                {statusLabel}
               </div>
             </div>
             {pro ? (
               <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px">
-                PRO
+                {common("proBadge")}
               </span>
             ) : null}
           </div>
           {profile.current_period_end ? (
             <div className="text-[12px] text-ink-2">
-              次回更新: <span className="t-mono">{fmtDate(profile.current_period_end)}</span>
+              {t("nextBilling")}:{" "}
+              <span className="t-mono">
+                {fmtDate(profile.current_period_end, locale)}
+              </span>
             </div>
           ) : null}
           {profile.trial_ends_at ? (
             <div className="text-[12px] text-ink-2 mt-1">
-              トライアル終了: <span className="t-mono">{fmtDate(profile.trial_ends_at)}</span>
+              {t("trialEnd")}:{" "}
+              <span className="t-mono">
+                {fmtDate(profile.trial_ends_at, locale)}
+              </span>
             </div>
           ) : null}
 
@@ -63,25 +85,23 @@ export default async function AccountPage() {
             {pro ? (
               <form action="/api/portal" method="post">
                 <button type="submit" className="btn">
-                  支払い管理
+                  {t("managePayment")}
                 </button>
               </form>
             ) : (
               <Link href="/pricing" className="btn btn-primary no-underline">
-                Pro に加入する
+                {t("subscribePro")}
               </Link>
             )}
           </div>
         </div>
 
         <div className="card">
-          <div className="t-label mb-2">ログアウト</div>
-          <p className="text-[12.5px] text-ink-2 mb-3">
-            サインアウトすると、このブラウザではログイン状態が解除されます。進捗は再度ログインすれば戻ります。
-          </p>
+          <div className="t-label mb-2">{t("signOutLabel")}</div>
+          <p className="text-[12.5px] text-ink-2 mb-3">{t("signOutBody")}</p>
           <form action="/api/auth/signout" method="post">
             <button type="submit" className="btn">
-              サインアウト
+              {t("signOutButton")}
             </button>
           </form>
         </div>

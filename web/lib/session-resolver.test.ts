@@ -1,4 +1,37 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+// session-resolver now reads UI strings via next-intl's `getTranslations`,
+// which requires a Next.js server-component request context. Stub it with an
+// identity-style translator so unit tests can exercise the resolution logic
+// without a request scope.
+vi.mock("next-intl/server", () => ({
+  getTranslations: async (namespace: string) => {
+    return (
+      key: string,
+      values?: Record<string, string | number>,
+    ): string => {
+      if (namespace === "practice") {
+        if (key === "randomSessionLabel") return `ランダム ${values?.n} 問`;
+        if (key === "examSessionLabel") return `${values?.code} · 全100問`;
+        if (key === "categorySessionLabel")
+          return `${values?.label} · ${values?.n} 問`;
+      }
+      if (namespace === "examTerms") {
+        const map: Record<string, string> = {
+          "category.strategy": "ストラテジ系",
+          "category.management": "マネジメント系",
+          "category.technology": "テクノロジ系",
+          "category.integrated": "中問",
+          "category.unknown": "分野なし",
+        };
+        return map[key] ?? key;
+      }
+      if (namespace === "review" && key === "sessionPrefix") return "復習";
+      return `${namespace}.${key}`;
+    };
+  },
+}));
+
 import { resolveSession } from "./session-resolver";
 
 describe("resolveSession: random", () => {

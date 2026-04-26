@@ -121,7 +121,10 @@
     "integratedGroupLabel": "中問 {group} — 共通の設問",
     "collapse": "▼ 折りたたむ",
     "questionLabel": "問{n}",
-    "integratedChip": "{group} グループ"
+    "integratedChip": "{group} グループ",
+    "randomSessionLabel": "ランダム {n} 問",
+    "examSessionLabel": "{code} · 全100問",
+    "categorySessionLabel": "{label} · {n} 問"
   },
   "result": {
     "loading": "読み込み中…",
@@ -155,5 +158,138 @@
     "ja": "日本語",
     "zh": "简体中文",
     "en": "English"
+  },
+  "exam": {
+    "subtitle": "本番と同じ 100 問 · 100 分 · 60% で合格",
+    "title": "模擬試験",
+    "randomLabel": "ランダム",
+    "randomTitle": "ランダム 100 問",
+    "randomBody": "全 2,800 問から 100 問ランダムに出題。分野の偏りなく実力を測れます。",
+    "startButton": "始める",
+    "pastTitle": "過去問モード",
+    "pastCount": "{count} 回",
+    "examMeta": "100 問 · 100 分",
+    "remainingTime": "残り時間",
+    "endButton": "終了する",
+    "navOpen": "問題一覧",
+    "navClose": "閉じる",
+    "prev": "← 前",
+    "next": "次 →",
+    "confirmExit": "未回答の問題が {n} 問あります。終了しますか？",
+    "questionLabel": "問{n}",
+    "integratedGroupLabel": "中問 {group} — 共通の設問",
+    "collapse": "▼ 折りたたむ",
+    "backToList": "← 模擬試験一覧",
+    "scoreLabel": "スコア",
+    "passNote": "合格目安 60% · ",
+    "passed": "合格ラインを超えています 🎉",
+    "almost": "あと少しです",
+    "accuracyLabel": "正答率",
+    "outOfHundred": "100 問中",
+    "wrongLabel": "不正解",
+    "reviewWrong": "間違えた問題を復習する →",
+    "perfect": "満点です",
+    "explanationsHeader": "解説",
+    "explanationsTitle": "問題ごとの振り返り",
+    "examWrongLabel": "{label} の間違い"
+  },
+  "stats": {
+    "subtitle": "学習の軌跡",
+    "title": "統計",
+    "totalAttemptsLabel": "累計回答",
+    "totalAttemptsSuffix": "回",
+    "noData": "まだデータがありません",
+    "correctCount": "正解 {count} 回",
+    "accuracyLabel": "正答率",
+    "passingHigh": "合格ラインを超えています",
+    "passingLow": "まだ 60% 未満",
+    "needAttempts": "1 問以上解くと表示されます",
+    "seenLabel": "学習した問題",
+    "seenSuffix": "問",
+    "masteredCount": "うち正解済 {count} 問",
+    "streakLabel": "連続学習",
+    "streakSuffix": "日",
+    "streakZero": "今日はまだです",
+    "streakOne": "今日から始まりました",
+    "streakMany": "継続中",
+    "categoryEmptyLabel": "分野別",
+    "categoryEmptyHint": "データがありません。練習を始めると表示されます。",
+    "categoryAccuracyTitle": "分野別の正答率",
+    "trendLabel": "直近 30 日",
+    "trendSummary": "{count} 回 / 30 日",
+    "trendTooltip": "{date} · {correct}/{total}",
+    "examEmptyLabel": "年度別",
+    "examEmptyHint": "過去問モードで解答するとここに結果が並びます。",
+    "examAccuracyTitle": "年度別の正答率",
+    "examShortSeasonAutumn": "秋",
+    "examShortSeasonSpring": "春",
+    "examShortSeasonOctober": "10",
+    "examShortSeasonSpecial": "特"
+  },
+  "review": {
+    "subtitle": "間違えた問題を集中的に",
+    "title": "復習",
+    "sessionPrefix": "復習",
+    "candidates": "候補 {n} 問",
+    "noCandidates": "候補なし",
+    "startButton": "始める",
+    "strategy": {
+      "wrong-recent": {
+        "title": "最近間違えた",
+        "subtitle": "直近 2 週間で間違えた問題",
+        "hint": "記憶が新しいうちに復習しましょう。"
+      },
+      "frequent-miss": {
+        "title": "繰り返し間違える",
+        "subtitle": "2 回以上間違えた問題",
+        "hint": "苦手ポイントを集中攻略します。"
+      },
+      "stale": {
+        "title": "久しく解いていない",
+        "subtitle": "7 日以上前に答えた問題",
+        "hint": "忘却曲線に合わせて再確認。"
+      }
+    }
+  },
+  "account": {
+    "subtitle": "アカウント",
+    "title": "メンバーシップ",
+    "accountLabel": "アカウント",
+    "planLabel": "プラン",
+    "nextBilling": "次回更新",
+    "trialEnd": "トライアル終了",
+    "managePayment": "支払い管理",
+    "subscribePro": "Pro に加入する",
+    "signOutLabel": "ログアウト",
+    "signOutBody": "サインアウトすると、このブラウザではログイン状態が解除されます。進捗は再度ログインすれば戻ります。",
+    "signOutButton": "サインアウト",
+    "status": {
+      "free": "無料プラン",
+      "trialing": "無料トライアル中",
+      "active": "Pro メンバー",
+      "past_due": "支払い失敗（要更新）",
+      "canceled": "解約済み"
+    }
+  },
+  "settings": {
+    "subtitle": "練習設定",
+    "title": "設定",
+    "note": "v2 で追加予定です。テーマ・情報密度などのカスタマイズができるようになります。"
+  },
+  "comingSoon": {
+    "proLabel": "Pro メンバー限定",
+    "preparing": "近日公開 · 今は準備中です"
+  },
+  "progress": {
+    "seenLabel": "学習した問題",
+    "seenSuffix": "問",
+    "noAttempts": "さあ、始めましょう",
+    "correctCount": "正解 {count} 問",
+    "accuracyLabel": "正答率",
+    "passingHigh": "合格ラインを超えています",
+    "passingLow": "まだ 60% 未満",
+    "needAttempts": "1 問以上解くと表示されます",
+    "untouchedLabel": "未着手",
+    "untouchedSub": "全 {total} 問のうち"
   }
 }

@@ -1,6 +1,11 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 type Day = { date: string; total: number; correct: number };
 
 export function DailyTrend({ days }: { days: Day[] }) {
+  const t = useTranslations("stats");
   const max = Math.max(1, ...days.map((d) => d.total));
   const totalAnswers = days.reduce((s, d) => s + d.total, 0);
 
@@ -8,19 +13,21 @@ export function DailyTrend({ days }: { days: Day[] }) {
     <div className="card">
       <div className="flex justify-between items-baseline mb-3">
         <div>
-          <div className="t-label">直近 30 日</div>
+          <div className="t-label">{t("trendLabel")}</div>
           <div className="text-[13px] text-ink-3 mt-0.5">
-            {totalAnswers} 回 / 30 日
+            {t("trendSummary", { count: totalAnswers })}
           </div>
         </div>
       </div>
       <div className="flex items-end gap-[3px] h-[88px]">
         {days.map((d) => {
           const h = (d.total / max) * 100;
-          const correctH = d.total
-            ? (d.correct / d.total) * h
-            : 0;
-          const title = `${d.date} · ${d.correct}/${d.total}`;
+          const correctH = d.total ? (d.correct / d.total) * h : 0;
+          const title = t("trendTooltip", {
+            date: d.date,
+            correct: d.correct,
+            total: d.total,
+          });
           return (
             <div
               key={d.date}

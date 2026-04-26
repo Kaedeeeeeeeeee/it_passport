@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { requirePro } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
@@ -11,6 +12,7 @@ type Props = {
 export default async function ExamReviewLauncher({ params }: Props) {
   const { sessionId } = await params;
   const profile = await requirePro("/exam");
+  const t = await getTranslations("exam");
   const admin = supabaseAdmin();
 
   const { data: exam } = await admin
@@ -43,7 +45,7 @@ export default async function ExamReviewLauncher({ params }: Props) {
       source: {
         kind: "review",
         strategy: "exam-wrong",
-        label: `${source.label ?? "模擬試験"} の間違い`,
+        label: t("examWrongLabel", { label: source.label ?? t("title") }),
         questionIds: wrong,
       },
       question_count: wrong.length,

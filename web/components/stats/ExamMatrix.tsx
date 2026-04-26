@@ -1,19 +1,7 @@
-import type { ExamStat } from "@/lib/stats";
+"use client";
 
-function formatExamShort(examCode: string): string {
-  const m = /^(\d{4})(r|h)(\d+)([a-z]*)$/.exec(examCode);
-  if (!m) return examCode;
-  const [, , eraLetter, eraYear, suffix] = m;
-  const era = eraLetter === "r" ? "R" : "H";
-  const seasonMap: Record<string, string> = {
-    "": "",
-    a: "秋",
-    h: "春",
-    o: "10",
-    tokubetsu: "特",
-  };
-  return `${era}${eraYear}${seasonMap[suffix] ?? ""}`;
-}
+import { useTranslations } from "next-intl";
+import type { ExamStat } from "@/lib/stats";
 
 function tone(accuracy: number): string {
   if (accuracy >= 0.8) return "bg-[#b7e3c7] text-[#0d3d1f]";
@@ -24,19 +12,34 @@ function tone(accuracy: number): string {
 }
 
 export function ExamMatrix({ rows }: { rows: ExamStat[] }) {
+  const t = useTranslations("stats");
+
+  function formatExamShort(examCode: string): string {
+    const m = /^(\d{4})(r|h)(\d+)([a-z]*)$/.exec(examCode);
+    if (!m) return examCode;
+    const [, , eraLetter, eraYear, suffix] = m;
+    const era = eraLetter === "r" ? "R" : "H";
+    const seasonMap: Record<string, string> = {
+      "": "",
+      a: t("examShortSeasonAutumn"),
+      h: t("examShortSeasonSpring"),
+      o: t("examShortSeasonOctober"),
+      tokubetsu: t("examShortSeasonSpecial"),
+    };
+    return `${era}${eraYear}${seasonMap[suffix] ?? ""}`;
+  }
+
   if (rows.length === 0) {
     return (
       <div className="card">
-        <div className="t-label mb-2">年度別</div>
-        <p className="text-[13px] text-ink-3">
-          過去問モードで解答するとここに結果が並びます。
-        </p>
+        <div className="t-label mb-2">{t("examEmptyLabel")}</div>
+        <p className="text-[13px] text-ink-3">{t("examEmptyHint")}</p>
       </div>
     );
   }
   return (
     <div className="card">
-      <div className="t-label mb-3">年度別の正答率</div>
+      <div className="t-label mb-3">{t("examAccuracyTitle")}</div>
       <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
         {rows.map((r) => (
           <div

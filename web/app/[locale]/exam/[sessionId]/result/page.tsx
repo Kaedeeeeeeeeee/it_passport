@@ -1,9 +1,10 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { ExamResultClient } from "@/components/exam/ExamResultClient";
+import { Link } from "@/i18n/navigation";
 import { requirePro } from "@/lib/auth";
 import { questionById } from "@/lib/questions";
 import { supabaseServer } from "@/lib/supabase/server";
-import { ExamResultClient } from "@/components/exam/ExamResultClient";
 import type { Category } from "@/lib/types";
 
 type Props = {
@@ -18,6 +19,7 @@ type ExamSource = {
 export default async function ExamResultPage({ params }: Props) {
   const { sessionId } = await params;
   const profile = await requirePro("/exam");
+  const t = await getTranslations("exam");
 
   const sb = await supabaseServer();
   const { data: session } = await sb
@@ -81,7 +83,7 @@ export default async function ExamResultPage({ params }: Props) {
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="flex items-center gap-4 px-5 sm:px-8 py-4 border-b border-line bg-surface-2">
         <Link href="/exam" className="btn btn-ghost !text-[12px] no-underline">
-          ← 模擬試験一覧
+          {t("backToList")}
         </Link>
         <div className="flex-1" />
         <div className="t-mono text-[11px] text-ink-3 hidden sm:block">

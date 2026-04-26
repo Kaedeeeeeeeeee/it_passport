@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { requirePro } from "@/lib/auth";
 import { allQuestions, questionsForExam, sample } from "@/lib/questions";
@@ -12,6 +13,7 @@ const EXAM_QUESTION_COUNT = 100;
 export default async function ExamStart({ params }: Props) {
   const { code } = await params;
   const profile = await requirePro("/exam");
+  const t = await getTranslations("exam");
 
   let questionIds: string[];
   let sourceLabel: string;
@@ -19,7 +21,7 @@ export default async function ExamStart({ params }: Props) {
     questionIds = sample(allQuestions.slice(), EXAM_QUESTION_COUNT).map(
       (q) => q.id,
     );
-    sourceLabel = "ランダム 100 問";
+    sourceLabel = t("randomTitle");
   } else {
     const qs = questionsForExam(code).sort((a, b) => a.number - b.number);
     if (qs.length === 0) notFound();
