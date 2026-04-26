@@ -46,7 +46,10 @@
     "sourceLabel": "题源",
     "sourceBodyLine1": "独立行政法人",
     "sourceBodyLine2": "信息处理推进机构 (IPA)",
-    "sourceLink": "官方网站 →"
+    "sourceLink": "官方网站 →",
+    "feedback": "反馈",
+    "feedbackEmail": "f.shera.09@gmail.com",
+    "feedbackSubject": "IT Passport - 反馈"
   },
   "login": {
     "back": "← IT Passport 练习笔记",

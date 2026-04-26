@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FigureImage } from "@/components/FigureImage";
 import { Markdown } from "@/components/md/Markdown";
 import { useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics";
 import { categoryLabel } from "@/lib/exam-terms";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { recordAttempt } from "@/lib/progress";
@@ -104,6 +105,7 @@ export function ExamClient({ sessionId, label, questions, startedAt }: Props) {
       if (submittedRef.current) return;
       submittedRef.current = true;
       setSubmitting(true);
+      track("exam_finished", { reason });
       const completedAt = Date.now();
       const payloadAnswers = questions.map((q, i) => {
         const a = answers[i];
@@ -143,7 +145,6 @@ export function ExamClient({ sessionId, label, questions, startedAt }: Props) {
       }
 
       clearLocal(sessionId);
-      void reason;
       router.replace(`/exam/${sessionId}/result`);
     },
     [answers, questions, router, sessionId],

@@ -115,6 +115,13 @@ export function Sidebar({ user }: Props) {
         </Link>
       )}
 
+      <a
+        href={`mailto:${t("feedbackEmail")}?subject=${encodeURIComponent(t("feedbackSubject"))}`}
+        className="text-[11px] text-ink-3 hover:text-accent no-underline mb-2 block text-center"
+      >
+        {t("feedback")}
+      </a>
+
       <div className="rounded-sm border border-line bg-surface px-3.5 py-3 text-[11px] leading-relaxed text-ink-2">
         <div className="t-label text-[10px] mb-1.5">{t("sourceLabel")}</div>
         {t("sourceBodyLine1")}

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { track } from "@/lib/analytics";
 import type { ChoiceLetter } from "@/lib/types";
 
 type State =
@@ -36,6 +37,7 @@ export function AiExplanation({
       }
       const data = (await res.json()) as { explanation: string };
       setState({ kind: "ready", text: data.explanation });
+      track("explanation_generated", { language: locale });
     } catch (e) {
       setState({ kind: "error", message: (e as Error).message });
     }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AiExplanation } from "@/components/explain/AiExplanation";
 import { FigureImage } from "@/components/FigureImage";
 import { Markdown } from "@/components/md/Markdown";
 import { Link, useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics";
 import { categoryLabel } from "@/lib/exam-terms";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { newSessionId, recordAttempt, saveSession } from "@/lib/progress";
@@ -29,6 +30,16 @@ export function PracticeClient({ slug, label, questions }: Props) {
   const sessionMetaRef = useRef<{ localId: string; startedAt: number } | null>(
     null,
   );
+  const trackedStartRef = useRef(false);
+
+  // Fire `practice_started` once per mount. The guard prevents StrictMode's
+  // double-invoke in dev from sending two events. Re-emitting on a real new
+  // mount (i.e. a fresh session) is intended.
+  useEffect(() => {
+    if (trackedStartRef.current) return;
+    trackedStartRef.current = true;
+    track("practice_started", { source: slug });
+  }, [slug]);
 
   const q = questions[idx];
   const total = questions.length;

@@ -46,7 +46,10 @@
     "sourceLabel": "Source",
     "sourceBodyLine1": "Information-technology Promotion",
     "sourceBodyLine2": "Agency, Japan (IPA)",
-    "sourceLink": "Official site →"
+    "sourceLink": "Official site →",
+    "feedback": "Feedback",
+    "feedbackEmail": "f.shera.09@gmail.com",
+    "feedbackSubject": "IT Passport - Feedback"
   },
   "login": {
     "back": "← IT Passport Practice",

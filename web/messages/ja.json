@@ -46,7 +46,10 @@
     "sourceLabel": "出典",
     "sourceBodyLine1": "独立行政法人",
     "sourceBodyLine2": "情報処理推進機構 (IPA)",
-    "sourceLink": "公式サイト →"
+    "sourceLink": "公式サイト →",
+    "feedback": "フィードバック",
+    "feedbackEmail": "f.shera.09@gmail.com",
+    "feedbackSubject": "IT Passport - フィードバック"
   },
   "login": {
     "back": "← IT Passport 練習ノート",
