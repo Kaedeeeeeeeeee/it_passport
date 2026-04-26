@@ -5,9 +5,11 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-// Paths that must never be locale-prefixed: API routes and the OAuth/magic-
-// link callback. These still need the Supabase session refresh, though.
-const SKIP_INTL = /^\/(?:api\/|callback(?:$|[/?]))/;
+// Paths that must never be locale-prefixed: API routes, the OAuth/magic-
+// link callback, and Next.js file-convention SEO files (sitemap.xml,
+// robots.txt). These still need the Supabase session refresh, though.
+const SKIP_INTL =
+  /^\/(?:api\/|callback(?:$|[/?])|sitemap\.xml(?:$|\?)|robots\.txt(?:$|\?))/;
 
 /** Proxy (Next 16 renamed `middleware` → `proxy`).
  *
