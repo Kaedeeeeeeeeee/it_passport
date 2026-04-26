@@ -195,17 +195,27 @@ debugging similar weirdness.
 - **Custom domain**: site is on `*.vercel.app`. Buying a domain and
   setting it in Vercel Dashboard → Domains will require updating
   `NEXT_PUBLIC_SITE_URL` (env) and the Stripe webhook endpoint URL.
-- **Stripe live mode**: everything is `sk_test_*` / `whsec_*` /
-  `prod_*` (test). Switching to live = create live product/price/
-  webhook on Stripe Dashboard, swap env vars, redeploy.
+- **消費税 / Stripe Tax**: deferred. Currently 免税事業者 (個人事業主,
+  < ¥10M annual revenue) so we don't actually collect or remit
+  consumption tax. Legal page deliberately omits "税込". When revenue
+  approaches the ¥10M threshold: register as 課税事業者, enable Stripe
+  Tax in dashboard, archive the current price + recreate with
+  `tax_behavior: "inclusive"`, add `automatic_tax: { enabled: true }`
+  + `customer_update.address` to checkout/route.ts, and restore
+  「税込」 wording on /legal + /terms.
 - **Vercel Preview env**: no env vars set for Preview deployments
   (CLI bug). Add them via Vercel Dashboard if/when you start using PR
   previews.
 - **Supabase Development env vars**: same story — only Production has
   the full set on Vercel. Add via dashboard if you want
   `vercel dev` to work end-to-end.
-- **Sentry / error monitoring**: not installed. Prod errors are
-  visible only via `vercel logs`.
+- **Sentry / error monitoring**: SDK is installed (`@sentry/nextjs`)
+  with `instrumentation.ts` + `instrumentation-client.ts` + a
+  `global-error.tsx` boundary. SDK is dormant when
+  `NEXT_PUBLIC_SENTRY_DSN` env is unset. To activate: create project
+  at sentry.io → set `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`,
+  `SENTRY_ORG`, `SENTRY_PROJECT` on Vercel → redeploy. Source maps
+  upload happens at build time via the auth token.
 - **Blog content**: only one demo post per locale. No real schedule.
 - **Onboarding flow**: nothing. First-time users land on `/home` cold.
 
