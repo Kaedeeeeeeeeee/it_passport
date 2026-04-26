@@ -77,6 +77,18 @@ export async function POST(req: Request) {
       success_url: `${base}/account?checkout=success`,
       cancel_url: `${base}/pricing?checkout=cancel`,
       allow_promotion_codes: true,
+      // 3-day free trial — disclosed in /legal (特商法表記). Applied per
+      // session rather than per price so existing customers who churn and
+      // resubscribe also get it. Default `payment_method_collection: "always"`
+      // means we still collect a card up-front and auto-charge on day 4.
+      subscription_data: {
+        trial_period_days: 3,
+        metadata: { source: "passnote.app" },
+      },
+      // The charge's credit-card statement descriptor comes from the
+      // product (set via `stripe products update <id> --statement-descriptor`),
+      // not per-session — Stripe Checkout in subscription mode doesn't
+      // accept payment_intent_data overrides.
     });
     if (!session.url) {
       return NextResponse.json(
