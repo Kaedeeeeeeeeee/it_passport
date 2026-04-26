@@ -106,8 +106,11 @@ export function breadcrumbSchema(items: BreadcrumbItem[], locale: string) {
   };
 }
 
-/** schema.org Article for blog posts. Image points to the route's
- *  dynamic opengraph-image so it always tracks the actual OG output. */
+/** schema.org Article for blog posts. We deliberately omit the `image`
+ *  field: Next.js's file-based opengraph-image convention emits a hashed
+ *  URL (e.g. `opengraph-image-abc123?xyz`) that we can't reliably name
+ *  from build-time code. The og:image meta tag still carries the right
+ *  URL for social sharing — Article schema is valid without `image`. */
 export function articleSchema(opts: {
   locale: string;
   slugPath: string;
@@ -133,7 +136,6 @@ export function articleSchema(opts: {
     dateModified: opts.dateModified ?? opts.datePublished,
     author: publisher,
     publisher,
-    image: `${url}/opengraph-image`,
     inLanguage: opts.locale,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     keywords: opts.tags.join(", "),
