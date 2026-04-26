@@ -94,6 +94,11 @@ export async function generateMetadata({
         "x-default": "/",
       },
     },
+    // Set GOOGLE_SITE_VERIFICATION on Vercel after registering the
+    // domain in Search Console; without it, no meta tag is emitted.
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
   };
 }
 

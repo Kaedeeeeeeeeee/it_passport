@@ -353,5 +353,56 @@
     "readMore": "Read more →",
     "publishedAt": "{date}",
     "tagsLabel": "Tags"
+  },
+  "legalNav": {
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "tokushou": "Commercial disclosure"
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "Please read before using passnote.app",
+    "lastUpdated": "Last updated: 2026-04-26",
+    "translationNotice": "This is an informational English translation of the Japanese terms. The Japanese version governs in case of any discrepancy.",
+    "body": "## 1. Scope\n\nThese Terms govern your use of the website service \"passnote.app (IT Passport Practice Notes)\" (the \"Service\"), operated by Zhang Shifeng (\"we\", \"us\"). By using the Service you agree to these Terms.\n\n## 2. Account\n\n1. Some features require sign-in via email or Google account.\n2. You are responsible for safeguarding your account credentials and may not share them with third parties.\n3. You may delete your account at any time. Data handling on deletion is described in the Privacy Policy.\n\n## 3. Paid plans and billing\n\n1. The Service offers a free plan and a Pro membership (¥980/month tax included).\n2. Pro billing is processed by Stripe.\n3. New Pro subscriptions include a 3-day free trial. Cancelling during the trial avoids any charge.\n4. Unless cancelled, the subscription renews automatically each month after the trial.\n5. You can cancel any time from the account page. **No prorated refund is given on cancellation**, but Pro access continues to the end of the current billing period.\n6. Prices and plan contents may change with prior notice.\n\n## 4. Prohibited conduct\n\nYou must not:\n\n- Violate laws or public order\n- Infringe IP, privacy, or other rights of us or third parties\n- Reproduce, redistribute, or republish Service content (questions, AI explanations) without permission\n- Scrape, mass-access, or reverse-engineer the Service\n- Impersonate another user or third party\n- Disrupt the operation of the Service\n\n## 5. Intellectual property\n\n1. The Service's source code, design, logos, and AI explanations are owned by us or rightful holders.\n2. The original past-exam content is copyright **Information-technology Promotion Agency, Japan (IPA)**, used by us within IPA's permitted scope.\n\n## 6. Disclaimer\n\n1. We make no warranty regarding the Service (including the accuracy of AI explanations). Final study and exam decisions are your own responsibility.\n2. We are not liable for damages from interruption, change, or unavailability of the Service except in cases of our intent or gross negligence.\n3. Third-party services we link or integrate with (Stripe, Supabase, Google AI Gateway, etc.) are governed by their own terms.\n\n## 7. Service changes / termination\n\nWe may change, suspend, or terminate the Service with or without prior notice.\n\n## 8. Changes to these Terms\n\nWe may revise these Terms at any time. Material changes will be announced on the Service. Continued use after changes constitutes acceptance.\n\n## 9. Governing law and jurisdiction\n\nThese Terms are governed by Japanese law. Disputes will be subject to the exclusive jurisdiction of the district court covering our principal place of business as the court of first instance.\n\n## 10. Contact\n\nReach us at f.shera.09@gmail.com."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "How we handle your personal data",
+    "lastUpdated": "Last updated: 2026-04-26",
+    "translationNotice": "This is an informational English translation of the Japanese privacy policy. The Japanese version governs in case of any discrepancy.",
+    "body": "## 1. Information we collect\n\nIn providing the Service we collect:\n\n- **Account info**: email, basic Google profile (name, picture) when using Google sign-in\n- **Learning data**: answer history, progress, chosen UI language\n- **Technical info**: IP, cookies, browser/OS info, anonymized page views and Web Vitals via Vercel Analytics\n- **Payment info**: card numbers etc. are processed directly by **Stripe** — we never store the card number itself, only the Stripe customer ID and subscription status.\n\n## 2. How we use it\n\n- Operate the Service (save progress, generate AI explanations, manage Pro)\n- Respond to your inquiries\n- Improve quality and prevent abuse\n- Comply with legal requirements\n\n## 3. Third parties\n\nWe share data only with the following operational service providers, only as needed:\n\n- **Supabase** (US / Tokyo region): database and authentication\n- **Stripe** (US / Japan): card payment processing\n- **Vercel** (US): hosting, Analytics, Speed Insights\n- **Google AI Gateway / Google Gemini**: AI explanation generation — question text and your answer letter are sent; no personally-identifying info is sent\n\nWe do not otherwise share personal data with third parties except where required by law or with your consent.\n\n## 4. Cookies\n\nThe Service uses cookies to:\n\n- Maintain auth sessions (issued by Supabase)\n- Persist UI language preference (`NEXT_LOCALE`)\n- Provide anonymous analytics via Vercel Analytics\n\nYou may disable cookies in your browser; some Service features may stop working as a result.\n\n## 5. Your rights\n\nYou may request, regarding your personal data:\n\n- Disclosure, correction, addition, or deletion\n- Stop of use or third-party transfer\n\nContact f.shera.09@gmail.com. After identity verification we will respond in a reasonable timeframe. You can also delete your account from the account page at any time.\n\n## 6. Retention\n\nData is retained while your account is active or as required by law for the purposes stated. After an account deletion request we delete data within a reasonable time, except for backups required for operations.\n\n## 7. Changes\n\nThis policy may be revised. Material changes will be announced on the Service.\n\n## 8. Contact\n\nReach us at f.shera.09@gmail.com."
+  },
+  "tokushou": {
+    "title": "Commercial transaction disclosure",
+    "subtitle": "Required disclosure under Japan's Specified Commercial Transaction Act",
+    "lastUpdated": "Last updated: 2026-04-26",
+    "translationNotice": "This is an informational English translation of a Japan-specific legal disclosure. The Japanese version is the legally binding text.",
+    "items": {
+      "seller": "Seller",
+      "sellerValue": "Zhang Shifeng",
+      "address": "Address",
+      "addressValue": "Disclosed without delay upon request",
+      "phone": "Phone",
+      "phoneValue": "Disclosed without delay upon request",
+      "email": "Email",
+      "emailValue": "f.shera.09@gmail.com",
+      "service": "Service name",
+      "serviceValue": "passnote.app (IT Passport Practice Notes)",
+      "price": "Price",
+      "priceValue": "Pro membership: ¥980 / month (tax included)",
+      "extraFees": "Other required fees",
+      "extraFeesValue": "Internet connection fees to access the Service are borne by the user",
+      "paymentMethod": "Payment method",
+      "paymentMethodValue": "Credit card (processed via Stripe)",
+      "paymentTiming": "Billing timing",
+      "paymentTimingValue": "Charged on subscription, then automatically renewed on the same day each month",
+      "delivery": "Delivery",
+      "deliveryValue": "Pro features become available immediately after payment is confirmed",
+      "returns": "Refunds / cancellation",
+      "returnsValue": "Due to the nature of digital services, refunds are not provided in principle. You can cancel from the account page at any time; Pro features remain available through the end of the current billing period after cancellation. Cancelling within the 3-day free trial avoids any charge.",
+      "environment": "System requirements",
+      "environmentValue": "Latest versions of Chrome / Safari / Firefox / Edge are recommended"
+    }
   }
 }

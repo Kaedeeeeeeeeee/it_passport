@@ -47,6 +47,7 @@ export default async function LandingPage() {
   const common = await getTranslations("common");
   const sampleT = await getTranslations("publicSample");
   const blogT = await getTranslations("blog");
+  const legalNav = await getTranslations("legalNav");
   const examTerms = await getTranslations("examTerms");
   const totalQuestions = allQuestions.length;
   const totalExams = exams.length;
@@ -221,14 +222,23 @@ export default async function LandingPage() {
       </main>
 
       <footer className="border-t border-line">
-        <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-6 flex items-center justify-between text-[11.5px] text-ink-3">
+        <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[11.5px] text-ink-3">
           <span>© {common("appName")}</span>
-          <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4 flex-wrap">
             <Link href="/blog" className="hover:text-accent no-underline">
               {blogT("nav")}
             </Link>
+            <Link href="/terms" className="hover:text-accent no-underline">
+              {legalNav("terms")}
+            </Link>
+            <Link href="/privacy" className="hover:text-accent no-underline">
+              {legalNav("privacy")}
+            </Link>
+            <Link href="/legal" className="hover:text-accent no-underline">
+              {legalNav("tokushou")}
+            </Link>
             <span className="t-mono">{common("tagline")}</span>
-          </div>
+          </nav>
         </div>
       </footer>
     </div>

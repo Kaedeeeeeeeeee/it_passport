@@ -13,6 +13,7 @@ export default async function PublicLayout({
 }) {
   const t = await getTranslations("landing");
   const common = await getTranslations("common");
+  const legalNav = await getTranslations("legalNav");
 
   return (
     <div className="flex-1 flex flex-col bg-bg">
@@ -48,9 +49,20 @@ export default async function PublicLayout({
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-line">
-        <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-6 flex items-center justify-between text-[11.5px] text-ink-3">
+        <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[11.5px] text-ink-3">
           <span>© {common("appName")}</span>
-          <span className="t-mono">{common("tagline")}</span>
+          <nav className="flex items-center gap-4 flex-wrap">
+            <Link href="/terms" className="hover:text-accent">
+              {legalNav("terms")}
+            </Link>
+            <Link href="/privacy" className="hover:text-accent">
+              {legalNav("privacy")}
+            </Link>
+            <Link href="/legal" className="hover:text-accent">
+              {legalNav("tokushou")}
+            </Link>
+            <span className="t-mono">{common("tagline")}</span>
+          </nav>
         </div>
       </footer>
     </div>
