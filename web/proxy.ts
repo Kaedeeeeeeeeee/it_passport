@@ -5,11 +5,18 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-// Paths that must never be locale-prefixed: API routes, the OAuth/magic-
-// link callback, and Next.js file-convention SEO files (sitemap.xml,
-// robots.txt). These still need the Supabase session refresh, though.
+// Paths that must never be locale-rewritten by next-intl: API routes,
+// the OAuth/magic-link callback, Next.js file-convention SEO files
+// (sitemap.xml, robots.txt), and OG image routes under any locale
+// (`/ja/opengraph-image`, `/zh/opengraph-image`, etc.). With
+// `localePrefix: "as-needed"`, next-intl would otherwise 307-strip the
+// `/ja` prefix, but the OG image route lives under `app/[locale]/` and
+// needs the prefix to resolve — Twitter / Slack would follow the
+// redirect into a 404. Listing it here lets the prefixed URL serve
+// the image directly. These paths still go through the Supabase
+// session refresh below.
 const SKIP_INTL =
-  /^\/(?:api\/|callback(?:$|[/?])|sitemap\.xml(?:$|\?)|robots\.txt(?:$|\?))/;
+  /^\/(?:api\/|callback(?:$|[/?])|sitemap\.xml(?:$|\?)|robots\.txt(?:$|\?)|(?:ja|zh|en)\/opengraph-image(?:$|\?))/;
 
 /** Proxy (Next 16 renamed `middleware` → `proxy`).
  *
