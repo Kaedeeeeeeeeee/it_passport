@@ -147,10 +147,14 @@ max_indexes = 5
 enabled = true
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
-site_url = "https://it-passport-steel.vercel.app"
+site_url = "https://passnote.app"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-# Includes the production Vercel domain plus localhost ports for dev.
+# Includes the production custom domain, the Vercel-assigned alias (kept as
+# fallback for direct visits / OG links that didn't pick up the custom
+# domain), and localhost ports for dev.
 additional_redirect_urls = [
+  "https://passnote.app/callback",
+  "https://passnote.app",
   "https://it-passport-steel.vercel.app/callback",
   "https://it-passport-steel.vercel.app",
   "http://localhost:3000/callback",
