@@ -46,6 +46,7 @@ export default async function LandingPage() {
   const t = await getTranslations("landing");
   const common = await getTranslations("common");
   const sampleT = await getTranslations("publicSample");
+  const blogT = await getTranslations("blog");
   const examTerms = await getTranslations("examTerms");
   const totalQuestions = allQuestions.length;
   const totalExams = exams.length;
@@ -222,7 +223,12 @@ export default async function LandingPage() {
       <footer className="border-t border-line">
         <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-6 flex items-center justify-between text-[11.5px] text-ink-3">
           <span>© {common("appName")}</span>
-          <span className="t-mono">{common("tagline")}</span>
+          <div className="flex items-center gap-4">
+            <Link href="/blog" className="hover:text-accent no-underline">
+              {blogT("nav")}
+            </Link>
+            <span className="t-mono">{common("tagline")}</span>
+          </div>
         </div>
       </footer>
     </div>

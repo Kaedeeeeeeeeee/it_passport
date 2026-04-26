@@ -49,7 +49,8 @@
     "sourceLink": "Official site →",
     "feedback": "Feedback",
     "feedbackEmail": "f.shera.09@gmail.com",
-    "feedbackSubject": "IT Passport - Feedback"
+    "feedbackSubject": "IT Passport - Feedback",
+    "blog": "Blog"
   },
   "login": {
     "back": "← IT Passport Practice",
@@ -344,5 +345,13 @@
     "title": "{label} drills",
     "subtitle": "20-question preview drawn from {count} total.",
     "ctaButton": "Sign in for the 20-question drill →"
+  },
+  "blog": {
+    "nav": "Blog",
+    "indexTitle": "Blog",
+    "indexSubtitle": "Tips for IT Passport prep",
+    "readMore": "Read more →",
+    "publishedAt": "{date}",
+    "tagsLabel": "Tags"
   }
 }

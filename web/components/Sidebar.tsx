@@ -115,6 +115,13 @@ export function Sidebar({ user }: Props) {
         </Link>
       )}
 
+      <Link
+        href="/blog"
+        className="text-[11.5px] text-ink-3 hover:text-accent no-underline mb-2 block px-2.5"
+      >
+        {t("blog")}
+      </Link>
+
       <a
         href={`mailto:${t("feedbackEmail")}?subject=${encodeURIComponent(t("feedbackSubject"))}`}
         className="text-[11px] text-ink-3 hover:text-accent no-underline mb-2 block text-center"

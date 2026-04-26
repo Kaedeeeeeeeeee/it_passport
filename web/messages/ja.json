@@ -49,7 +49,8 @@
     "sourceLink": "公式サイト →",
     "feedback": "フィードバック",
     "feedbackEmail": "f.shera.09@gmail.com",
-    "feedbackSubject": "IT Passport - フィードバック"
+    "feedbackSubject": "IT Passport - フィードバック",
+    "blog": "ブログ"
   },
   "login": {
     "back": "← IT Passport 練習ノート",
@@ -344,5 +345,13 @@
     "title": "{label} 対策",
     "subtitle": "{count} 問から 20 問プレビュー。",
     "ctaButton": "登録して 20 問ドリル →"
+  },
+  "blog": {
+    "nav": "ブログ",
+    "indexTitle": "ブログ",
+    "indexSubtitle": "学習法・備考のヒント",
+    "readMore": "続きを読む →",
+    "publishedAt": "{date}",
+    "tagsLabel": "タグ"
   }
 }

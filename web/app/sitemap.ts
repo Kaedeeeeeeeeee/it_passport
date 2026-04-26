@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
+import { getAllPosts } from "@/lib/blog";
 import { exams } from "@/lib/questions";
 
 const BASE_URL = (
@@ -40,7 +41,7 @@ function entries(
   }));
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Top-level paths (free + private indexes that still reside in the public
@@ -54,6 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/review",
     "/stats",
     "/exams",
+    "/blog",
   ];
 
   const out: MetadataRoute.Sitemap = [];
@@ -69,6 +71,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Category programmatic landing pages (3 categories × 3 locales).
   for (const cat of PUBLIC_CATEGORIES) {
     out.push(...entries(`/category/${cat}`, now));
+  }
+
+  // Blog posts. Each locale may have its own slug set; emit only the slugs
+  // that actually exist for that locale. A missing/empty content dir is
+  // tolerated so deploys don't break before the blog has any content.
+  for (const locale of routing.locales) {
+    let posts: Awaited<ReturnType<typeof getAllPosts>>;
+    try {
+      posts = await getAllPosts(locale);
+    } catch {
+      posts = [];
+    }
+    for (const post of posts) {
+      out.push({
+        url: localizedUrl(`/blog/${post.slug}`, locale),
+        lastModified: now,
+      });
+    }
   }
 
   return out;

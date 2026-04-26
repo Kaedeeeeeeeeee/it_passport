@@ -49,7 +49,8 @@
     "sourceLink": "官方网站 →",
     "feedback": "反馈",
     "feedbackEmail": "f.shera.09@gmail.com",
-    "feedbackSubject": "IT Passport - 反馈"
+    "feedbackSubject": "IT Passport - 反馈",
+    "blog": "博客"
   },
   "login": {
     "back": "← IT Passport 练习笔记",
@@ -344,5 +345,13 @@
     "title": "{label} 专项练习",
     "subtitle": "从 {count} 题中预览 20 道。",
     "ctaButton": "登录后做 20 题 →"
+  },
+  "blog": {
+    "nav": "博客",
+    "indexTitle": "博客",
+    "indexSubtitle": "学习法 / 备考小贴士",
+    "readMore": "继续阅读 →",
+    "publishedAt": "{date}",
+    "tagsLabel": "标签"
   }
 }
