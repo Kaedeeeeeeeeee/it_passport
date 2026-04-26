@@ -9,6 +9,13 @@ REPO_ROOT="$(cd "$WEB_DIR/.." && pwd)"
 SRC_DIR="$REPO_ROOT/dataset"
 
 if [ ! -f "$SRC_DIR/questions.json" ]; then
+  # ../dataset is only present in local checkouts. On Vercel/CI the build
+  # sees only `web/`, so fall back to the committed copy under web/data/
+  # and web/public/figures/. Fail only if even those are missing.
+  if [ -f "$WEB_DIR/data/questions.json" ]; then
+    echo "Skipping sync: using committed dataset under web/data/ (Vercel/CI build)" >&2
+    exit 0
+  fi
   echo "ERR: $SRC_DIR/questions.json not found. Run scripts/pack_dataset.py at the repo root first." >&2
   exit 1
 fi

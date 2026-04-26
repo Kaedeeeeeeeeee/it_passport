@@ -41,9 +41,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Dataset artifacts — synced from ../dataset/ by scripts/sync-dataset.sh
-# (see package.json "prebuild"). Not checked in; the source of truth is the
-# packed dataset in the repo root, not this copy.
-/public/figures
-/data/questions.json
+# Dataset artifacts — copied from ../dataset/ by scripts/sync-dataset.sh
+# during local dev (see package.json "prebuild"). The source of truth is the
+# packed dataset at the repo root. Committed copies under web/data/ and
+# web/public/figures/ exist so Vercel/CI builds work without ../dataset/.
 .env*.local
