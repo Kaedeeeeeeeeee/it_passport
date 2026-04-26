@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { supabaseServer } from "./supabase/server";
 import type { User } from "@supabase/supabase-js";
 
@@ -17,23 +18,31 @@ export type ProfileRow = {
   preferred_language: string | null;
 };
 
-export async function getUser(): Promise<User | null> {
+/**
+ * Per-request memoised. Multiple components in the same render tree
+ * (e.g. (shell) layout + the page inside it + a header) all call
+ * `getUser()` / `getProfile()` independently — without `cache()` each
+ * call would round-trip Supabase. With it, only the first does the
+ * fetch, the rest reuse the in-flight Promise. This was the dominant
+ * source of nav-click latency on tab switches.
+ */
+export const getUser = cache(async (): Promise<User | null> => {
   const sb = await supabaseServer();
   const { data } = await sb.auth.getUser();
   return data.user;
-}
+});
 
-export async function getProfile(): Promise<ProfileRow | null> {
+export const getProfile = cache(async (): Promise<ProfileRow | null> => {
+  const user = await getUser();
+  if (!user) return null;
   const sb = await supabaseServer();
-  const { data: auth } = await sb.auth.getUser();
-  if (!auth.user) return null;
   const { data } = await sb
     .from("profiles")
     .select("*")
-    .eq("id", auth.user.id)
+    .eq("id", user.id)
     .maybeSingle();
   return (data as ProfileRow | null) ?? null;
-}
+});
 
 export function isPro(status: ProfileRow["subscription_status"] | undefined) {
   if (process.env.DEV_FORCE_PRO === "true") return true;
