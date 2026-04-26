@@ -296,5 +296,25 @@
     "needAttempts": "Answer at least 1 question to see this",
     "untouchedLabel": "Not yet seen",
     "untouchedSub": "of {total} total"
+  },
+  "publicSample": {
+    "sectionLabel": "Try 5 questions",
+    "sectionTitle": "Try 5 questions — no signup",
+    "sectionBody": "Five real past-exam questions. AI explanations and all 2,800 questions unlock after sign-up.",
+    "previewExplanation": "Sign in to see the AI explanation",
+    "ctaButton": "All 2,800 questions + AI explanations → Start free"
+  },
+  "publicExam": {
+    "indexTitle": "28 official past exams",
+    "indexSubtitle": "Every IT Passport (iパス) past exam, year by year. 100 questions each.",
+    "examTitle": "{title} past exam",
+    "examSubtitle": "100 questions · {season}",
+    "questionTeaser": "Q{n}",
+    "ctaButton": "Sign in to take all 100 →"
+  },
+  "publicCategory": {
+    "title": "{label} drills",
+    "subtitle": "20-question preview drawn from {count} total.",
+    "ctaButton": "Sign in for the 20-question drill →"
   }
 }

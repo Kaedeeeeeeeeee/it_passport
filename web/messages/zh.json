@@ -296,5 +296,25 @@
     "needAttempts": "做满一题后显示",
     "untouchedLabel": "未触碰",
     "untouchedSub": "全 {total} 题中"
+  },
+  "publicSample": {
+    "sectionLabel": "5 题体验",
+    "sectionTitle": "免登录·5 题体验",
+    "sectionBody": "从真实考题中精选 5 道。AI 解析与全部 2,800 题需登录后查看。",
+    "previewExplanation": "登录后查看 AI 解析",
+    "ctaButton": "全部 2,800 题 + AI 解析 → 免费开始"
+  },
+  "publicExam": {
+    "indexTitle": "官方真题 28 套",
+    "indexSubtitle": "IT Passport (iパス) 历年真题，按年份整理。每套 100 题。",
+    "examTitle": "{title} 真题",
+    "examSubtitle": "100 题 · {season}",
+    "questionTeaser": "第{n}题",
+    "ctaButton": "登录后做完 100 题 →"
+  },
+  "publicCategory": {
+    "title": "{label} 专项练习",
+    "subtitle": "从 {count} 题中预览 20 道。",
+    "ctaButton": "登录后做 20 题 →"
   }
 }

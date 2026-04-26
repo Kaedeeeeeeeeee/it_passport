@@ -296,5 +296,25 @@
     "needAttempts": "1 問以上解くと表示されます",
     "untouchedLabel": "未着手",
     "untouchedSub": "全 {total} 問のうち"
+  },
+  "publicSample": {
+    "sectionLabel": "5問体験",
+    "sectionTitle": "登録不要・5問体験",
+    "sectionBody": "実際の過去問から 5 問。AI 解説と全 2,800 問は登録後に。",
+    "previewExplanation": "AI 解説は登録すると見られます",
+    "ctaButton": "全 2,800 問 + AI 解説 → 無料で始める"
+  },
+  "publicExam": {
+    "indexTitle": "公式過去問 28 回分",
+    "indexSubtitle": "ITパスポート試験 (iパス) の過去問を年度別に。各 100 問。",
+    "examTitle": "{title} 過去問",
+    "examSubtitle": "100 問 · {season}",
+    "questionTeaser": "問{n}",
+    "ctaButton": "登録して 100 問解く →"
+  },
+  "publicCategory": {
+    "title": "{label} 対策",
+    "subtitle": "{count} 問から 20 問プレビュー。",
+    "ctaButton": "登録して 20 問ドリル →"
   }
 }

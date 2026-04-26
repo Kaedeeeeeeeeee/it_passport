@@ -7,7 +7,12 @@ import {
 } from "next-intl/server";
 import { Noto_Sans_JP, Noto_Serif_JP, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { routing, type Locale } from "@/i18n/routing";
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://it-passport.app"
+).replace(/\/$/, "");
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -102,6 +107,23 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const messages = await getMessages();
+  const common = await getTranslations({ locale, namespace: "common" });
+  const appName = common("appName");
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: appName,
+    url: SITE_URL,
+    inLanguage: routing.locales,
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: appName,
+    url: SITE_URL,
+  };
 
   return (
     <html
@@ -109,6 +131,8 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${notoSansJp.variable} ${notoSerifJp.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <JsonLd data={websiteSchema} />
+        <JsonLd data={organizationSchema} />
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
