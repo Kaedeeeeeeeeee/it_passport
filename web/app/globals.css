@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "katex/dist/katex.min.css";
 
 /* ----- 温かい紙 (Warm paper) design tokens, ported from design handoff ---- */
 

@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 
 type Props = { nextPath: string };
 
 export function LoginForm({ nextPath }: Props) {
+  const t = useTranslations("login");
   const [email, setEmail] = useState("");
   const [state, setState] = useState<
     | { kind: "idle" }
@@ -43,9 +45,9 @@ export function LoginForm({ nextPath }: Props) {
   if (state.kind === "sent") {
     return (
       <div className="rounded-[var(--radius)] border border-accent/30 bg-accent-soft px-4 py-4 text-[13px] leading-relaxed text-accent-ink">
-        <div className="font-semibold mb-1">メールを確認してください</div>
+        <div className="font-semibold mb-1">{t("magicLinkSent")}</div>
         <div className="text-ink-2">
-          <span className="t-mono">{state.email}</span> にログインリンクを送信しました。メール内のボタンから戻ると、ログインが完了します。
+          <span className="t-mono">{state.email}</span>
         </div>
       </div>
     );
@@ -59,19 +61,19 @@ export function LoginForm({ nextPath }: Props) {
         className="btn flex items-center justify-center gap-3 py-3"
       >
         <GoogleIcon />
-        <span>Google で続行</span>
+        <span>{t("googleButton")}</span>
       </button>
 
       <div className="flex items-center gap-3 my-1">
         <div className="flex-1 h-px bg-line" />
         <span className="text-[10px] text-ink-3 tracking-[0.1em] uppercase">
-          または
+          {t("or")}
         </span>
         <div className="flex-1 h-px bg-line" />
       </div>
 
       <form onSubmit={sendMagicLink} className="flex flex-col gap-2.5">
-        <label className="t-label">メールアドレス</label>
+        <label className="t-label">{t("magicLinkPlaceholder")}</label>
         <input
           type="email"
           required
@@ -85,7 +87,7 @@ export function LoginForm({ nextPath }: Props) {
           disabled={state.kind === "sending" || !email}
           className="btn btn-primary py-3"
         >
-          {state.kind === "sending" ? "送信中…" : "マジックリンクを送る"}
+          {state.kind === "sending" ? t("sending") : t("magicLinkButton")}
         </button>
       </form>
 

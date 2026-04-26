@@ -1,38 +1,30 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { LibraryTabs } from "@/components/library/LibraryTabs";
 import { Topbar } from "@/components/Topbar";
-import { CATEGORY_LABELS, PRACTICE_CATEGORIES } from "@/lib/categories";
+import { Link } from "@/i18n/navigation";
+import { PRACTICE_CATEGORIES } from "@/lib/categories";
+import {
+  categoryLabel,
+  eraLabel,
+  eraOf,
+  formatExamTitle,
+  seasonLabel,
+} from "@/lib/exam-terms";
 import { exams, questionsByCategory } from "@/lib/questions";
 
 const CATEGORY_SESSION_SIZE = 20;
 
-function seasonLabel(season: string): string {
-  const m: Record<string, string> = {
-    annual: "通年",
-    spring: "春期",
-    autumn: "秋期",
-    october: "10月",
-    special: "特別",
-  };
-  return m[season] ?? season;
-}
+export default async function LibraryPage() {
+  const t = await getTranslations("library");
+  const examTerms = await getTranslations("examTerms");
 
-function eraGroup(examCode: string): "reiwa" | "heisei" {
-  return examCode.includes("r") && !/h\d/.test(examCode) ? "reiwa" : "heisei";
-}
-
-function eraTitle(era: "reiwa" | "heisei"): string {
-  return era === "reiwa" ? "令和" : "平成";
-}
-
-export default function LibraryPage() {
   const sorted = exams
     .slice()
     .sort((a, b) => b.year - a.year || b.exam_code.localeCompare(a.exam_code));
 
   const grouped = sorted.reduce<Record<"reiwa" | "heisei", typeof sorted>>(
     (acc, e) => {
-      acc[eraGroup(e.exam_code)].push(e);
+      acc[eraOf(e.exam_code)].push(e);
       return acc;
     },
     { reiwa: [], heisei: [] },
@@ -42,7 +34,7 @@ export default function LibraryPage() {
     <section>
       <div className="flex items-baseline gap-3.5 mb-3.5">
         <span className="text-[11px] text-ink-3 tracking-[0.08em]">
-          各 {CATEGORY_SESSION_SIZE} 問 · ランダム抽出
+          {t("categorySubtitle", { n: CATEGORY_SESSION_SIZE })}
         </span>
       </div>
 
@@ -58,18 +50,18 @@ export default function LibraryPage() {
             >
               <div className="flex justify-between items-baseline mb-2">
                 <div className="font-semibold text-[14px]">
-                  {CATEGORY_LABELS[cat]}
+                  {categoryLabel(cat, examTerms)}
                 </div>
                 <span className="text-[11px] text-ink-3 t-mono">
-                  {CATEGORY_SESSION_SIZE}問
+                  {t("categoryCount", { n: CATEGORY_SESSION_SIZE })}
                 </span>
               </div>
               <div className="text-[11.5px] text-ink-3">
-                全 {total} 問から抽出
+                {t("categoryPool", { total })}
               </div>
               <div className="mt-3 flex items-center justify-between text-[11px] text-ink-3">
                 <span>category-{cat}</span>
-                <span>開く →</span>
+                <span>{t("openButton")}</span>
               </div>
             </Link>
           );
@@ -85,45 +77,44 @@ export default function LibraryPage() {
           <div className="flex items-baseline gap-3.5 mb-3.5">
             <div className="w-[3px] h-4 bg-accent" />
             <h2 className="t-serif m-0 text-[17px] font-semibold -tracking-[0.3px]">
-              {eraTitle(era)}
+              {eraLabel(era, examTerms)}
             </h2>
             <span className="text-[11px] text-ink-3 tracking-[0.08em]">
-              {grouped[era].length} 回 · {grouped[era].length * 100} 問
+              {t("eraStats", {
+                count: grouped[era].length,
+                total: grouped[era].length * 100,
+              })}
             </span>
           </div>
 
           <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
-            {grouped[era].map((e) => {
-              const m = /^(\d{4})(r|h)(\d+)([a-z]*)$/.exec(e.exam_code);
-              const eraYear = m?.[3] ?? "";
-              const suffix = m?.[4] ?? "";
-              const title = `${eraTitle(era)}${eraYear}年度${
-                { "": "", a: "秋期", h: "春期", o: "10月", tokubetsu: "特別" }[suffix] ?? ""
-              }`;
-              return (
-                <Link
-                  key={e.exam_code}
-                  id={e.exam_code}
-                  href={`/practice/exam-${e.exam_code}?n=100`}
-                  className="card hover:bg-surface-2 transition-colors no-underline text-ink block"
-                  style={{ padding: 18 }}
-                >
-                  <div className="flex justify-between items-baseline mb-2">
-                    <div className="font-semibold text-[14px]">{title}</div>
-                    <span className="text-[11px] text-ink-3 t-mono">
-                      {e.year}
-                    </span>
+            {grouped[era].map((e) => (
+              <Link
+                key={e.exam_code}
+                id={e.exam_code}
+                href={`/practice/exam-${e.exam_code}?n=100`}
+                className="card hover:bg-surface-2 transition-colors no-underline text-ink block"
+                style={{ padding: 18 }}
+              >
+                <div className="flex justify-between items-baseline mb-2">
+                  <div className="font-semibold text-[14px]">
+                    {formatExamTitle(e.exam_code, examTerms)}
                   </div>
-                  <div className="text-[11.5px] text-ink-3">
-                    {seasonLabel(e.season)} · 100 問
-                  </div>
-                  <div className="mt-3 flex items-center justify-between text-[11px] text-ink-3">
-                    <span>{e.exam_code}</span>
-                    <span>開く →</span>
-                  </div>
-                </Link>
-              );
-            })}
+                  <span className="text-[11px] text-ink-3 t-mono">
+                    {e.year}
+                  </span>
+                </div>
+                <div className="text-[11.5px] text-ink-3">
+                  {t("examSeasonCount", {
+                    season: seasonLabel(e.season, examTerms),
+                  })}
+                </div>
+                <div className="mt-3 flex items-center justify-between text-[11px] text-ink-3">
+                  <span>{e.exam_code}</span>
+                  <span>{t("openButton")}</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       ))}
@@ -132,7 +123,7 @@ export default function LibraryPage() {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <Topbar subtitle="公式過去問 28 回分" title="問題集" />
+      <Topbar subtitle={t("subtitle", { count: exams.length })} title={t("title")} />
 
       <div className="flex-1 overflow-auto p-5 sm:p-8">
         <LibraryTabs categorySlot={categorySlot} examSlot={examSlot} />

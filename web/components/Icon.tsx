@@ -15,7 +15,8 @@ export type IconName =
   | "x"
   | "arrow"
   | "fire"
-  | "dot";
+  | "dot"
+  | "globe";
 
 const PATHS: Record<IconName, ReactNode> = {
   home: <path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-7h-6v7H4a1 1 0 01-1-1V10z" />,
@@ -58,6 +59,14 @@ const PATHS: Record<IconName, ReactNode> = {
   arrow: <path d="M5 12h14M13 5l7 7-7 7" />,
   fire: <path d="M12 2s4 4 4 8a4 4 0 01-8 0c0-1 1-2 1-2-3 2-5 5-5 8a8 8 0 0016 0c0-6-4-10-8-14z" />,
   dot: <circle cx="12" cy="12" r="4" />,
+  globe: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3c2.5 3 2.5 15 0 18" />
+      <path d="M12 3c-2.5 3-2.5 15 0 18" />
+    </>
+  ),
 };
 
 type Props = SVGProps<SVGSVGElement> & {

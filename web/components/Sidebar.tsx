@@ -1,23 +1,23 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Icon, type IconName } from "./Icon";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 
 type Item = {
   href: string;
-  label: string;
-  sub: string;
+  key: "home" | "library" | "exam" | "review" | "stats";
   icon: IconName;
   pro?: boolean;
 };
 
 const ITEMS: Item[] = [
-  { href: "/home", label: "ホーム", sub: "Dashboard", icon: "home" },
-  { href: "/library", label: "問題集", sub: "Library", icon: "book" },
-  { href: "/exam", label: "模擬試験", sub: "Mock exam", icon: "exam", pro: true },
-  { href: "/review", label: "復習", sub: "Review", icon: "bookmark", pro: true },
-  { href: "/stats", label: "統計", sub: "Stats", icon: "chart", pro: true },
+  { href: "/home", key: "home", icon: "home" },
+  { href: "/library", key: "library", icon: "book" },
+  { href: "/exam", key: "exam", icon: "exam", pro: true },
+  { href: "/review", key: "review", icon: "bookmark", pro: true },
+  { href: "/stats", key: "stats", icon: "chart", pro: true },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -30,6 +30,9 @@ type Props = {
 
 export function Sidebar({ user }: Props) {
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = useTranslations("sidebar");
+  const common = useTranslations("common");
   const isProUser = user?.isPro ?? false;
 
   return (
@@ -43,10 +46,10 @@ export function Sidebar({ user }: Props) {
         </span>
         <span>
           <span className="block text-sm font-semibold -tracking-[0.2px]">
-            IT Passport
+            {locale === "en" ? "IT Passport" : "IT Passport"}
           </span>
           <span className="block text-[10px] text-ink-3 tracking-[0.08em] mt-px">
-            練習ノート
+            {common("tagline").split(" · ")[0]}
           </span>
         </span>
       </Link>
@@ -65,14 +68,14 @@ export function Sidebar({ user }: Props) {
             <Link key={it.href} href={it.href} className={cls}>
               <Icon name={it.icon} size={16} />
               <span className="flex-1 flex justify-between items-baseline">
-                <span>{it.label}</span>
+                <span>{t(it.key)}</span>
                 {showProBadge ? (
                   <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px">
-                    PRO
+                    {common("proBadge")}
                   </span>
                 ) : (
                   <span className="text-[10px] text-ink-3 font-normal tracking-[0.04em]">
-                    {it.sub}
+                    {t(`${it.key}Sub`)}
                   </span>
                 )}
               </span>
@@ -82,6 +85,10 @@ export function Sidebar({ user }: Props) {
       </nav>
 
       <div className="flex-1" />
+
+      <div className="mb-2.5">
+        <LocaleSwitcher variant="sidebar" />
+      </div>
 
       {user ? (
         <Link
@@ -94,7 +101,7 @@ export function Sidebar({ user }: Props) {
           <div className="flex-1 min-w-0">
             <div className="text-[12px] truncate">{user.email}</div>
             <div className="text-[10px] text-ink-3">
-              {isProUser ? "Pro メンバー" : "無料プラン"}
+              {isProUser ? t("proMember") : t("freeMember")}
             </div>
           </div>
           <Icon name="settings" size={14} />
@@ -104,22 +111,22 @@ export function Sidebar({ user }: Props) {
           href="/login"
           className="btn mb-2.5 !text-[12.5px] no-underline text-center block"
         >
-          ログイン
+          {t("loginButton")}
         </Link>
       )}
 
       <div className="rounded-sm border border-line bg-surface px-3.5 py-3 text-[11px] leading-relaxed text-ink-2">
-        <div className="t-label text-[10px] mb-1.5">出典</div>
-        独立行政法人
+        <div className="t-label text-[10px] mb-1.5">{t("sourceLabel")}</div>
+        {t("sourceBodyLine1")}
         <br />
-        情報処理推進機構 (IPA)
+        {t("sourceBodyLine2")}
         <a
           href="https://www3.jitec.ipa.go.jp/JitesCbt/html/openinfo/questions.html"
           target="_blank"
           rel="noreferrer noopener"
           className="mt-1 block text-[10px] text-ink-3 hover:text-accent no-underline"
         >
-          公式サイト →
+          {t("sourceLink")}
         </a>
       </div>
     </aside>

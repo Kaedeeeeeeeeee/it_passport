@@ -1,0 +1,159 @@
+{
+  "common": {
+    "appName": "IT Passport 练习笔记",
+    "tagline": "iパス備考 · AI 解析",
+    "open": "打开",
+    "retry": "重试",
+    "generating": "生成中…",
+    "proBadge": "PRO",
+    "loading": "加载中…"
+  },
+  "landing": {
+    "eyebrow": "IT Passport 考试 · iパス 备考",
+    "heroTitle": "{exams} 年份・{questions} 道官方真题，配 AI 解析。",
+    "heroBody": "从分领域的 20 题小练到全真模拟考试。答错的题由 AI 即时讲解，并自动累积到复习清单里。",
+    "ctaPrimary": "免费开始 →",
+    "ctaSecondary": "已有账号？",
+    "navLogin": "登录",
+    "navStart": "开始",
+    "featureLibraryLabel": "Library",
+    "featureLibraryTitle": "全 {total} 题 · 分领域练习",
+    "featureLibraryBody": "从ストラテジ系（战略）・マネジメント系（管理）・テクノロジ系（技术）三大领域随机抽 20 题。利用碎片时间集中攻克弱项。",
+    "featureAiLabel": "AI Explanation",
+    "featureAiTitle": "AI 即时解析",
+    "featureAiBody": "每道题都用日语、中文或英语讲解正确选项的依据和其他选项错在哪里。不用翻教材。",
+    "featureExamLabel": "Mock Exam",
+    "featureExamTitle": "全真模拟考试",
+    "featureExamBody": "100 题 · 100 分钟 · 60% 合格，完全还原考场。分领域得分自动汇总。",
+    "bottomCtaTitle": "马上免费开始",
+    "bottomCtaBody": "用邮箱或 Google 账号登录。学习进度会在所有设备间自动同步。",
+    "bottomCtaButton": "登录并开始 →"
+  },
+  "sidebar": {
+    "home": "首页",
+    "homeSub": "Dashboard",
+    "library": "题库",
+    "librarySub": "Library",
+    "exam": "模拟考试",
+    "examSub": "Mock exam",
+    "review": "复习",
+    "reviewSub": "Review",
+    "stats": "统计",
+    "statsSub": "Stats",
+    "loginButton": "登录",
+    "proMember": "Pro 会员",
+    "freeMember": "免费方案",
+    "sourceLabel": "题源",
+    "sourceBodyLine1": "独立行政法人",
+    "sourceBodyLine2": "信息处理推进机构 (IPA)",
+    "sourceLink": "官方网站 →"
+  },
+  "login": {
+    "back": "← IT Passport 练习笔记",
+    "heading": "登录",
+    "subheading": "通过邮箱接收魔法链接，或用 Google 账号继续。",
+    "footerNote": "登录后，学习进度会在设备间同步，并可使用 Pro 功能（AI 解析・模拟考试・复习・统计）。",
+    "magicLinkPlaceholder": "邮箱地址",
+    "magicLinkButton": "发送魔法链接",
+    "sending": "发送中…",
+    "magicLinkSent": "已发送，请查收邮箱。",
+    "googleButton": "使用 Google 继续",
+    "or": "或",
+    "errorGeneric": "登录失败，请重试。"
+  },
+  "home": {
+    "subtitle": "{date} · 每天一点点。",
+    "title": "IT Passport 考试练习",
+    "browseLibrary": "从题库选题 →",
+    "quickStartLabel": "快速开始",
+    "quickStartTitle": "随机 10 题",
+    "quickStartBody": "从全 {total} 题中随机抽 10 题练习。做完后可查看 AI 解析。",
+    "quickStartCta": "开始",
+    "latestExamLabel": "最新真题",
+    "latestExamCta": "打开",
+    "latestExamMeta": "100 题 · {count} 题含图表"
+  },
+  "library": {
+    "subtitle": "官方真题 {count} 年份",
+    "title": "题库",
+    "tabCategory": "分领域",
+    "tabYear": "按年份",
+    "categorySubtitle": "各 {n} 题 · 随机抽取",
+    "categoryPool": "从全 {total} 题中抽取",
+    "categoryCount": "{n} 题",
+    "eraStats": "{count} 次 · 共 {total} 题",
+    "examSeasonCount": "{season} · 100 题",
+    "openButton": "打开 →"
+  },
+  "examTerms": {
+    "era": {
+      "reiwa": "令和",
+      "heisei": "平成"
+    },
+    "season": {
+      "annual": "通年",
+      "spring": "春季",
+      "autumn": "秋季",
+      "october": "10月",
+      "special": "特别"
+    },
+    "category": {
+      "strategy": "ストラテジ系 (战略)",
+      "management": "マネジメント系 (管理)",
+      "technology": "テクノロジ系 (技术)",
+      "integrated": "中問 (整合题)",
+      "unknown": "未分类"
+    },
+    "suffix": {
+      "a": "秋季",
+      "h": "春季",
+      "o": "10月",
+      "tokubetsu": "特别"
+    },
+    "examTitle": "{era}{year}年度{suffix}"
+  },
+  "practice": {
+    "endButton": "× 退出",
+    "prev": "← 上一题",
+    "next": "下一题 →",
+    "finish": "查看结果 →",
+    "beforePick": "选择答案后查看对错",
+    "integratedGroupLabel": "中問 {group} — 公共题干",
+    "collapse": "▼ 收起",
+    "questionLabel": "第{n}题",
+    "integratedChip": "{group} 组"
+  },
+  "result": {
+    "loading": "加载中…",
+    "backHome": "← 返回首页",
+    "tryAgain": "再来一次随机题",
+    "sectionLabel": "解析",
+    "sectionTitle": "逐题回顾",
+    "scoreLabel": "得分",
+    "passCutoff": "合格线 60% · ",
+    "passed": "👍 已过线",
+    "almost": "还差一点",
+    "accuracyLabel": "正确率",
+    "thisSession": "本次",
+    "wrongLabel": "错题",
+    "startFromHere": "先从这些开始",
+    "rowSummary": "{category} · {exam} {questionLabel}",
+    "yourAnswer": "你的答案",
+    "correctAnswer": "正解",
+    "integratedContextLabel": "中問 公共题干",
+    "choiceEmpty": "—",
+    "choiceFigure": "(看图选择)"
+  },
+  "aiExplanation": {
+    "title": "AI 解析",
+    "generate": "生成解析",
+    "generating": "生成中…",
+    "retry": "重试"
+  },
+  "localeSwitcher": {
+    "label": "语言",
+    "ja": "日本語",
+    "zh": "简体中文",
+    "en": "English"
+  }
+}

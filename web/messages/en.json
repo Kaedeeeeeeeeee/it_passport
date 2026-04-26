@@ -1,0 +1,159 @@
+{
+  "common": {
+    "appName": "IT Passport Practice",
+    "tagline": "iパス prep · AI explanations",
+    "open": "Open",
+    "retry": "Retry",
+    "generating": "Generating…",
+    "proBadge": "PRO",
+    "loading": "Loading…"
+  },
+  "landing": {
+    "eyebrow": "IT Passport exam · iパス prep",
+    "heroTitle": "{exams} years of official past questions · {questions} problems · with AI explanations.",
+    "heroBody": "From 20-question category drills to full-length mock exams. AI explains every wrong answer instantly, and your mistakes flow into a smart review list.",
+    "ctaPrimary": "Start free →",
+    "ctaSecondary": "I already have an account",
+    "navLogin": "Log in",
+    "navStart": "Get started",
+    "featureLibraryLabel": "Library",
+    "featureLibraryTitle": "{total} problems · category drills",
+    "featureLibraryBody": "Random 20-question sets from Strategy / Management / Technology (ストラテジ系・マネジメント系・テクノロジ系). Close your weak spots in short sessions.",
+    "featureAiLabel": "AI Explanation",
+    "featureAiTitle": "AI explains on the spot",
+    "featureAiBody": "Why the correct choice is right and why the others are wrong — per question, in Japanese, Chinese, or English. No textbook flipping.",
+    "featureExamLabel": "Mock Exam",
+    "featureExamTitle": "Full-length mock exam",
+    "featureExamBody": "100 questions · 100 minutes · 60% to pass — exactly like the real thing. Category scores tallied automatically.",
+    "bottomCtaTitle": "Start free now",
+    "bottomCtaBody": "Sign in with email or Google. Progress syncs across all your devices.",
+    "bottomCtaButton": "Log in & start →"
+  },
+  "sidebar": {
+    "home": "Home",
+    "homeSub": "Dashboard",
+    "library": "Library",
+    "librarySub": "問題集",
+    "exam": "Mock exam",
+    "examSub": "模擬試験",
+    "review": "Review",
+    "reviewSub": "復習",
+    "stats": "Stats",
+    "statsSub": "統計",
+    "loginButton": "Log in",
+    "proMember": "Pro member",
+    "freeMember": "Free plan",
+    "sourceLabel": "Source",
+    "sourceBodyLine1": "Information-technology Promotion",
+    "sourceBodyLine2": "Agency, Japan (IPA)",
+    "sourceLink": "Official site →"
+  },
+  "login": {
+    "back": "← IT Passport Practice",
+    "heading": "Log in",
+    "subheading": "Get a magic link by email, or continue with Google.",
+    "footerNote": "Signing in syncs your progress across devices and unlocks Pro features (AI explanations · mock exam · review · stats).",
+    "magicLinkPlaceholder": "Email address",
+    "magicLinkButton": "Send magic link",
+    "sending": "Sending…",
+    "magicLinkSent": "Sent. Check your inbox.",
+    "googleButton": "Continue with Google",
+    "or": "or",
+    "errorGeneric": "Could not sign in. Please try again."
+  },
+  "home": {
+    "subtitle": "{date} · a little every day.",
+    "title": "IT Passport practice",
+    "browseLibrary": "Browse the library →",
+    "quickStartLabel": "Quick start",
+    "quickStartTitle": "10 random questions",
+    "quickStartBody": "Random 10 questions drawn from all {total}. AI explanations shown on the result page.",
+    "quickStartCta": "Start",
+    "latestExamLabel": "Latest past exam",
+    "latestExamCta": "Open",
+    "latestExamMeta": "100 questions · {count} with figures"
+  },
+  "library": {
+    "subtitle": "{count} official past exams",
+    "title": "Library",
+    "tabCategory": "By category",
+    "tabYear": "By year",
+    "categorySubtitle": "{n} questions each · random draw",
+    "categoryPool": "Drawn from {total} questions",
+    "categoryCount": "{n} Q",
+    "eraStats": "{count} exams · {total} questions",
+    "examSeasonCount": "{season} · 100 questions",
+    "openButton": "Open →"
+  },
+  "examTerms": {
+    "era": {
+      "reiwa": "Reiwa",
+      "heisei": "Heisei"
+    },
+    "season": {
+      "annual": "Annual",
+      "spring": "Spring",
+      "autumn": "Autumn",
+      "october": "October",
+      "special": "Special"
+    },
+    "category": {
+      "strategy": "ストラテジ系 (Strategy)",
+      "management": "マネジメント系 (Management)",
+      "technology": "テクノロジ系 (Technology)",
+      "integrated": "中問 (Integrated)",
+      "unknown": "Uncategorized"
+    },
+    "suffix": {
+      "a": " Autumn",
+      "h": " Spring",
+      "o": " October",
+      "tokubetsu": " Special"
+    },
+    "examTitle": "{era} {year}{suffix}"
+  },
+  "practice": {
+    "endButton": "× Exit",
+    "prev": "← Previous",
+    "next": "Next →",
+    "finish": "Finish →",
+    "beforePick": "Pick to reveal the answer",
+    "integratedGroupLabel": "中問 {group} — shared stem",
+    "collapse": "▼ Collapse",
+    "questionLabel": "Q{n}",
+    "integratedChip": "Group {group}"
+  },
+  "result": {
+    "loading": "Loading…",
+    "backHome": "← Back home",
+    "tryAgain": "Another random 10",
+    "sectionLabel": "Explanations",
+    "sectionTitle": "Question-by-question review",
+    "scoreLabel": "Score",
+    "passCutoff": "Pass line 60% · ",
+    "passed": "👍 Passed",
+    "almost": "Almost there",
+    "accuracyLabel": "Accuracy",
+    "thisSession": "This session",
+    "wrongLabel": "Wrong",
+    "startFromHere": "Start from these",
+    "rowSummary": "{category} · {exam} {questionLabel}",
+    "yourAnswer": "You",
+    "correctAnswer": "Answer",
+    "integratedContextLabel": "Shared stem",
+    "choiceEmpty": "—",
+    "choiceFigure": "(pick a figure)"
+  },
+  "aiExplanation": {
+    "title": "AI explanation",
+    "generate": "Generate",
+    "generating": "Generating…",
+    "retry": "Retry"
+  },
+  "localeSwitcher": {
+    "label": "Language",
+    "ja": "日本語",
+    "zh": "简体中文",
+    "en": "English"
+  }
+}

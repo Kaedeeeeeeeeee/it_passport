@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 
 type TabKey = "category" | "exam";
@@ -11,22 +12,23 @@ export function LibraryTabs({
   categorySlot: ReactNode;
   examSlot: ReactNode;
 }) {
+  const t = useTranslations("library");
   const [active, setActive] = useState<TabKey>("category");
 
   return (
     <>
       <div
         role="tablist"
-        aria-label="問題集の表示切り替え"
+        aria-label={t("title")}
         className="flex gap-1 border-b border-line mb-6"
       >
         <TabButton
-          label="分野別"
+          label={t("tabCategory")}
           active={active === "category"}
           onClick={() => setActive("category")}
         />
         <TabButton
-          label="年度別"
+          label={t("tabYear")}
           active={active === "exam"}
           onClick={() => setActive("exam")}
         />

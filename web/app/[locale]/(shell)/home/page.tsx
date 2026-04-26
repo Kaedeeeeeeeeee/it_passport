@@ -1,47 +1,50 @@
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Topbar } from "@/components/Topbar";
 import { ProgressSummary } from "@/components/ProgressSummary";
+import { Link } from "@/i18n/navigation";
+import { formatExamTitle } from "@/lib/exam-terms";
 import { allQuestions, exams } from "@/lib/questions";
+import type { Locale } from "@/i18n/routing";
 
-function formatExamTitle(examCode: string): string {
-  const m = /^(\d{4})(r|h)(\d+)([a-z]*)$/.exec(examCode);
-  if (!m) return examCode;
-  const [, , eraLetter, eraYear, suffix] = m;
-  const era = eraLetter === "r" ? "令和" : "平成";
-  const seasonMap: Record<string, string> = {
-    "": "",
-    a: "秋期",
-    h: "春期",
-    o: "10月",
-    tokubetsu: "特別",
-  };
-  return `${era}${eraYear}年度${seasonMap[suffix] ?? ""}`;
-}
+const LOCALE_DATE_TAG: Record<Locale, string> = {
+  ja: "ja-JP",
+  zh: "zh-CN",
+  en: "en-US",
+};
 
-function formatToday() {
+function formatToday(locale: Locale) {
   const d = new Date();
-  const days = ["日", "月", "火", "水", "木", "金", "土"];
-  const y = d.getFullYear();
-  const mo = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${y}.${mo}.${dd} (${days[d.getDay()]})`;
+  return new Intl.DateTimeFormat(LOCALE_DATE_TAG[locale], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    weekday: "short",
+  }).format(d);
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const t = await getTranslations("home");
+  const library = await getTranslations("library");
+  const examTerms = await getTranslations("examTerms");
+  const locale = (await getLocale()) as Locale;
+
   const latestExam = exams
     .slice()
-    .sort((a, b) => b.year - a.year || b.exam_code.localeCompare(a.exam_code))[0];
+    .sort(
+      (a, b) => b.year - a.year || b.exam_code.localeCompare(a.exam_code),
+    )[0];
 
   const figureCount = allQuestions.filter((q) => q.figures.length > 0).length;
+  const totalQuestions = allQuestions.length;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <Topbar
-        subtitle={`${formatToday()} · 今日も、少しずつ。`}
-        title="ITパスポート試験 練習"
+        subtitle={t("subtitle", { date: formatToday(locale) })}
+        title={t("title")}
         right={
           <Link href="/library" className="btn btn-primary no-underline">
-            問題集から選ぶ →
+            {t("browseLibrary")}
           </Link>
         }
       />
@@ -52,39 +55,37 @@ export default function DashboardPage() {
         <div className="card">
           <div className="flex justify-between items-center mb-3.5 gap-4">
             <div>
-              <div className="t-label">すぐに始める</div>
+              <div className="t-label">{t("quickStartLabel")}</div>
               <div className="t-serif text-lg font-semibold mt-1 -tracking-[0.2px]">
-                ランダム 10 問
+                {t("quickStartTitle")}
               </div>
             </div>
             <Link
               href="/practice/random?n=10"
               className="btn btn-primary no-underline"
             >
-              始める
+              {t("quickStartCta")}
             </Link>
           </div>
           <p className="text-[12.5px] text-ink-2 leading-relaxed">
-            全 2,800 問から 10 問ランダムに選んで練習します。答え終わると AI
-            解説付きで結果を確認できます。
+            {t("quickStartBody", { total: totalQuestions.toLocaleString() })}
           </p>
         </div>
 
         <div className="card">
           <div className="flex justify-between items-center mb-3.5 gap-4">
             <div>
-              <div className="t-label">最新の過去問</div>
+              <div className="t-label">{t("latestExamLabel")}</div>
               <div className="t-serif text-lg font-semibold mt-1 -tracking-[0.2px]">
-                {formatExamTitle(latestExam.exam_code)}
+                {formatExamTitle(latestExam.exam_code, examTerms)}
               </div>
             </div>
             <Link href="/library" className="btn no-underline">
-              開く
+              {library("openButton").replace(" →", "")}
             </Link>
           </div>
           <div className="text-[12.5px] text-ink-2">
-            100 問 · <span className="t-mono">{figureCount}</span>
-            問に図表あり
+            {t("latestExamMeta", { count: figureCount })}
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { ChoiceLetter } from "@/lib/types";
 
@@ -16,6 +17,8 @@ export function AiExplanation({
   questionId: string;
   userAnswer: ChoiceLetter | null;
 }) {
+  const t = useTranslations("aiExplanation");
+  const common = useTranslations("common");
   const [state, setState] = useState<State>({ kind: "idle" });
 
   async function load() {
@@ -41,9 +44,9 @@ export function AiExplanation({
     return (
       <div className="rounded-[var(--radius)] border border-line bg-surface p-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
         <div className="t-label mb-2 flex items-center gap-2">
-          AI 解説
+          {t("title")}
           <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
-            PRO
+            {common("proBadge")}
           </span>
         </div>
         {state.text}
@@ -55,9 +58,9 @@ export function AiExplanation({
     <div className="rounded-[var(--radius)] border border-line bg-surface p-4">
       <div className="flex items-center gap-3">
         <div className="t-label flex-1 flex items-center gap-2">
-          AI 解説
+          {t("title")}
           <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
-            PRO
+            {common("proBadge")}
           </span>
         </div>
         {state.kind === "idle" ? (
@@ -66,11 +69,11 @@ export function AiExplanation({
             onClick={load}
             className="btn btn-ghost !text-[12px] !py-1.5 !px-3"
           >
-            解説を生成
+            {t("generate")}
           </button>
         ) : null}
         {state.kind === "loading" ? (
-          <span className="text-[11px] text-ink-3">生成中…</span>
+          <span className="text-[11px] text-ink-3">{t("generating")}</span>
         ) : null}
         {state.kind === "error" ? (
           <button
@@ -78,7 +81,7 @@ export function AiExplanation({
             onClick={load}
             className="btn btn-ghost !text-[12px] !py-1.5 !px-3"
           >
-            再試行
+            {t("retry")}
           </button>
         ) : null}
       </div>

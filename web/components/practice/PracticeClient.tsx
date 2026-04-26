@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
-import remarkBreaks from "remark-breaks";
-import remarkGfm from "remark-gfm";
 import { AiExplanation } from "@/components/explain/AiExplanation";
 import { FigureImage } from "@/components/FigureImage";
+import { Markdown } from "@/components/md/Markdown";
+import { Link, useRouter } from "@/i18n/navigation";
+import { categoryLabel } from "@/lib/exam-terms";
 import { CHOICE_LETTERS } from "@/lib/questions";
 import { newSessionId, recordAttempt, saveSession } from "@/lib/progress";
 import { flushPending } from "@/lib/sync";
-import type { ChoiceLetter, Figure, Question } from "@/lib/types";
+import type { ChoiceLetter, Question } from "@/lib/types";
 
 type Props = {
   slug: string;
@@ -168,14 +168,15 @@ function Topbar({
   total: number;
   progress: number;
 }) {
+  const t = useTranslations("practice");
   return (
     <div className="flex items-center gap-4 sm:gap-5 px-4 sm:px-8 py-4 border-b border-line bg-surface-2">
-      <a
-        href="/"
+      <Link
+        href="/home"
         className="btn btn-ghost !text-[12px] !px-2.5 !py-1.5 no-underline text-ink-2"
       >
-        × 終了
-      </a>
+        {t("endButton")}
+      </Link>
       <div className="flex-1 flex items-center gap-3">
         <div className="t-mono text-[12px] text-ink-3 whitespace-nowrap">
           {String(idx + 1).padStart(2, "0")} / {total}
@@ -192,23 +193,22 @@ function Topbar({
 }
 
 function Metadata({ q }: { q: Question }) {
-  const categoryLabel: Record<string, string> = {
-    strategy: "ストラテジ系",
-    management: "マネジメント系",
-    technology: "テクノロジ系",
-    integrated: "中問",
-  };
+  const practice = useTranslations("practice");
+  const examTerms = useTranslations("examTerms");
+  const groupLetter = q.integrated_group_id?.split("-").pop() ?? "";
   return (
     <div className="flex items-center gap-2.5 flex-wrap mb-5">
       {q.category ? (
-        <span className="chip chip-accent">{categoryLabel[q.category]}</span>
+        <span className="chip chip-accent">
+          {categoryLabel(q.category, examTerms)}
+        </span>
       ) : null}
       <span className="chip">
-        {q.exam_code} · 問{q.number}
+        {q.exam_code} · {practice("questionLabel", { n: q.number })}
       </span>
       {q.integrated_group_id ? (
         <span className="chip">
-          {q.integrated_group_id.split("-").pop()} グループ
+          {practice("integratedChip", { group: groupLetter })}
         </span>
       ) : null}
     </div>
@@ -216,105 +216,32 @@ function Metadata({ q }: { q: Question }) {
 }
 
 function IntegratedContext({ q }: { q: Question }) {
+  const t = useTranslations("practice");
   if (!q.integrated_context) return null;
+  const groupLetter = q.integrated_group_id?.split("-").pop() ?? "";
   return (
     <details
       className="mb-6 rounded-[var(--radius)] border border-line bg-surface-2 overflow-hidden"
       open
     >
       <summary className="cursor-pointer list-none px-5 py-3 flex items-center justify-between text-[12px] text-ink-3 bg-surface">
-        <span className="t-label">中問 {q.integrated_group_id?.split("-").pop()} — 共通の設問</span>
-        <span className="text-[11px]">▼ 折りたたむ</span>
+        <span className="t-label">
+          {t("integratedGroupLabel", { group: groupLetter })}
+        </span>
+        <span className="text-[11px]">{t("collapse")}</span>
       </summary>
-      <div className="px-5 py-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
-        {q.integrated_context}
+      <div className="px-5 py-4 text-[13px] leading-[1.85] text-ink-2">
+        <Markdown figures={q.figures}>{q.integrated_context}</Markdown>
       </div>
     </details>
   );
 }
 
-function resolveFigure(src: string, figures: Figure[]): Figure | undefined {
-  const normalized = src.replace(/^\.\.\/figures\//, "figures/");
-  const filename = normalized.split("/").pop() ?? "";
-  if (!filename) return undefined;
-  return figures.find((f) => f.path.endsWith(filename));
-}
-
-function buildMarkdownComponents(figures: Figure[]): Components {
-  return {
-    p: ({ children }) => (
-      <p className="mb-3 last:mb-0">{children}</p>
-    ),
-    img: ({ src }) => {
-      const fig = resolveFigure(typeof src === "string" ? src : "", figures);
-      return fig ? <FigureImage figure={fig} /> : null;
-    },
-    table: ({ children }) => (
-      <div className="my-4 overflow-x-auto rounded-[var(--radius)] border border-line">
-        <table className="w-full border-collapse text-[13.5px] leading-[1.6]">
-          {children}
-        </table>
-      </div>
-    ),
-    thead: ({ children }) => (
-      <thead className="bg-surface-2 text-ink-2">{children}</thead>
-    ),
-    tr: ({ children }) => (
-      <tr className="border-b border-line last:border-b-0">{children}</tr>
-    ),
-    th: ({ children }) => (
-      <th className="border-r border-line px-3 py-2 text-left font-semibold last:border-r-0">
-        {children}
-      </th>
-    ),
-    td: ({ children }) => (
-      <td className="border-r border-line px-3 py-2 align-top last:border-r-0">
-        {children}
-      </td>
-    ),
-    ul: ({ children }) => (
-      <ul className="mb-3 list-disc space-y-1 pl-6">{children}</ul>
-    ),
-    ol: ({ children }) => (
-      <ol className="mb-3 list-decimal space-y-1 pl-6">{children}</ol>
-    ),
-    code: ({ className, children }) => {
-      const isBlock = /language-/.test(className ?? "");
-      if (isBlock) {
-        return (
-          <code className={"t-mono text-[13px] " + (className ?? "")}>
-            {children}
-          </code>
-        );
-      }
-      return (
-        <code className="t-mono rounded bg-surface-2 px-1 py-0.5 text-[0.92em]">
-          {children}
-        </code>
-      );
-    },
-    pre: ({ children }) => (
-      <pre className="my-3 overflow-x-auto rounded-[var(--radius)] bg-surface-2 p-3">
-        {children}
-      </pre>
-    ),
-  };
-}
-
 function QuestionBody({ q }: { q: Question }) {
   const hasInlineImage = /!\[[^\]]*\]\([^)]+\)/.test(q.question);
-  const components = useMemo(
-    () => buildMarkdownComponents(q.figures),
-    [q.figures],
-  );
   return (
     <div className="t-serif mb-6 text-[16px] leading-[1.85] sm:text-[17px]">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
-        components={components}
-      >
-        {q.question}
-      </ReactMarkdown>
+      <Markdown figures={q.figures}>{q.question}</Markdown>
       {q.figures.length > 0 && !hasInlineImage ? (
         <div className="mt-2">
           {q.figures.map((f) => (
@@ -428,25 +355,36 @@ function Choices({
         const raw = q.choices[letter] ?? "";
         const isFigRef = raw.startsWith("figure:");
         const s = choiceStyle(letter, answered, correctLetters);
+        const handleActivate = () => {
+          if (!locked) onPick(letter);
+        };
         return (
-          <button
+          <div
             key={letter}
-            type="button"
-            onClick={() => onPick(letter)}
-            disabled={locked}
+            role="button"
+            tabIndex={locked ? -1 : 0}
+            aria-disabled={locked}
+            onClick={handleActivate}
+            onKeyDown={(e) => {
+              if (locked) return;
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleActivate();
+              }
+            }}
             style={{ background: s.background, borderColor: s.border }}
             className={
-              "flex items-start gap-4 text-left p-4 sm:px-5 rounded-[var(--radius-lg)] border transition-colors " +
-              (locked ? "cursor-default" : "hover:bg-surface-2")
+              "flex items-start gap-4 text-left p-4 sm:px-5 rounded-[var(--radius-lg)] border transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent/50 " +
+              (locked ? "cursor-default" : "cursor-pointer hover:bg-surface-2")
             }
           >
             <span
-              className="grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0"
+              className="grid place-items-center w-7 h-7 rounded-sm t-serif text-[13px] font-semibold shrink-0 mt-0.5"
               style={{ background: s.letterBg, color: s.letterColor }}
             >
               {letter}
             </span>
-            <span className="flex-1 pt-0.5 text-[13.5px] leading-[1.7] text-ink">
+            <div className="flex-1 pt-0.5 text-[13.5px] leading-[1.7] text-ink">
               {isFigRef || isFigureChoice ? (
                 <FigureImage
                   figure={{
@@ -457,10 +395,10 @@ function Choices({
                   maxWidth={320}
                 />
               ) : (
-                raw
+                <Markdown figures={q.figures}>{raw}</Markdown>
               )}
-            </span>
-          </button>
+            </div>
+          </div>
         );
       })}
     </div>
@@ -482,6 +420,7 @@ function FooterBar({
   onNext: () => void;
   onFinish: () => void;
 }) {
+  const t = useTranslations("practice");
   return (
     <div className="flex justify-between items-center gap-3 px-5 sm:px-8 py-3.5 border-t border-line bg-surface-2">
       <button
@@ -490,7 +429,7 @@ function FooterBar({
         disabled={!canPrev}
         className="btn btn-ghost !text-[13px]"
       >
-        ← 前の問題
+        {t("prev")}
       </button>
       {answered ? (
         isLast ? (
@@ -499,7 +438,7 @@ function FooterBar({
             onClick={onFinish}
             className="btn btn-primary !text-[13px]"
           >
-            採点する →
+            {t("finish")}
           </button>
         ) : (
           <button
@@ -507,13 +446,11 @@ function FooterBar({
             onClick={onNext}
             className="btn btn-primary !text-[13px]"
           >
-            次の問題へ →
+            {t("next")}
           </button>
         )
       ) : (
-        <div className="t-mono text-[11px] text-ink-3">
-          選択すると正誤を確認
-        </div>
+        <div className="t-mono text-[11px] text-ink-3">{t("beforePick")}</div>
       )}
     </div>
   );

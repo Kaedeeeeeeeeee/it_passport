@@ -1,12 +1,34 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import createIntlMiddleware from "next-intl/middleware";
+import { NextResponse, type NextRequest } from "next/server";
+import { routing } from "./i18n/routing";
+
+const intlMiddleware = createIntlMiddleware(routing);
+
+// Paths that must never be locale-prefixed: API routes and the OAuth/magic-
+// link callback. These still need the Supabase session refresh, though.
+const SKIP_INTL = /^\/(?:api\/|callback(?:$|[/?]))/;
 
 /** Proxy (Next 16 renamed `middleware` → `proxy`).
- *  Refreshes the Supabase auth session cookie on every request that passes
- *  the matcher. Without this, expired session cookies would cause server
- *  components to see the user as logged-out. */
+ *
+ *  1. Delegates locale detection/routing to next-intl for public paths.
+ *  2. Refreshes the Supabase auth session cookie on every request so server
+ *     components never see a stale session. */
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  const path = request.nextUrl.pathname;
+
+  let response: NextResponse;
+
+  if (SKIP_INTL.test(path)) {
+    response = NextResponse.next({ request });
+  } else {
+    response = intlMiddleware(request);
+    // If next-intl wants to redirect (e.g. `/` → `/en/`), honor it immediately.
+    // The next request will hit this proxy again for the session refresh.
+    if (response.status === 307 || response.status === 308) {
+      return response;
+    }
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,7 +42,8 @@ export async function proxy(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => {
             request.cookies.set(name, value);
           });
-          response = NextResponse.next({ request });
+          // Preserve the response from next-intl (which may carry a rewrite
+          // header) — only attach the refreshed cookies, don't rebuild it.
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options);
           });
