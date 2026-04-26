@@ -38,6 +38,10 @@ export function LocaleSwitcher({ variant = "header" }: { variant?: Variant }) {
       : "flex items-center gap-1.5 btn btn-ghost !text-[12.5px] !py-1.5 !px-2.5 no-underline";
 
   const menuAlignment = variant === "sidebar" ? "left-0" : "right-0";
+  // Sidebar sits at the bottom of the column → menu opens upward.
+  // Header sits at the top of the page → menu opens downward.
+  const menuVertical =
+    variant === "sidebar" ? "bottom-full mb-1" : "top-full mt-1";
 
   return (
     <div className="relative">
@@ -65,7 +69,7 @@ export function LocaleSwitcher({ variant = "header" }: { variant?: Variant }) {
           />
           <div
             role="listbox"
-            className={`absolute ${menuAlignment} bottom-full mb-1 min-w-[148px] rounded-[var(--radius)] border border-line bg-surface shadow-md z-50 overflow-hidden`}
+            className={`absolute ${menuAlignment} ${menuVertical} min-w-[148px] rounded-[var(--radius)] border border-line bg-surface shadow-md z-50 overflow-hidden`}
           >
             {routing.locales.map((l) => (
               <button
