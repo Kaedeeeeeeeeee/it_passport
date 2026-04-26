@@ -1,9 +1,20 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getProfile, isPro } from "@/lib/auth";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "account" });
+  return { title: t("title"), description: t("subtitle") };
+}
 
 const LOCALE_DATE_TAG: Record<Locale, string> = {
   ja: "ja-JP",

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Topbar } from "@/components/Topbar";
 import { Link } from "@/i18n/navigation";
@@ -6,6 +7,16 @@ import { formatExamTitle } from "@/lib/exam-terms";
 import { exams } from "@/lib/questions";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "exam" });
+  return { title: t("title"), description: t("subtitle") };
+}
 
 export default async function ExamPage() {
   await requirePro("/exam");

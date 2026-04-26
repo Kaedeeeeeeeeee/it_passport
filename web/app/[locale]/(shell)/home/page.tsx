@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Topbar } from "@/components/Topbar";
 import { ProgressSummary } from "@/components/ProgressSummary";
@@ -5,6 +6,21 @@ import { Link } from "@/i18n/navigation";
 import { formatExamTitle } from "@/lib/exam-terms";
 import { allQuestions, exams } from "@/lib/questions";
 import type { Locale } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  const date = new Intl.DateTimeFormat(LOCALE_DATE_TAG[locale as Locale], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date());
+  return { title: t("title"), description: t("subtitle", { date }) };
+}
 
 const LOCALE_DATE_TAG: Record<Locale, string> = {
   ja: "ja-JP",

@@ -81,6 +81,14 @@ export async function generateMetadata({
       title: appName,
       description,
     },
+    alternates: {
+      languages: {
+        ja: "/",
+        zh: "/zh",
+        en: "/en",
+        "x-default": "/",
+      },
+    },
   };
 }
 

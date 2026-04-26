@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Link, redirect } from "@/i18n/navigation";
 import { getProfile } from "@/lib/auth";
 import { allQuestions, exams } from "@/lib/questions";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const common = await getTranslations({ locale, namespace: "common" });
+  const t = await getTranslations({ locale, namespace: "landing" });
+  return { title: common("appName"), description: t("heroBody") };
+}
 
 export default async function LandingPage() {
   const profile = await getProfile();

@@ -8,12 +8,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "settings" });
+  const t = await getTranslations({ locale, namespace: "pricing" });
   return { title: t("title"), description: t("subtitle") };
 }
 
-export default async function SettingsPage() {
-  const t = await getTranslations("settings");
+export default async function PricingPage() {
+  const t = await getTranslations("pricing");
   return (
     <ComingSoon
       subtitle={t("subtitle")}

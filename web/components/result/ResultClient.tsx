@@ -32,6 +32,8 @@ export function ResultClient({ sessionId, embedded = false }: Props) {
     const raw = sessionStorage.getItem(`itp_answers_${sessionId}`);
     if (raw) {
       try {
+        // sessionStorage is client-only; hydrate once on mount.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAnswers(JSON.parse(raw));
       } catch {
         setAnswers([]);

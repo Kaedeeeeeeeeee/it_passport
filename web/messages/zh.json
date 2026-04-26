@@ -276,6 +276,11 @@
     "title": "设置",
     "note": "v2 版本会加上：主题、信息密度等可定制项。"
   },
+  "pricing": {
+    "title": "价格",
+    "subtitle": "方案",
+    "note": "即将上线。Pro 功能的方案即将公布。"
+  },
   "comingSoon": {
     "proLabel": "Pro 会员专享",
     "preparing": "即将上线 · 准备中"

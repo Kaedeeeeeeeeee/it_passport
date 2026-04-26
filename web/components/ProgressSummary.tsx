@@ -21,6 +21,8 @@ export function ProgressSummary() {
 
   useEffect(() => {
     const s = summarize(loadProgress());
+    // localStorage is client-only; hydrate once on mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStats([
       {
         label: t("seenLabel"),

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Topbar } from "@/components/Topbar";
 import { CategoryBreakdown } from "@/components/stats/CategoryBreakdown";
@@ -13,6 +14,16 @@ import {
 } from "@/lib/stats";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "stats" });
+  return { title: t("title"), description: t("subtitle") };
+}
 
 export default async function StatsPage() {
   const profile = await requirePro("/stats");

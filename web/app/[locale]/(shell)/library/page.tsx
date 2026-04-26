@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { LibraryTabs } from "@/components/library/LibraryTabs";
 import { Topbar } from "@/components/Topbar";
@@ -13,6 +14,19 @@ import {
 import { exams, questionsByCategory } from "@/lib/questions";
 
 const CATEGORY_SESSION_SIZE = 20;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "library" });
+  return {
+    title: t("title"),
+    description: t("subtitle", { count: exams.length }),
+  };
+}
 
 export default async function LibraryPage() {
   const t = await getTranslations("library");

@@ -276,6 +276,11 @@
     "title": "Settings",
     "note": "Coming in v2 — themes, information density, and more."
   },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Plans",
+    "note": "Coming soon. Pro plans will be announced shortly."
+  },
   "comingSoon": {
     "proLabel": "Pro member exclusive",
     "preparing": "Launching soon · we're working on it"
