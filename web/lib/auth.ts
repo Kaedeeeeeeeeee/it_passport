@@ -14,6 +14,7 @@ export type ProfileRow = {
     | "canceled";
   trial_ends_at: string | null;
   current_period_end: string | null;
+  preferred_language: string | null;
 };
 
 export async function getUser(): Promise<User | null> {

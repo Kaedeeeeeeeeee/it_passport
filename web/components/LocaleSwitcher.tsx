@@ -15,9 +15,20 @@ export function LocaleSwitcher({ variant = "header" }: { variant?: Variant }) {
   const router = useRouter();
   const t = useTranslations("localeSwitcher");
 
-  function pick(next: Locale) {
+  async function pick(next: Locale) {
     setOpen(false);
     if (next === locale) return;
+    // Persist the choice (cookie + profile if signed in) before navigating so
+    // the next request — and any other device — sees the new preference.
+    try {
+      await fetch("/api/locale", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ locale: next }),
+      });
+    } catch {
+      // Network hiccup shouldn't block the UX — fall through and navigate.
+    }
     router.replace(pathname, { locale: next });
   }
 
