@@ -1,19 +1,32 @@
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import { getCachedExplanation, setCachedExplanation } from "@/lib/ai-cache";
-import { buildUserPrompt, SYSTEM_PROMPT } from "@/lib/explain-prompt";
+import {
+  buildUserPrompt,
+  getSystemPrompt,
+  type ExplainLanguage,
+} from "@/lib/explain-prompt";
 import { questionById } from "@/lib/questions";
 import type { ChoiceLetter } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
+const SUPPORTED_LANGUAGES: ExplainLanguage[] = ["ja", "zh", "en"];
+
 type Body = {
   questionId?: string;
   userAnswer?: ChoiceLetter | null;
+  language?: string;
 };
 
 const MODEL = process.env.AI_MODEL || "google/gemini-3-flash";
+
+function resolveLanguage(input: unknown): ExplainLanguage {
+  return SUPPORTED_LANGUAGES.includes(input as ExplainLanguage)
+    ? (input as ExplainLanguage)
+    : "ja";
+}
 
 export async function POST(req: Request) {
   let body: Body;
@@ -23,6 +36,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid JSON body" }, { status: 400 });
   }
   const { questionId, userAnswer = null } = body;
+  const language = resolveLanguage(body.language);
   if (!questionId || typeof questionId !== "string") {
     return NextResponse.json({ error: "questionId required" }, { status: 400 });
   }
@@ -32,7 +46,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unknown questionId" }, { status: 404 });
   }
 
-  const cached = await getCachedExplanation(questionId, MODEL).catch(() => null);
+  const cached = await getCachedExplanation(questionId, MODEL, language).catch(
+    () => null,
+  );
   if (cached) {
     return NextResponse.json({ explanation: cached, cached: true });
   }
@@ -41,7 +57,7 @@ export async function POST(req: Request) {
   try {
     const result = await generateText({
       model: MODEL,
-      system: SYSTEM_PROMPT,
+      system: getSystemPrompt(language),
       prompt: buildUserPrompt(question, userAnswer ?? null),
     });
     text = result.text.trim();
@@ -53,7 +69,7 @@ export async function POST(req: Request) {
     );
   }
 
-  await setCachedExplanation(questionId, MODEL, text).catch(() => {
+  await setCachedExplanation(questionId, MODEL, language, text).catch(() => {
     // Cache failures shouldn't block the user response.
   });
 

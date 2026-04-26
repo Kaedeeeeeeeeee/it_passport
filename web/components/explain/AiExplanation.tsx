@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import type { ChoiceLetter } from "@/lib/types";
 
@@ -19,6 +19,7 @@ export function AiExplanation({
 }) {
   const t = useTranslations("aiExplanation");
   const common = useTranslations("common");
+  const locale = useLocale();
   const [state, setState] = useState<State>({ kind: "idle" });
 
   async function load() {
@@ -27,7 +28,7 @@ export function AiExplanation({
       const res = await fetch("/api/explain", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ questionId, userAnswer }),
+        body: JSON.stringify({ questionId, userAnswer, language: locale }),
       });
       if (!res.ok) {
         const message = await res.text().catch(() => res.statusText);
