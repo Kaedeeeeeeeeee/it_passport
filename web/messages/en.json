@@ -282,7 +282,32 @@
   "pricing": {
     "title": "Pricing",
     "subtitle": "Plans",
-    "note": "Coming soon. Pro plans will be announced shortly."
+    "freeLabel": "Free",
+    "freeName": "Free plan",
+    "freePrice": "¥0",
+    "freeBilling": "Always free",
+    "freeFeatures": [
+      "All 2,800 questions",
+      "Category drills (20 Q each)",
+      "Progress sync"
+    ],
+    "proLabel": "Pro",
+    "proName": "Pro member",
+    "proPrice": "¥980",
+    "proBilling": "/ month",
+    "proFeatures": [
+      "AI explanations (ja / zh / en)",
+      "Full mock exam (100 Q · 100 min)",
+      "Review mode (drill the questions you missed)",
+      "Stats dashboard",
+      "Cross-device sync"
+    ],
+    "ctaLogin": "Sign in to subscribe",
+    "ctaSubscribe": "Subscribe to Pro",
+    "ctaCurrent": "Current plan",
+    "ctaManage": "Manage billing",
+    "alreadyProTitle": "You're a Pro member",
+    "alreadyProBody": "Thanks for subscribing."
   },
   "comingSoon": {
     "proLabel": "Pro member exclusive",

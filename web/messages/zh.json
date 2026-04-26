@@ -282,7 +282,32 @@
   "pricing": {
     "title": "价格",
     "subtitle": "方案",
-    "note": "即将上线。Pro 功能的方案即将公布。"
+    "freeLabel": "Free",
+    "freeName": "免费方案",
+    "freePrice": "¥0",
+    "freeBilling": "永久免费",
+    "freeFeatures": [
+      "全部 2,800 道题",
+      "分领域 20 题小练",
+      "进度自动同步"
+    ],
+    "proLabel": "Pro",
+    "proName": "Pro 会员",
+    "proPrice": "¥980",
+    "proBilling": "/ 月",
+    "proFeatures": [
+      "AI 解析（中日英三语）",
+      "全真模拟考试（100 题・100 分钟）",
+      "复习模式（针对错题集中复习）",
+      "学习统计仪表盘",
+      "跨设备同步"
+    ],
+    "ctaLogin": "登录开始",
+    "ctaSubscribe": "升级 Pro",
+    "ctaCurrent": "当前方案",
+    "ctaManage": "管理支付",
+    "alreadyProTitle": "你已是 Pro 会员",
+    "alreadyProBody": "感谢你的支持。"
   },
   "comingSoon": {
     "proLabel": "Pro 会员专享",

@@ -282,7 +282,32 @@
   "pricing": {
     "title": "料金",
     "subtitle": "プラン",
-    "note": "近日公開予定です。Pro 機能のオプションを近いうちにご案内します。"
+    "freeLabel": "Free",
+    "freeName": "無料プラン",
+    "freePrice": "¥0",
+    "freeBilling": "ずっと無料",
+    "freeFeatures": [
+      "全 2,800 問の練習",
+      "分野別 20 問ドリル",
+      "進捗の自動同期"
+    ],
+    "proLabel": "Pro",
+    "proName": "Pro メンバー",
+    "proPrice": "¥980",
+    "proBilling": "/ 月",
+    "proFeatures": [
+      "AI 解説 (日本語・中国語・英語)",
+      "本番同形式の模擬試験 (100 問・100 分)",
+      "復習モード (間違えた問題を集中的に)",
+      "学習統計ダッシュボード",
+      "クロスデバイス同期"
+    ],
+    "ctaLogin": "ログインして始める",
+    "ctaSubscribe": "Pro に加入する",
+    "ctaCurrent": "現在のプラン",
+    "ctaManage": "支払いを管理",
+    "alreadyProTitle": "Pro メンバーです",
+    "alreadyProBody": "ご利用ありがとうございます。"
   },
   "comingSoon": {
     "proLabel": "Pro メンバー限定",
