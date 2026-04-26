@@ -1,10 +1,20 @@
 import { ImageResponse } from "next/og";
+import { getPost } from "@/lib/blog";
 
-export const alt = "IT Passport 練習ノート — ITパスポート試験 過去問 28年分・AI解説つき";
+export const alt = "IT Passport 練習ノート — Blog";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+type Params = Promise<{ locale: string; slug: string }>;
+
+export default async function BlogOgImage({ params }: { params: Params }) {
+  const { locale, slug } = await params;
+  const post = await getPost(locale, slug);
+
+  const title = post?.title ?? "IT Passport 練習ノート";
+  const date = post?.date ?? "";
+  const tags = post?.tags?.slice(0, 3) ?? [];
+
   return new ImageResponse(
     (
       <div
@@ -51,35 +61,23 @@ export default function OpengraphImage() {
                 textTransform: "uppercase",
               }}
             >
-              Past-exam practice
+              Blog · 用語解説
             </div>
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div
-            style={{
-              fontSize: 72,
-              fontWeight: 600,
-              lineHeight: 1.15,
-              letterSpacing: -2,
-              color: "#1a1a1a",
-              display: "flex",
-            }}
-          >
-            ITパスポート試験
-          </div>
-          <div
-            style={{
-              fontSize: 40,
-              fontWeight: 500,
-              color: "#2d4a3e",
-              letterSpacing: -0.8,
-              display: "flex",
-            }}
-          >
-            過去問28年分 · AI解説つき
-          </div>
+        <div
+          style={{
+            fontSize: 60,
+            fontWeight: 600,
+            lineHeight: 1.25,
+            letterSpacing: -1.5,
+            color: "#1a1a1a",
+            display: "flex",
+            maxWidth: "100%",
+          }}
+        >
+          {title}
         </div>
 
         <div
@@ -91,14 +89,24 @@ export default function OpengraphImage() {
             fontSize: 18,
           }}
         >
-          <div style={{ display: "flex", gap: 28 }}>
-            <div style={{ display: "flex" }}>2,800 問</div>
-            <div style={{ display: "flex" }}>令和7〜平成21年</div>
-            <div style={{ display: "flex" }}>228 図表</div>
+          <div style={{ display: "flex", gap: 12 }}>
+            {tags.map((tag) => (
+              <div
+                key={tag}
+                style={{
+                  display: "flex",
+                  border: "1px solid #d4d3cf",
+                  borderRadius: 4,
+                  padding: "4px 10px",
+                  fontSize: 14,
+                  color: "#5a5a56",
+                }}
+              >
+                {tag}
+              </div>
+            ))}
           </div>
-          <div style={{ display: "flex", fontSize: 14 }}>
-            出典: IPA · 非商用学習用途
-          </div>
+          <div style={{ display: "flex", fontSize: 16 }}>{date}</div>
         </div>
       </div>
     ),

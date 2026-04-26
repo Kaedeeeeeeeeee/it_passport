@@ -4,9 +4,17 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getPost } from "@/lib/blog";
+import {
+  articleSchema,
+  breadcrumbSchema,
+  buildAlternates,
+  buildOpenGraph,
+  homeBreadcrumb,
+} from "@/lib/seo";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -30,7 +38,26 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const post = await getPost(locale, slug);
   if (!post) return {};
-  return { title: post.title, description: post.description };
+  const common = await getTranslations({ locale, namespace: "common" });
+  const siteName = common("appName");
+  const path = `/blog/${slug}`;
+  const og = buildOpenGraph({
+    locale,
+    title: post.title,
+    description: post.description,
+    type: "article",
+    publishedTime: post.date,
+    authors: [siteName],
+    tags: post.tags,
+    siteName,
+  });
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: og.openGraph,
+    twitter: og.twitter,
+    alternates: buildAlternates(path, locale),
+  };
 }
 
 // Reuses the same styling tokens as web/components/md/Markdown.tsx so blog
@@ -139,9 +166,32 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   if (!post) notFound();
 
   const t = await getTranslations({ locale, namespace: "blog" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const siteName = common("appName");
+
+  const article = articleSchema({
+    locale,
+    slugPath: `/blog/${slug}`,
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    tags: post.tags,
+    publisherName: siteName,
+  });
+
+  const breadcrumb = breadcrumbSchema(
+    [
+      homeBreadcrumb(locale),
+      { name: t("indexTitle"), path: "/blog" },
+      { name: post.title, path: `/blog/${slug}` },
+    ],
+    locale,
+  );
 
   return (
     <article className="max-w-[720px] mx-auto px-6 sm:px-9 py-12 sm:py-16">
+      <JsonLd data={article} />
+      <JsonLd data={breadcrumb} />
       <Link
         href="/blog"
         className="text-[12.5px] text-ink-3 hover:text-ink-2 no-underline"

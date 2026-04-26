@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { PostCard } from "@/components/blog/PostCard";
 import type { Locale } from "@/i18n/routing";
 import { getAllPosts } from "@/lib/blog";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
 type Params = Promise<{ locale: string }>;
 
@@ -13,9 +14,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const title = t("indexTitle");
+  const description = t("indexSubtitle");
+  const og = buildOpenGraph({
+    locale,
+    title,
+    description,
+    type: "website",
+    siteName: common("appName"),
+  });
   return {
-    title: t("indexTitle"),
-    description: t("indexSubtitle"),
+    title,
+    description,
+    openGraph: og.openGraph,
+    twitter: og.twitter,
+    alternates: buildAlternates("/blog", locale),
   };
 }
 

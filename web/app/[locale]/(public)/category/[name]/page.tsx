@@ -6,6 +6,13 @@ import { Link } from "@/i18n/navigation";
 import { PRACTICE_CATEGORIES } from "@/lib/categories";
 import { categoryLabel } from "@/lib/exam-terms";
 import { questionsByCategory } from "@/lib/questions";
+import {
+  breadcrumbSchema,
+  buildAlternates,
+  buildOpenGraph,
+  homeBreadcrumb,
+  localizedUrl,
+} from "@/lib/seo";
 import type { Category } from "@/lib/types";
 
 const PREVIEW_SIZE = 20;
@@ -30,11 +37,24 @@ export async function generateMetadata({
   if (!isPublicCategory(name)) return {};
   const t = await getTranslations({ locale, namespace: "publicCategory" });
   const examTerms = await getTranslations({ locale, namespace: "examTerms" });
+  const common = await getTranslations({ locale, namespace: "common" });
   const label = categoryLabel(name, examTerms);
   const total = questionsByCategory(name).length;
+  const title = t("title", { label });
+  const description = t("subtitle", { count: total });
+  const og = buildOpenGraph({
+    locale,
+    title,
+    description,
+    type: "website",
+    siteName: common("appName"),
+  });
   return {
-    title: t("title", { label }),
-    description: t("subtitle", { count: total }),
+    title,
+    description,
+    openGraph: og.openGraph,
+    twitter: og.twitter,
+    alternates: buildAlternates(`/category/${name}`, locale),
   };
 }
 
@@ -49,11 +69,12 @@ export default async function PublicCategoryPage({
 }: {
   params: Params;
 }) {
-  const { name } = await params;
+  const { locale, name } = await params;
   if (!isPublicCategory(name)) notFound();
 
   const t = await getTranslations("publicCategory");
   const examTerms = await getTranslations("examTerms");
+  const publicExam = await getTranslations({ locale, namespace: "publicExam" });
   const label = categoryLabel(name, examTerms);
   const all = questionsByCategory(name);
   const total = all.length;
@@ -74,16 +95,28 @@ export default async function PublicCategoryPage({
     "@type": "CollectionPage",
     name: t("title", { label }),
     description: t("subtitle", { count: total }),
+    url: localizedUrl(`/category/${name}`, locale),
     inLanguage: ["ja", "zh", "en"],
     isPartOf: {
       "@type": "WebSite",
       name: "IT Passport Practice",
+      url: localizedUrl("/", locale),
     },
   };
+
+  const breadcrumb = breadcrumbSchema(
+    [
+      homeBreadcrumb(locale),
+      { name: publicExam("indexTitle"), path: "/exams" },
+      { name: t("title", { label }), path: `/category/${name}` },
+    ],
+    locale,
+  );
 
   return (
     <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-12 sm:py-16">
       <JsonLd data={collectionSchema} />
+      <JsonLd data={breadcrumb} />
 
       <header className="mb-9">
         <Link

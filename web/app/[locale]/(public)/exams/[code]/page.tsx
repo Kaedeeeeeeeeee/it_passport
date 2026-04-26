@@ -9,6 +9,13 @@ import {
   seasonLabel,
 } from "@/lib/exam-terms";
 import { exams, questionsForExam } from "@/lib/questions";
+import {
+  breadcrumbSchema,
+  buildAlternates,
+  buildOpenGraph,
+  homeBreadcrumb,
+  localizedUrl,
+} from "@/lib/seo";
 
 const TEASER_LIMIT = 80;
 
@@ -28,11 +35,25 @@ export async function generateMetadata({
   if (!e) return {};
   const t = await getTranslations({ locale, namespace: "publicExam" });
   const examTerms = await getTranslations({ locale, namespace: "examTerms" });
+  const common = await getTranslations({ locale, namespace: "common" });
   const title = t("examTitle", { title: formatExamTitle(code, examTerms) });
   const description = t("examSubtitle", {
     season: seasonLabel(e.season, examTerms),
   });
-  return { title, description };
+  const og = buildOpenGraph({
+    locale,
+    title,
+    description,
+    type: "website",
+    siteName: common("appName"),
+  });
+  return {
+    title,
+    description,
+    openGraph: og.openGraph,
+    twitter: og.twitter,
+    alternates: buildAlternates(`/exams/${code}`, locale),
+  };
 }
 
 /** Truncate to ~TEASER_LIMIT characters at a sensible break, with ellipsis.
@@ -44,29 +65,56 @@ function teaser(question: string): string {
 }
 
 export default async function PublicExamPage({ params }: { params: Params }) {
-  const { code } = await params;
+  const { locale, code } = await params;
   const e = exams.find((x) => x.exam_code === code);
   if (!e) notFound();
 
   const t = await getTranslations("publicExam");
   const examTerms = await getTranslations("examTerms");
+  const common = await getTranslations({ locale, namespace: "common" });
   const title = formatExamTitle(code, examTerms);
   const seasonText = seasonLabel(e.season, examTerms);
   const questions = questionsForExam(code).sort((a, b) => a.number - b.number);
+  const examUrl = localizedUrl(`/exams/${code}`, locale);
 
   const quizSchema = {
     "@context": "https://schema.org",
     "@type": "Quiz",
     name: t("examTitle", { title }),
-    about: "IT Passport (iパス) — Information Technology Engineers Examination",
+    about:
+      "IT Passport (iパス) — Information-Technology Engineers Examination, administered by IPA Japan.",
+    url: examUrl,
     inLanguage: ["ja", "zh", "en"],
     educationalLevel: "Beginner",
+    learningResourceType: "Practice Exam",
+    educationalUse: ["self-assessment", "exam preparation"],
     numberOfQuestions: 100,
+    datePublished: `${e.year}-01-01`,
+    provider: {
+      "@type": "Organization",
+      name: "Information-technology Promotion Agency, Japan (IPA)",
+      url: "https://www.ipa.go.jp/",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: common("appName"),
+      url: localizedUrl("/", locale),
+    },
   };
+
+  const breadcrumb = breadcrumbSchema(
+    [
+      homeBreadcrumb(locale),
+      { name: t("indexTitle"), path: "/exams" },
+      { name: t("examTitle", { title }), path: `/exams/${code}` },
+    ],
+    locale,
+  );
 
   return (
     <div className="max-w-[1040px] mx-auto px-6 sm:px-9 py-12 sm:py-16">
       <JsonLd data={quizSchema} />
+      <JsonLd data={breadcrumb} />
 
       <header className="mb-9">
         <Link

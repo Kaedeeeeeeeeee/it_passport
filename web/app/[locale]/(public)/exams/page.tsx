@@ -8,6 +8,7 @@ import {
   seasonLabel,
 } from "@/lib/exam-terms";
 import { exams } from "@/lib/questions";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -16,9 +17,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "publicExam" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const title = t("indexTitle");
+  const description = t("indexSubtitle");
+  const og = buildOpenGraph({
+    locale,
+    title,
+    description,
+    type: "website",
+    siteName: common("appName"),
+  });
   return {
-    title: t("indexTitle"),
-    description: t("indexSubtitle"),
+    title,
+    description,
+    openGraph: og.openGraph,
+    twitter: og.twitter,
+    alternates: buildAlternates("/exams", locale),
   };
 }
 
