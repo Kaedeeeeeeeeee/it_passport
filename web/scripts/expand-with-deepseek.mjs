@@ -5,7 +5,10 @@
 //
 // Usage:
 //   node --env-file=.env.local scripts/expand-with-deepseek.mjs \
-//     content/blog/ja/firewall-toha.mdx [content/blog/ja/...]
+//     [--concurrency=N] content/blog/ja/firewall-toha.mdx [content/blog/ja/...]
+//
+// --concurrency defaults to 1. Use 3-4 for batch jobs; DeepSeek's per-key
+// rate limit is generous enough.
 
 import { readFile, writeFile } from "node:fs/promises";
 import { argv, exit, env } from "node:process";
@@ -21,9 +24,21 @@ if (!env.DEEPSEEK_API_KEY) {
   exit(1);
 }
 
-const files = argv.slice(2);
+const rawArgs = argv.slice(2);
+let concurrency = 1;
+const files = [];
+for (const a of rawArgs) {
+  const m = a.match(/^--concurrency=(\d+)$/);
+  if (m) {
+    concurrency = Math.max(1, parseInt(m[1], 10));
+    continue;
+  }
+  files.push(a);
+}
 if (files.length === 0) {
-  console.error("Usage: expand-with-deepseek.mjs <outline.mdx> [...]");
+  console.error(
+    "Usage: expand-with-deepseek.mjs [--concurrency=N] <outline.mdx> [...]",
+  );
   exit(1);
 }
 
@@ -116,16 +131,41 @@ async function expand(filePath) {
   };
 }
 
-for (const file of files) {
-  try {
-    const r = await expand(file);
-    const cost =
-      ((r.inputTokens ?? 0) * 0.14 + (r.outputTokens ?? 0) * 0.28) / 1_000_000;
-    console.log(
-      `✓ ${r.filePath} — ${r.chars} chars, ${(r.ms / 1000).toFixed(1)}s, ${r.inputTokens}→${r.outputTokens} tok ($${cost.toFixed(4)})`,
-    );
-  } catch (e) {
-    console.error(`✗ ${file}: ${e.message}`);
-    exit(1);
+/** Process all files with a fixed-size pool of concurrent workers. */
+async function runPool(items, workerCount, fn) {
+  const queue = items.slice();
+  const errors = [];
+  let totalCost = 0;
+  const t0 = Date.now();
+
+  async function worker() {
+    while (queue.length > 0) {
+      const file = queue.shift();
+      try {
+        const r = await fn(file);
+        const cost =
+          ((r.inputTokens ?? 0) * 0.14 + (r.outputTokens ?? 0) * 0.28) /
+          1_000_000;
+        totalCost += cost;
+        console.log(
+          `✓ ${r.filePath} — ${r.chars} chars, ${(r.ms / 1000).toFixed(1)}s, ${r.inputTokens}→${r.outputTokens} tok ($${cost.toFixed(4)})`,
+        );
+      } catch (e) {
+        console.error(`✗ ${file}: ${e.message}`);
+        errors.push({ file, error: e.message });
+      }
+    }
   }
+
+  await Promise.all(
+    Array.from({ length: Math.min(workerCount, items.length) }, () => worker()),
+  );
+
+  const wallSec = ((Date.now() - t0) / 1000).toFixed(1);
+  console.log(
+    `\n--- ${items.length - errors.length}/${items.length} ok, ${wallSec}s wall, $${totalCost.toFixed(4)} total ---`,
+  );
+  if (errors.length > 0) exit(1);
 }
+
+await runPool(files, concurrency, expand);
