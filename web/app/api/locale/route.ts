@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProfile } from "@/lib/auth";
+import { userFromRequest } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { routing } from "@/i18n/routing";
 
@@ -41,12 +41,12 @@ export async function POST(request: Request) {
     maxAge: 60 * 60 * 24 * 365,
   });
 
-  const profile = await getProfile();
-  if (profile) {
+  const user = await userFromRequest(request);
+  if (user) {
     const { error } = await supabaseAdmin()
       .from("profiles")
       .update({ preferred_language: locale })
-      .eq("id", profile.id);
+      .eq("id", user.id);
     if (error) {
       // Non-fatal: cookie write already succeeded, so the choice still takes
       // effect on this device. Surface the failure for observability.

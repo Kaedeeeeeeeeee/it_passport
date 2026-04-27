@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { supabaseAdmin } from "./admin";
 
 /** Server-side Supabase client that reads/writes auth session cookies.
  *  Use in Server Components, Route Handlers, and Server Actions. */
@@ -28,4 +29,26 @@ export async function supabaseServer(): Promise<SupabaseClient> {
       },
     },
   );
+}
+
+/** Resolve the authenticated user from either the session cookie (web) or
+ *  an `Authorization: Bearer <jwt>` header (native iOS app). Returns null
+ *  when neither path yields a valid user. Route handlers should call this
+ *  instead of `supabaseServer().auth.getUser()` so the same endpoint can
+ *  serve both clients. Writes still go through `supabaseAdmin()` as before. */
+export async function userFromRequest(req: Request): Promise<User | null> {
+  const cookieClient = await supabaseServer();
+  const { data: cookieAuth } = await cookieClient.auth.getUser();
+  if (cookieAuth.user) return cookieAuth.user;
+
+  const header = req.headers.get("authorization");
+  if (header && header.toLowerCase().startsWith("bearer ")) {
+    const jwt = header.slice(7).trim();
+    if (jwt) {
+      const { data } = await supabaseAdmin().auth.getUser(jwt);
+      if (data.user) return data.user;
+    }
+  }
+
+  return null;
 }

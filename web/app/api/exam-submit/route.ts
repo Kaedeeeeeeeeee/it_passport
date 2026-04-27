@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { supabaseServer } from "@/lib/supabase/server";
+import { userFromRequest } from "@/lib/supabase/server";
 
 type SubmitBody = {
   sessionId: string;
@@ -14,11 +14,11 @@ type SubmitBody = {
 };
 
 /** Finalise an exam session: insert attempts, mark session completed, record
- *  the correct count. Caller (ExamClient) posts once at submission time. */
+ *  the correct count. Caller (ExamClient on web, ExamViewModel on iOS) posts
+ *  once at submission time. Auth: cookie or Bearer JWT. */
 export async function POST(request: Request) {
-  const sb = await supabaseServer();
-  const { data: auth } = await sb.auth.getUser();
-  if (!auth.user) {
+  const user = await userFromRequest(request);
+  if (!user) {
     return NextResponse.json({ error: "not authenticated" }, { status: 401 });
   }
 
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     .select("id, user_id, kind, completed_at")
     .eq("id", body.sessionId)
     .maybeSingle();
-  if (!session || session.user_id !== auth.user.id || session.kind !== "exam") {
+  if (!session || session.user_id !== user.id || session.kind !== "exam") {
     return NextResponse.json({ error: "not found" }, { status: 404 });
   }
   if (session.completed_at) {
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   const rows = body.answers
     .filter((a) => a.letter !== null)
     .map((a) => ({
-      user_id: auth.user!.id,
+      user_id: user.id,
       question_id: a.questionId,
       answer: a.letter as string,
       correct: !!a.correct,

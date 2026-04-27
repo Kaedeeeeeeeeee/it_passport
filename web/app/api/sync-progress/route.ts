@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase/server";
+import { userFromRequest } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 type AttemptIn = {
@@ -20,13 +20,13 @@ type SessionIn = {
   correctCount?: number;
 };
 
-/** POST: batch-ingest browser attempts into Supabase for the signed-in user.
+/** POST: batch-ingest client attempts into Supabase for the signed-in user.
+ *  Auth: cookie (web) or `Authorization: Bearer <jwt>` (native iOS).
  *  Optionally create/update a session row and tag attempts with its id.
  *  Dedup via unique(user_id, question_id, attempted_at). */
 export async function POST(request: Request) {
-  const sb = await supabaseServer();
-  const { data: auth } = await sb.auth.getUser();
-  if (!auth.user) {
+  const user = await userFromRequest(request);
+  if (!user) {
     return NextResponse.json({ error: "not authenticated" }, { status: 401 });
   }
 
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid body" }, { status: 400 });
   }
 
-  const userId = auth.user.id;
+  const userId = user.id;
   const admin = supabaseAdmin();
 
   let sessionId: string | undefined;
