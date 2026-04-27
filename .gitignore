@@ -13,3 +13,19 @@ dataset/
 # Supabase CLI scratch state (project refs, versions, pooler URL)
 supabase/.temp/
 supabase/.branches/
+
+# Claude Code per-project state (skills, agents, sessions, plans, chat hist)
+.claude/
+
+# Xcode per-user state and build artifacts
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.swiftpm/
+.build/
+build/
+*.moved-aside
+
+# Don't commit .p8 or .pem keys that may end up next to the project
+*.p8
+*.pem
