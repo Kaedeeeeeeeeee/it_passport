@@ -30,27 +30,36 @@ struct OnboardingView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
+            .indexViewStyle(.page(backgroundDisplayMode: .never))
 
             bottomBar
                 .padding(.horizontal, 24)
-                .padding(.bottom, 24)
+                .padding(.bottom, 32)
+                .padding(.top, 8)
         }
+        .paperBackground()
     }
 
     private func pageView(_ p: Page) -> some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 28) {
             Spacer()
             Image(systemName: p.icon)
-                .font(.system(size: 96))
-                .foregroundStyle(Color.accentColor)
-            Text(p.title)
-                .font(.title.weight(.bold))
-                .multilineTextAlignment(.center)
-            Text(p.body)
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 320)
+                .font(.system(size: 56, weight: .light))
+                .foregroundStyle(Theme.C.accent)
+                .frame(width: 132, height: 132)
+                .background(Theme.C.accentSoft, in: Circle())
+            VStack(spacing: 12) {
+                Text(p.title)
+                    .font(.serif(28))
+                    .foregroundStyle(Theme.C.ink)
+                    .multilineTextAlignment(.center)
+                Text(p.body)
+                    .font(.bodyText)
+                    .foregroundStyle(Theme.C.ink2)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(4)
+                    .frame(maxWidth: 320)
+            }
             Spacer()
         }
         .padding(.horizontal, 32)
@@ -59,7 +68,7 @@ struct OnboardingView: View {
     private var bottomBar: some View {
         HStack {
             Button("スキップ") { onFinish() }
-                .foregroundStyle(.secondary)
+                .buttonStyle(.ghost)
             Spacer()
             Button {
                 if page < pages.count - 1 {
@@ -69,17 +78,15 @@ struct OnboardingView: View {
                 }
             } label: {
                 Text(page == pages.count - 1 ? "始める" : "次へ")
-                    .frame(width: 100)
-                    .padding(.vertical, 6)
+                    .frame(minWidth: 96)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .buttonStyle(.primary)
         }
     }
 
     private struct Page {
         let icon: String
-        let title: String
-        let body: String
+        let title: LocalizedStringKey
+        let body: LocalizedStringKey
     }
 }

@@ -8,7 +8,7 @@ struct PricingSheet: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 28) {
                 header
                 benefitsList
                 if entitlement.isPro {
@@ -20,11 +20,12 @@ struct PricingSheet: View {
             }
             .padding(24)
         }
+        .paperBackground()
         .presentationDetents([.medium, .large])
-        .presentationBackground(.regularMaterial)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("閉じる") { dismiss() }
+                    .foregroundStyle(Theme.C.ink2)
             }
         }
         .task {
@@ -35,16 +36,23 @@ struct PricingSheet: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Pro").font(.largeTitle.weight(.bold))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 14, weight: .semibold))
+                    .frame(width: 28, height: 28)
+                    .background(Theme.C.accent, in: RoundedRectangle(cornerRadius: Theme.R.small))
+                MarkerTitle(text: "Pro", size: 32)
+            }
             Text("¥980 / 月 または年額プラン")
-                .font(.title3)
-                .foregroundStyle(.secondary)
+                .font(.bodyText)
+                .foregroundStyle(Theme.C.ink2)
         }
     }
 
     private var benefitsList: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             benefit("doc.text.magnifyingglass", "本番同形式の模擬試験 (100 問 / 100 分)")
             benefit("arrow.uturn.backward", "間違えた問題を集中復習")
             benefit("chart.bar.xaxis", "進捗ダッシュボード")
@@ -64,30 +72,34 @@ struct PricingSheet: View {
             if storeKit.products.isEmpty {
                 ProgressView("商品情報を読み込み中…")
                     .padding(.vertical, 12)
+                    .tint(Theme.C.accent)
             }
             if let err = storeKit.purchaseError {
-                Text(err).font(.footnote).foregroundStyle(.red)
+                Text(err)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.C.wrong)
             }
             Button("購入を復元") {
                 Task { await storeKit.restorePurchases() }
             }
-            .font(.footnote)
-            .foregroundStyle(.secondary)
+            .buttonStyle(.ghost)
+            .padding(.top, 4)
         }
     }
 
     private func purchaseButton(id: ProProduct, product: Product) -> some View {
         let inProgress = storeKit.purchaseInProgress == id
+        let isYearly = id == .yearly
         return Button {
             Task { await storeKit.purchase(id) }
         } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(label(for: id))
-                        .font(.body.weight(.semibold))
-                    if let savings = id == .yearly ? "年払いで約 17% 節約" : nil {
-                        Text(savings)
-                            .font(.caption)
+                        .font(.system(size: 15, weight: .semibold))
+                    if isYearly {
+                        Text("年払いで約 17% 節約")
+                            .font(.system(size: 11))
                             .opacity(0.85)
                     }
                 }
@@ -96,32 +108,41 @@ struct PricingSheet: View {
                     ProgressView().tint(.white)
                 } else {
                     Text(product.displayPrice)
-                        .font(.body.weight(.semibold))
+                        .font(.system(size: 15, weight: .semibold).monospacedDigit())
                 }
             }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 18)
+            .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .background(
+                isYearly ? Theme.C.accent : Theme.C.accentInk,
+                in: RoundedRectangle(cornerRadius: Theme.R.button)
+            )
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
+        .buttonStyle(.plain)
         .disabled(storeKit.purchaseInProgress != nil)
     }
 
     private var alreadyProBadge: some View {
-        Label("Pro 加入中", systemImage: "checkmark.seal.fill")
-            .font(.body.weight(.semibold))
-            .foregroundStyle(.green)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(.green.opacity(0.10), in: .rect(cornerRadius: 12))
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundStyle(Theme.C.correct)
+                .font(.system(size: 18))
+            Text("Pro 加入中")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Theme.C.ink)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 18)
+        .background(Theme.C.accentSoft, in: RoundedRectangle(cornerRadius: Theme.R.card))
     }
 
     private var legalLinks: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("購入後、Apple ID への自動更新で課金されます。設定 → Apple ID → サブスクリプションでいつでも解約できます。")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
+        Text("購入後、Apple ID への自動更新で課金されます。設定 → Apple ID → サブスクリプションでいつでも解約できます。")
+            .font(.system(size: 11))
+            .foregroundStyle(Theme.C.ink3)
+            .lineSpacing(2)
     }
 
     private func label(for id: ProProduct) -> String {
@@ -132,13 +153,16 @@ struct PricingSheet: View {
     }
 
     @ViewBuilder
-    private func benefit(_ icon: String, _ text: String) -> some View {
-        HStack(spacing: 12) {
+    private func benefit(_ icon: String, _ text: LocalizedStringKey) -> some View {
+        HStack(spacing: 14) {
             Image(systemName: icon)
-                .frame(width: 28)
-                .foregroundStyle(Color.accentColor)
+                .font(.system(size: 14))
+                .foregroundStyle(Theme.C.accentInk)
+                .frame(width: 32, height: 32)
+                .background(Theme.C.accentSoft, in: RoundedRectangle(cornerRadius: Theme.R.small))
             Text(text)
-                .font(.callout)
+                .font(.bodyText)
+                .foregroundStyle(Theme.C.ink)
         }
     }
 }

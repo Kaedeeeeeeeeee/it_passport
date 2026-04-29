@@ -15,48 +15,55 @@ struct LoginView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("ようこそ")
-                    .font(.largeTitle.weight(.semibold))
-                Text("サインインして進捗を端末間で同期")
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.top, 32)
-
-            VStack(spacing: 12) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 28) {
+                header
                 magicLinkSection
-                Divider().padding(.vertical, 4)
-                appleButton
-                googleButton
+                divider
+                socialButtons
+                statusFooter
+                Spacer(minLength: 32)
             }
-
-            if case .sent(let mail) = status {
-                Text("\(mail) にログインリンクを送りました。受信トレイをご確認ください。")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            if case .error(let msg) = status {
-                Text(msg)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-            }
-
-            Spacer()
+            .padding(.horizontal, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 40)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(24)
+        .paperBackground()
         .navigationTitle("Sign in")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: Header
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            MarkerTitle(text: "ようこそ", size: 32)
+            Text("サインインして進捗を端末間で同期")
+                .font(.bodyText)
+                .foregroundStyle(Theme.C.ink2)
+        }
+        .padding(.top, 8)
     }
 
     // MARK: Magic link
 
     private var magicLinkSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("メールでログイン")
-                .font(.subheadline.weight(.medium))
+                .font(.tLabel)
+                .foregroundStyle(Theme.C.ink3)
+                .textCase(.uppercase)
+
             TextField("you@example.com", text: $email)
-                .textFieldStyle(.roundedBorder)
+                .font(.bodyText)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .background(Theme.C.surface, in: RoundedRectangle(cornerRadius: Theme.R.button))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.R.button)
+                        .stroke(Theme.C.lineStrong, lineWidth: 1)
+                )
                 .textContentType(.emailAddress)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
@@ -65,7 +72,7 @@ struct LoginView: View {
             Button {
                 Task { await sendMagicLink() }
             } label: {
-                HStack {
+                HStack(spacing: 8) {
                     if status == .sending {
                         ProgressView().tint(.white)
                     } else {
@@ -73,26 +80,33 @@ struct LoginView: View {
                     }
                     Text("ログインリンクを送る")
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 4)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .buttonStyle(.primary(fillWidth: true))
             .disabled(email.isEmpty || status == .sending)
+            .opacity(email.isEmpty || status == .sending ? 0.55 : 1.0)
         }
     }
 
-    private func sendMagicLink() async {
-        status = .sending
-        do {
-            try await AuthClient.shared.sendMagicLink(email: email)
-            status = .sent(email)
-        } catch {
-            status = .error(error.localizedDescription)
+    // MARK: Divider
+
+    private var divider: some View {
+        HStack(spacing: 12) {
+            Rectangle().fill(Theme.C.line).frame(height: 1)
+            Text("または")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(Theme.C.ink3)
+            Rectangle().fill(Theme.C.line).frame(height: 1)
         }
     }
 
-    // MARK: Apple
+    // MARK: Social
+
+    private var socialButtons: some View {
+        VStack(spacing: 12) {
+            appleButton
+            googleButton
+        }
+    }
 
     private var appleButton: some View {
         SignInWithAppleButton(.signIn) { req in
@@ -104,8 +118,71 @@ struct LoginView: View {
             Task { await handleAppleResult(result) }
         }
         .signInWithAppleButtonStyle(.black)
-        .frame(height: 50)
-        .clipShape(.rect(cornerRadius: 12))
+        .frame(height: 48)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.R.button))
+    }
+
+    private var googleButton: some View {
+        Button {
+            Task { await signInGoogle() }
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "g.circle.fill")
+                    .font(.system(size: 18))
+                Text("Google で続ける")
+                    .font(.system(size: 14, weight: .medium))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .foregroundStyle(Theme.C.ink)
+            .background(Theme.C.surface, in: RoundedRectangle(cornerRadius: Theme.R.button))
+            .overlay {
+                RoundedRectangle(cornerRadius: Theme.R.button)
+                    .stroke(Theme.C.lineStrong, lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: Status footer
+
+    @ViewBuilder
+    private var statusFooter: some View {
+        if case .sent(let mail) = status {
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: "envelope.open")
+                    .foregroundStyle(Theme.C.accent)
+                    .font(.system(size: 13))
+                Text("\(mail) にログインリンクを送りました。受信トレイをご確認ください。")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.C.ink2)
+                    .lineSpacing(2)
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.C.accentSoft, in: RoundedRectangle(cornerRadius: Theme.R.card))
+        }
+        if case .error(let msg) = status {
+            Text(msg)
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.C.wrong)
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.C.wrong.opacity(0.08),
+                            in: RoundedRectangle(cornerRadius: Theme.R.card))
+        }
+    }
+
+    // MARK: Actions
+
+    private func sendMagicLink() async {
+        status = .sending
+        do {
+            try await AuthClient.shared.sendMagicLink(email: email)
+            status = .sent(email)
+        } catch {
+            status = .error(error.localizedDescription)
+        }
     }
 
     private func handleAppleResult(_ result: Result<ASAuthorization, Error>) async {
@@ -129,29 +206,6 @@ struct LoginView: View {
                 status = .error(error.localizedDescription)
             }
         }
-    }
-
-    // MARK: Google
-
-    private var googleButton: some View {
-        Button {
-            Task { await signInGoogle() }
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: "g.circle.fill")
-                    .font(.title3)
-                Text("Google で続ける")
-                    .font(.subheadline.weight(.medium))
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(Color(.tertiarySystemBackground), in: .rect(cornerRadius: 12))
-            .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(.separator), lineWidth: 1)
-            }
-        }
-        .buttonStyle(.plain)
     }
 
     private func signInGoogle() async {
