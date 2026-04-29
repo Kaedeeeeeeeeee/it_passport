@@ -55,5 +55,11 @@
     </array>
     <key>NSSupportsLiveActivities</key>
     <true/>
+    <key>UIUserInterfaceStyle</key>
+    <string>Light</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>NotoSerifJP-SemiBold.otf</string>
+    </array>
 </dict>
 </plist>

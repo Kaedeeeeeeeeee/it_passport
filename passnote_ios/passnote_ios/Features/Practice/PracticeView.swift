@@ -52,6 +52,7 @@ struct PracticeView: View {
                 .padding(20)
             }
             .id(vm.index)  // reset scroll on question change
+            .paperBackground()
 
             FooterBar(
                 canPrev: vm.canGoPrev,
@@ -125,27 +126,29 @@ private struct Topbar: View {
         HStack(spacing: 12) {
             Button("やめる", action: onEnd)
                 .buttonStyle(.plain)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Theme.C.ink3)
 
             Text("\(String(format: "%02d", idx + 1)) / \(total)")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .font(.monoCount)
+                .foregroundStyle(Theme.C.ink2)
 
             ProgressView(value: Double(progress), total: Double(total))
                 .progressViewStyle(.linear)
-                .tint(.accentColor)
+                .tint(Theme.C.accent)
 
             Text(label)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(Theme.C.ink3)
                 .lineLimit(1)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(.bar)
+        .background(Theme.C.surface)
         .overlay(alignment: .bottom) {
-            Divider()
+            Rectangle()
+                .fill(Theme.C.line)
+                .frame(height: 1)
         }
     }
 }
@@ -163,29 +166,33 @@ private struct FooterBar: View {
     var body: some View {
         HStack {
             Button("前へ", action: onPrev)
+                .buttonStyle(.ghost)
                 .disabled(!canPrev)
+                .opacity(canPrev ? 1.0 : 0.4)
 
             Spacer()
 
             if answered {
                 if isLast {
                     Button("結果を見る", action: onFinish)
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.primary)
                 } else {
                     Button("次へ", action: onNext)
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.primary)
                 }
             } else {
                 Text("選択肢を選んでください")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.C.ink3)
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(.bar)
+        .padding(.vertical, 10)
+        .background(Theme.C.surface)
         .overlay(alignment: .top) {
-            Divider()
+            Rectangle()
+                .fill(Theme.C.line)
+                .frame(height: 1)
         }
     }
 }
@@ -198,15 +205,21 @@ private struct AnswerReveal: View {
 
     var body: some View {
         let letters = correctLetters.sorted().joined(separator: "・")
-        HStack(spacing: 8) {
+        let tint = picked.correct ? Theme.C.correct : Theme.C.wrong
+        HStack(spacing: 10) {
             Image(systemName: picked.correct ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .foregroundStyle(picked.correct ? .green : .red)
+                .foregroundStyle(tint)
             Text(picked.correct ? "正解" : "不正解 — 正答は \(letters)")
-                .font(.subheadline.weight(.medium))
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(Theme.C.ink)
         }
-        .padding(12)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background((picked.correct ? Color.green : Color.red).opacity(0.10),
-                    in: .rect(cornerRadius: 10))
+        .background(tint.opacity(0.10), in: RoundedRectangle(cornerRadius: Theme.R.card))
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.R.card)
+                .stroke(tint.opacity(0.35), lineWidth: 1)
+        )
     }
 }

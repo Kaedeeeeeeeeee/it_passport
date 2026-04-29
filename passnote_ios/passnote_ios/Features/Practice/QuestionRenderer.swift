@@ -8,14 +8,14 @@ struct QuestionMetadataView: View {
     let question: Question
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             if let cat = question.category {
-                Chip(text: categoryLabel(cat), tint: .accentColor)
+                ThemedChip(text: categoryLabel(cat), style: .accent)
             }
-            Chip(text: "\(question.examCode) · 問\(question.number)", tint: .secondary)
+            ThemedChip(text: "\(question.examCode) · 問\(question.number)", style: .neutral)
             if let groupId = question.integratedGroupId {
                 let letter = groupId.split(separator: "-").last.map(String.init) ?? ""
-                Chip(text: "大問 \(letter)", tint: .secondary)
+                ThemedChip(text: "大問 \(letter)", style: .muted)
             }
             Spacer(minLength: 0)
         }
@@ -28,20 +28,6 @@ struct QuestionMetadataView: View {
         case .technology: "テクノロジ系"
         case .integrated: "総合"
         }
-    }
-}
-
-private struct Chip: View {
-    let text: String
-    let tint: Color
-
-    var body: some View {
-        Text(text)
-            .font(.caption2)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .foregroundStyle(tint)
-            .background(tint.opacity(0.12), in: .capsule)
     }
 }
 
@@ -58,8 +44,9 @@ struct IntegratedContextView: View {
         DisclosureGroup(isExpanded: $expanded) {
             VStack(alignment: .leading, spacing: 12) {
                 Text(stripImageMarkdown(context))
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                    .font(.bodyText)
+                    .foregroundStyle(Theme.C.ink2)
+                    .lineSpacing(3)
                 ForEach(figures, id: \.path) { fig in
                     FigureView(figure: fig)
                 }
@@ -67,11 +54,15 @@ struct IntegratedContextView: View {
             .padding(.top, 8)
         } label: {
             Text("大問 \(letter) の問題文")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Theme.C.ink2)
         }
-        .padding(12)
-        .background(.regularMaterial, in: .rect(cornerRadius: 12))
+        .padding(14)
+        .background(Theme.C.surface2, in: RoundedRectangle(cornerRadius: Theme.R.card))
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.R.card)
+                .stroke(Theme.C.line, lineWidth: 1)
+        )
     }
 }
 
@@ -83,8 +74,9 @@ struct QuestionBodyView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(stripImageMarkdown(question.question))
-                .font(.body)
-                .lineSpacing(4)
+                .font(.bodyTextLarge)
+                .foregroundStyle(Theme.C.ink)
+                .lineSpacing(7)
             // Show all figures separately. Inline-image markdown in the
             // question text is uncommon; defer fancy interleaving to later.
             if question.choiceFormat != .figureChoices {
@@ -166,10 +158,10 @@ private struct ChoiceRow: View {
         Button(action: { if answered == nil { onPick(letter) } }) {
             HStack(alignment: .top, spacing: 12) {
                 Text(letter)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .frame(width: 28, height: 28)
                     .foregroundStyle(state.letterFg)
-                    .background(state.letterBg, in: .rect(cornerRadius: 6))
+                    .background(state.letterBg, in: RoundedRectangle(cornerRadius: Theme.R.small))
                 if isFigRef || isFigureChoice {
                     FigureView(
                         figure: Figure(path: figurePath, type: nil, description: nil),
@@ -178,16 +170,17 @@ private struct ChoiceRow: View {
                     Spacer(minLength: 0)
                 } else {
                     Text(stripImageMarkdown(raw))
-                        .font(.callout)
-                        .foregroundStyle(.primary)
+                        .font(.bodyText)
+                        .foregroundStyle(Theme.C.ink)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineSpacing(4)
                 }
             }
             .padding(14)
-            .background(bg, in: .rect(cornerRadius: 12))
+            .background(bg, in: RoundedRectangle(cornerRadius: Theme.R.button))
             .overlay {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: Theme.R.button)
                     .stroke(border, lineWidth: 1)
             }
         }
@@ -211,12 +204,12 @@ private struct LetterButton: View {
     var body: some View {
         Button(action: { onPick(letter) }) {
             Text(letter)
-                .font(.title2.weight(.semibold))
+                .font(.serif(22))
                 .frame(maxWidth: .infinity, minHeight: 64)
                 .foregroundStyle(state.letterFg)
-                .background(state.background, in: .rect(cornerRadius: 12))
+                .background(state.background, in: RoundedRectangle(cornerRadius: Theme.R.button))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: Theme.R.button)
                         .stroke(state.border, lineWidth: 1)
                 }
         }
@@ -229,31 +222,28 @@ private enum ChoiceState {
 
     var background: Color {
         switch self {
-        case .idle: Color(.secondarySystemBackground)
-        case .correct: Color.green.opacity(0.18)
-        case .wrongPick: Color.red.opacity(0.18)
-        case .otherWrong: Color(.secondarySystemBackground)
+        case .idle, .otherWrong: Theme.C.surface
+        case .correct:           Theme.C.accentSoft
+        case .wrongPick:         Theme.C.wrong.opacity(0.10)
         }
     }
     var border: Color {
         switch self {
-        case .idle: Color(.separator)
-        case .correct: Color.green
-        case .wrongPick: Color.red
-        case .otherWrong: Color(.separator)
+        case .idle, .otherWrong: Theme.C.line
+        case .correct:           Theme.C.accent
+        case .wrongPick:         Theme.C.wrong
         }
     }
     var letterBg: Color {
         switch self {
-        case .idle: Color(.tertiarySystemBackground)
-        case .correct: Color.green
-        case .wrongPick: Color.red
-        case .otherWrong: Color(.tertiarySystemBackground)
+        case .idle, .otherWrong: Theme.C.surface2
+        case .correct:           Theme.C.accent
+        case .wrongPick:         Theme.C.wrong
         }
     }
     var letterFg: Color {
         switch self {
-        case .idle, .otherWrong: .primary
+        case .idle, .otherWrong: Theme.C.ink2
         case .correct, .wrongPick: .white
         }
     }
@@ -271,12 +261,17 @@ struct FigureView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: maxWidth)
-                .background(.white, in: .rect(cornerRadius: 8))
+                .background(Theme.C.surface)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.R.small))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.R.small)
+                        .stroke(Theme.C.line, lineWidth: 1)
+                )
                 .accessibilityLabel(figure.description ?? "figure")
         } else {
             Text("⚠︎ figure missing: \(figure.path)")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 11))
+                .foregroundStyle(Theme.C.ink3)
         }
     }
 

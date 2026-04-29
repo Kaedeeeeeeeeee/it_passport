@@ -26,6 +26,7 @@ struct RootView: View {
             .badge(entitlement.isPro ? nil : Text("Pro"))
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(Theme.C.accent)
         .overlay {
             if !bank.loaded {
                 if let err = bank.loadError {

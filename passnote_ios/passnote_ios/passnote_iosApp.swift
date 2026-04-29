@@ -20,6 +20,7 @@ struct passnote_iosApp: App {
     @AppStorage("passnote.onboardingComplete") private var onboardingComplete = false
 
     init() {
+        FontRegistrar.register()
         let p = ProfileStore()
         let sk = StoreKitController()
         _profileStore = State(initialValue: p)
@@ -42,6 +43,8 @@ struct passnote_iosApp: App {
             .environment(storeKit)
             .environment(entitlement)
             .environment(localization)
+            .tint(Theme.C.accent)
+            .preferredColorScheme(.light)
             .task {
                 session.bootstrap()
                 storeKit.bootstrap()

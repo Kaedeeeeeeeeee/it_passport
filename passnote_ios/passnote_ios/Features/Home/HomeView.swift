@@ -8,14 +8,20 @@ struct HomeView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 24) {
+                MarkerTitle(text: "クイックスタート", size: 26)
+                    .padding(.top, 4)
+
                 heroCard
+
                 Text("収録: \(bank.allQuestions.count) 問 · \(bank.byExam.count) 回")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .font(.tLabel)
+                    .foregroundStyle(Theme.C.ink3)
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
+        .paperBackground()
         .navigationTitle("Home")
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -23,6 +29,7 @@ struct HomeView: View {
                     showSettings = true
                 } label: {
                     Image(systemName: "gearshape")
+                        .foregroundStyle(Theme.C.ink2)
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -30,6 +37,7 @@ struct HomeView: View {
                     showAccount = true
                 } label: {
                     Image(systemName: "person.crop.circle")
+                        .foregroundStyle(Theme.C.ink2)
                 }
             }
         }
@@ -45,26 +53,22 @@ struct HomeView: View {
     }
 
     private var heroCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("クイックスタート")
-                .font(.headline)
-            Text("ランダムに 20 問・分野ミックス")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Button {
-                quickStart = true
-            } label: {
-                Label("はじめる", systemImage: "play.fill")
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
+        PaperCard {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("ランダムに 20 問・分野ミックス")
+                    .font(.bodyText)
+                    .foregroundStyle(Theme.C.ink2)
+                    .lineSpacing(3)
+
+                Button {
+                    quickStart = true
+                } label: {
+                    Label("はじめる", systemImage: "play.fill")
+                }
+                .buttonStyle(.primary(fillWidth: true))
+                .disabled(bank.allQuestions.isEmpty)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(bank.allQuestions.isEmpty)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 20))
     }
 
     @ViewBuilder
