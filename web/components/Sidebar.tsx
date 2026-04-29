@@ -25,7 +25,7 @@ function isActive(pathname: string, href: string) {
 }
 
 type Props = {
-  user: { email: string; isPro: boolean } | null;
+  user: { email: string | null; isPro: boolean } | null;
 };
 
 export function Sidebar({ user }: Props) {
@@ -96,10 +96,10 @@ export function Sidebar({ user }: Props) {
           className="mb-2.5 flex items-center gap-2.5 rounded-sm border border-line bg-surface px-3 py-2.5 no-underline text-ink hover:bg-surface-2"
         >
           <div className="grid place-items-center h-7 w-7 rounded-full bg-accent-soft text-accent-ink text-[11px] font-semibold">
-            {user.email[0]?.toUpperCase() ?? "?"}
+            {user.email?.[0]?.toUpperCase() ?? "?"}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[12px] truncate">{user.email}</div>
+            <div className="text-[12px] truncate">{user.email ?? "—"}</div>
             <div className="text-[10px] text-ink-3">
               {isProUser ? t("proMember") : t("freeMember")}
             </div>

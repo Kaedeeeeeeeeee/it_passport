@@ -5,7 +5,7 @@ import type { User } from "@supabase/supabase-js";
 
 export type ProfileRow = {
   id: string;
-  email: string;
+  email: string | null;
   stripe_customer_id: string | null;
   subscription_status:
     | "free"

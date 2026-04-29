@@ -4,7 +4,10 @@ import Observation
 /// Mirrors the `GET /api/me` response shape (web/app/api/me/route.ts).
 struct AppProfile: Codable, Equatable, Sendable {
     let id: String
-    let email: String
+    /// Apple Sign in may withhold email (only sent first-time per Apple ID
+    /// × app pair, and only if user grants the email scope). The web side
+    /// matches: profiles.email is nullable as of migration 20260429120000.
+    let email: String?
     let subscriptionStatus: BillingStatus
     let trialEndsAt: Date?
     let currentPeriodEnd: Date?

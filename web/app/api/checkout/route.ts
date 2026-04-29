@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       // Reuse the customer record if we already have one on file.
       customer: profile.stripe_customer_id ?? undefined,
       // Otherwise prefill the email so Stripe can dedupe on its side.
-      customer_email: profile.stripe_customer_id ? undefined : profile.email,
+      customer_email: profile.stripe_customer_id ? undefined : (profile.email ?? undefined),
       // The webhook uses this to map the new Stripe customer back to our
       // profiles row.
       client_reference_id: profile.id,

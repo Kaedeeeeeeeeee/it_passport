@@ -16,7 +16,7 @@ struct AccountView: View {
         List {
             Section("アカウント") {
                 if let p = profileStore.profile {
-                    LabeledContent("メール", value: p.email)
+                    LabeledContent("メール", value: p.email ?? "(非公開)")
                     LabeledContent("プラン") {
                         statusBadge(p.subscriptionStatus, isPro: entitlement.isPro)
                     }
