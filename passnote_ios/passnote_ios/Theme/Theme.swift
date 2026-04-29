@@ -7,7 +7,10 @@ enum Theme {
         static let paper        = Color("Paper")
         static let surface      = Color("Surface")
         static let surface2     = Color("Surface2")
-        static let accent       = Color("Accent")
+        /// Forest green — the system AccentColor (configured via Asset Catalog).
+        /// Using the system tint slot lets `.tint(...)` propagate to all child
+        /// system controls without manual overrides.
+        static let accent       = Color.accentColor
         static let accentInk    = Color("AccentInk")
         static let accentSoft   = Color("AccentSoft")
         static let accentMuted  = Color("AccentMuted")

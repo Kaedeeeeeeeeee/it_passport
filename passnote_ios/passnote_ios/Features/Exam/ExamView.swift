@@ -11,7 +11,12 @@ struct ExamView: View {
             if entitlement.isPro {
                 proContent
             } else {
-                lockedView
+                ProUpsell(
+                    icon: "doc.text.magnifyingglass",
+                    title: "模擬試験",
+                    message: "Pro で 100 問・100 分の本番形式が解放",
+                    action: { showPaywall = true },
+                )
             }
         }
         .navigationTitle("Exam")
@@ -24,52 +29,39 @@ struct ExamView: View {
     }
 
     private var proContent: some View {
-        List {
-            Section("過去問模試") {
-                ForEach(bank.examCodesSorted, id: \.self) { code in
-                    Button {
-                        startCode = code
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(code).font(.body)
-                                Text("100 問・100 分・60% 合格")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.tertiary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                MarkerTitle(text: "過去問模試", size: 22)
+                    .padding(.leading, 4)
+
+                VStack(spacing: 0) {
+                    ForEach(Array(bank.examCodesSorted.enumerated()), id: \.offset) { idx, code in
+                        Button {
+                            startCode = code
+                        } label: {
+                            ExamRow(code: code)
+                        }
+                        .buttonStyle(.plain)
+
+                        if idx != bank.examCodesSorted.count - 1 {
+                            Rectangle()
+                                .fill(Theme.C.line)
+                                .frame(height: 1)
+                                .padding(.leading, 16)
                         }
                     }
-                    .buttonStyle(.plain)
                 }
+                .background(Theme.C.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.R.card)
+                        .stroke(Theme.C.line, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: Theme.R.card))
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
-    }
-
-    private var lockedView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "doc.text.magnifyingglass")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-            Text("模擬試験")
-                .font(.title2.bold())
-            Text("Pro で 100 問・100 分の本番形式が解放")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            Button {
-                showPaywall = true
-            } label: {
-                Text("Pro にアップグレード")
-                    .frame(maxWidth: 260)
-                    .padding(.vertical, 8)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-        }
-        .padding(40)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .paperBackground()
     }
 
     @ViewBuilder
@@ -84,5 +76,30 @@ struct ExamView: View {
                 examCode: code,
             ))
         }
+    }
+}
+
+private struct ExamRow: View {
+    let code: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(code)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Theme.C.ink)
+                Text("100 問・100 分・60% 合格")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.C.ink3)
+            }
+            Spacer(minLength: 8)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Theme.C.ink3)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(.rect)
     }
 }

@@ -37,14 +37,15 @@ struct ExamModeView: View {
                     )
                     if let pick = vm.currentAnswer {
                         Text("選択: \(pick.letter)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Theme.C.ink3)
                             .padding(.top, 4)
                     }
                 }
                 .padding(20)
             }
             .id(vm.index)
+            .paperBackground()
             footerBar
         }
         .navigationBarBackButtonHidden(true)
@@ -70,43 +71,50 @@ struct ExamModeView: View {
     private var topBar: some View {
         HStack(spacing: 12) {
             Button("中断") { ticker?.invalidate(); dismiss() }
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .buttonStyle(.plain)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Theme.C.ink3)
             Text("\(vm.index + 1) / \(vm.questions.count)")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .font(.monoCount)
+                .foregroundStyle(Theme.C.ink2)
             ProgressView(
                 value: Double(vm.progress), total: Double(vm.questions.count),
             )
-            .tint(.accentColor)
+            .tint(Theme.C.accent)
             Spacer()
             Label(vm.timeLabel, systemImage: "timer")
-                .font(.subheadline.monospacedDigit().weight(.semibold))
-                .foregroundStyle(vm.remainingSeconds < 300 ? .red : .primary)
+                .font(.system(size: 13, weight: .semibold).monospacedDigit())
+                .foregroundStyle(vm.remainingSeconds < 300 ? Theme.C.wrong : Theme.C.ink)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(.bar)
-        .overlay(alignment: .bottom) { Divider() }
+        .background(Theme.C.surface)
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Theme.C.line).frame(height: 1)
+        }
     }
 
     private var footerBar: some View {
         HStack {
             Button("前へ") { vm.goPrev() }
+                .buttonStyle(.ghost)
                 .disabled(vm.index == 0)
+                .opacity(vm.index == 0 ? 0.4 : 1.0)
             Spacer()
             if vm.index == vm.questions.count - 1 {
                 Button("提出") { showSubmitConfirm = true }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
             } else {
                 Button("次へ") { vm.goNext() }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(.bar)
-        .overlay(alignment: .top) { Divider() }
+        .padding(.vertical, 10)
+        .background(Theme.C.surface)
+        .overlay(alignment: .top) {
+            Rectangle().fill(Theme.C.line).frame(height: 1)
+        }
     }
 
     // MARK: -
@@ -169,42 +177,66 @@ struct ExamResultView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
-                Image(systemName: vm.passed ? "checkmark.seal.fill" : "xmark.seal")
-                    .font(.system(size: 72))
-                    .foregroundStyle(vm.passed ? .green : .red)
-                    .padding(.top, 32)
-                Text(vm.passed ? "合格" : "不合格")
-                    .font(.largeTitle.weight(.bold))
-                Text("\(vm.correctCount) / \(vm.questions.count) 正解")
-                    .font(.title2.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                Text("基準点 \(vm.passingThreshold) 問（60%）")
-                    .font(.footnote)
-                    .foregroundStyle(.tertiary)
+            VStack(alignment: .leading, spacing: 24) {
+                VStack(spacing: 12) {
+                    Image(systemName: vm.passed ? "checkmark.seal.fill" : "xmark.seal")
+                        .font(.system(size: 56, weight: .light))
+                        .foregroundStyle(.white)
+                        .frame(width: 96, height: 96)
+                        .background(
+                            vm.passed ? Theme.C.correct : Theme.C.wrong,
+                            in: Circle()
+                        )
+                        .padding(.top, 24)
+                    Text(vm.passed ? "合格" : "不合格")
+                        .font(.serif(34))
+                        .foregroundStyle(Theme.C.ink)
+                    Text("\(vm.correctCount) / \(vm.questions.count) 正解")
+                        .font(.system(size: 18, weight: .semibold).monospacedDigit())
+                        .foregroundStyle(Theme.C.ink2)
+                    Text("基準点 \(vm.passingThreshold) 問（60%）")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.C.ink3)
+                }
+                .frame(maxWidth: .infinity)
 
-                List {
-                    Section("結果一覧") {
+                VStack(alignment: .leading, spacing: 12) {
+                    MarkerTitle(text: "結果一覧", size: 22)
+                        .padding(.leading, 4)
+
+                    LazyVStack(spacing: 0) {
                         ForEach(Array(vm.questions.enumerated()), id: \.element.id) { i, q in
                             ExamResultRow(
                                 index: i + 1,
                                 question: q,
                                 answer: vm.answers[i],
                             )
+                            if i != vm.questions.count - 1 {
+                                Rectangle()
+                                    .fill(Theme.C.line)
+                                    .frame(height: 1)
+                                    .padding(.leading, 50)
+                            }
                         }
                     }
+                    .background(Theme.C.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Theme.R.card)
+                            .stroke(Theme.C.line, lineWidth: 1)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.R.card))
                 }
-                .listStyle(.insetGrouped)
-                .frame(minHeight: 320)
-                .scrollDisabled(true)
             }
-            .padding(.bottom, 32)
+            .padding(20)
+            .padding(.bottom, 16)
         }
+        .paperBackground()
         .navigationTitle(examCode)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("閉じる") { dismiss() }
+                    .foregroundStyle(Theme.C.ink2)
             }
         }
     }
@@ -218,22 +250,27 @@ private struct ExamResultRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Text("\(index)")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.tertiary)
+                .font(.monoCount)
+                .foregroundStyle(Theme.C.ink3)
                 .frame(width: 30, alignment: .trailing)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(question.question)
-                    .font(.subheadline)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.C.ink)
                     .lineLimit(2)
                 HStack(spacing: 6) {
                     Image(systemName: icon)
                         .foregroundStyle(iconColor)
+                        .font(.system(size: 11))
                     Text(meta)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Theme.C.ink3)
                 }
             }
         }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var icon: String {
@@ -241,8 +278,8 @@ private struct ExamResultRow: View {
         return a.correct ? "checkmark.circle.fill" : "xmark.circle.fill"
     }
     private var iconColor: Color {
-        guard let a = answer else { return .secondary }
-        return a.correct ? .green : .red
+        guard let a = answer else { return Theme.C.ink3 }
+        return a.correct ? Theme.C.correct : Theme.C.wrong
     }
     private var meta: String {
         guard let a = answer else { return "未回答 — 正答 \(question.answer)" }
