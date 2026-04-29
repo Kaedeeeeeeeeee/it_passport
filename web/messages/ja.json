@@ -155,7 +155,9 @@
     "title": "AI 解説",
     "generate": "解説を生成",
     "generating": "生成中…",
-    "retry": "再試行"
+    "retry": "再試行",
+    "paywallBody": "AI 解説は Pro 会員限定の機能です。Pro にアップグレードして、各問題の正解理由・誤答分析・関連用語をすべての言語で確認できるようになります。",
+    "paywallCta": "Pro へ"
   },
   "localeSwitcher": {
     "label": "言語",

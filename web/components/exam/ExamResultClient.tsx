@@ -88,7 +88,8 @@ export function ExamResultClient({
         <p className="text-[16px] t-serif font-semibold mb-4">
           {t("explanationsTitle")}
         </p>
-        <ResultClient sessionId={sessionId} embedded />
+        {/* Page wrapper does requirePro, so isPro is guaranteed here. */}
+        <ResultClient sessionId={sessionId} isPro embedded />
       </div>
     </>
   );

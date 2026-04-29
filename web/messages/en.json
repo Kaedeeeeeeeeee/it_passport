@@ -155,7 +155,9 @@
     "title": "AI explanation",
     "generate": "Generate",
     "generating": "Generating…",
-    "retry": "Retry"
+    "retry": "Retry",
+    "paywallBody": "AI explanations are a Pro-tier feature. Upgrade to read why each answer is correct, why the others are wrong, and the syllabus terms involved — in your language.",
+    "paywallCta": "Go Pro"
   },
   "localeSwitcher": {
     "label": "Language",

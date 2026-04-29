@@ -17,11 +17,12 @@ type Props = {
   slug: string;
   label: string;
   questions: Question[];
+  isPro: boolean;
 };
 
 type Answer = { letter: ChoiceLetter; correct: boolean };
 
-export function PracticeClient({ slug, label, questions }: Props) {
+export function PracticeClient({ slug, label, questions, isPro }: Props) {
   const router = useRouter();
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<(Answer | null)[]>(() =>
@@ -150,6 +151,7 @@ export function PracticeClient({ slug, label, questions }: Props) {
                 key={q.id}
                 questionId={q.id}
                 userAnswer={current.letter}
+                isPro={isPro}
               />
             </div>
           ) : null}

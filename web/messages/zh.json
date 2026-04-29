@@ -155,7 +155,9 @@
     "title": "AI 解析",
     "generate": "生成解析",
     "generating": "生成中…",
-    "retry": "重试"
+    "retry": "重试",
+    "paywallBody": "AI 解析为 Pro 会员专属功能。升级到 Pro 后可查看每道题的正确答案解析、错误选项分析以及相关考纲术语，多语言支持。",
+    "paywallCta": "升级 Pro"
   },
   "localeSwitcher": {
     "label": "语言",

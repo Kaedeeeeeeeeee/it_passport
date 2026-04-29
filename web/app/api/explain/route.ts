@@ -1,6 +1,9 @@
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 import { getCachedExplanation, setCachedExplanation } from "@/lib/ai-cache";
+import { isPro } from "@/lib/auth";
+import { userFromRequest } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   buildUserPrompt,
   getSystemPrompt,
@@ -8,6 +11,7 @@ import {
 } from "@/lib/explain-prompt";
 import { questionById } from "@/lib/questions";
 import type { ChoiceLetter } from "@/lib/types";
+import type { ProfileRow } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -46,6 +50,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unknown questionId" }, { status: 404 });
   }
 
+  // Pro gate: AI 解説 is a Pro-tier feature on web. iOS clients fall back
+  // to on-device Foundation Models when this returns 402. Anonymous /
+  // free callers get rejected; pricing page advertises the upgrade path.
+  const proStatus = await getProStatus(req);
+  if (!proStatus.isPro) {
+    return NextResponse.json(
+      { error: "Pro membership required", reason: proStatus.reason },
+      { status: 402 },
+    );
+  }
+
   const cached = await getCachedExplanation(questionId, MODEL, language).catch(
     () => null,
   );
@@ -74,4 +89,26 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({ explanation: text, cached: false });
+}
+
+type ProStatus =
+  | { isPro: true }
+  | { isPro: false; reason: "anonymous" | "free" | "unknown" };
+
+/** Resolve the caller's Pro membership state. Mirrors `userFromRequest` so
+ *  both cookie (web) and Bearer (iOS) auth paths work; iOS gets the same
+ *  402 response and falls back to on-device Foundation Models. */
+async function getProStatus(req: Request): Promise<ProStatus> {
+  const user = await userFromRequest(req);
+  if (!user) return { isPro: false, reason: "anonymous" };
+
+  const { data, error } = await supabaseAdmin()
+    .from("profiles")
+    .select("subscription_status")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (error || !data) return { isPro: false, reason: "unknown" };
+
+  const status = data.subscription_status as ProfileRow["subscription_status"];
+  return isPro(status) ? { isPro: true } : { isPro: false, reason: "free" };
 }

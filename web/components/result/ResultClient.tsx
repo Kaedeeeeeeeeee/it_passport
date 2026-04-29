@@ -19,12 +19,13 @@ type AnswerRec = {
 
 type Props = {
   sessionId: string;
+  isPro: boolean;
   /** When true, skips the page chrome (top bar + outer flex container) so the
    *  component can be embedded inside another result page (e.g. exam). */
   embedded?: boolean;
 };
 
-export function ResultClient({ sessionId, embedded = false }: Props) {
+export function ResultClient({ sessionId, isPro, embedded = false }: Props) {
   const t = useTranslations("result");
   const [answers, setAnswers] = useState<AnswerRec[] | null>(null);
 
@@ -71,7 +72,7 @@ export function ResultClient({ sessionId, embedded = false }: Props) {
       <div className="rounded-[var(--radius-lg)] border border-line bg-surface overflow-hidden">
         {questions.map((q, i) => {
           const a = answers[i];
-          return <ResultRow key={q.id} q={q} answer={a} idx={i} />;
+          return <ResultRow key={q.id} q={q} answer={a} idx={i} isPro={isPro} />;
         })}
       </div>
     );
@@ -107,7 +108,7 @@ export function ResultClient({ sessionId, embedded = false }: Props) {
           <div className="rounded-[var(--radius-lg)] border border-line bg-surface overflow-hidden">
             {questions.map((q, i) => {
               const a = answers[i];
-              return <ResultRow key={q.id} q={q} answer={a} idx={i} />;
+              return <ResultRow key={q.id} q={q} answer={a} idx={i} isPro={isPro} />;
             })}
           </div>
         </div>
@@ -176,10 +177,12 @@ function ResultRow({
   q,
   answer,
   idx,
+  isPro,
 }: {
   q: Question;
   answer: AnswerRec;
   idx: number;
+  isPro: boolean;
 }) {
   const t = useTranslations("result");
   const practice = useTranslations("practice");
@@ -234,7 +237,11 @@ function ResultRow({
       </button>
 
       {open ? (
-        <ResultDetail q={q} userLetter={answer?.letter ?? null} />
+        <ResultDetail
+          q={q}
+          userLetter={answer?.letter ?? null}
+          isPro={isPro}
+        />
       ) : null}
     </div>
   );
@@ -243,9 +250,11 @@ function ResultRow({
 function ResultDetail({
   q,
   userLetter,
+  isPro,
 }: {
   q: Question;
   userLetter: ChoiceLetter | null;
+  isPro: boolean;
 }) {
   const t = useTranslations("result");
   return (
@@ -320,7 +329,7 @@ function ResultDetail({
         })}
       </div>
 
-      <AiExplanation questionId={q.id} userAnswer={userLetter} />
+      <AiExplanation questionId={q.id} userAnswer={userLetter} isPro={isPro} />
     </div>
   );
 }
