@@ -15,7 +15,12 @@ struct ReviewView: View {
             if entitlement.isPro {
                 proContent
             } else {
-                lockedView
+                ProUpsell(
+                    icon: "arrow.uturn.backward",
+                    title: "復習モード",
+                    message: "Pro で間違えた問題を集中復習",
+                    action: { showPaywall = true },
+                )
             }
         }
         .navigationTitle("Review")
@@ -40,63 +45,50 @@ struct ReviewView: View {
     }
 
     private var proContent: some View {
-        List {
-            Section {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
                 Text("過去の解答ログから、復習が効きそうな問題を選び出します。")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            Section("復習方針") {
-                ForEach(Review.Strategy.allCases) { s in
-                    let n = counts[s] ?? 0
-                    Button {
-                        guard n > 0 else { return }
-                        startingStrategy = s
-                    } label: {
-                        HStack(spacing: 14) {
-                            Image(systemName: s.icon)
-                                .frame(width: 28)
-                                .foregroundStyle(Color.accentColor)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(s.title).font(.body)
-                                Text(s.description)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                    .font(.bodyText)
+                    .foregroundStyle(Theme.C.ink2)
+                    .lineSpacing(3)
+                    .padding(.horizontal, 4)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    MarkerTitle(text: "復習方針", size: 22)
+                        .padding(.leading, 4)
+
+                    VStack(spacing: 0) {
+                        ForEach(Array(Review.Strategy.allCases.enumerated()), id: \.offset) { idx, s in
+                            let n = counts[s] ?? 0
+                            Button {
+                                guard n > 0 else { return }
+                                startingStrategy = s
+                            } label: {
+                                StrategyRow(strategy: s, count: n)
                             }
-                            Spacer()
-                            Text("\(n)")
-                                .font(.subheadline.monospacedDigit())
-                                .foregroundStyle(n > 0 ? .primary : .tertiary)
+                            .buttonStyle(.plain)
+                            .disabled(n == 0)
+
+                            if idx != Review.Strategy.allCases.count - 1 {
+                                Rectangle()
+                                    .fill(Theme.C.line)
+                                    .frame(height: 1)
+                                    .padding(.leading, 56)
+                            }
                         }
-                        .contentShape(.rect)
                     }
-                    .buttonStyle(.plain)
-                    .disabled(n == 0)
+                    .background(Theme.C.surface)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Theme.R.card)
+                            .stroke(Theme.C.line, lineWidth: 1)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.R.card))
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
-    }
-
-    private var lockedView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "arrow.uturn.backward.circle.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-            Text("復習モード")
-                .font(.title2.bold())
-            Text("Pro で間違えた問題を集中復習")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            Button { showPaywall = true } label: {
-                Text("Pro にアップグレード")
-                    .frame(maxWidth: 260)
-                    .padding(.vertical, 8)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-        }
-        .padding(40)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .paperBackground()
     }
 
     @ViewBuilder
@@ -119,5 +111,40 @@ struct ReviewView: View {
                 source: source,
             ))
         }
+    }
+}
+
+private struct StrategyRow: View {
+    let strategy: Review.Strategy
+    let count: Int
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: strategy.icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Theme.C.accentInk)
+                .frame(width: 32, height: 32)
+                .background(Theme.C.accentSoft, in: RoundedRectangle(cornerRadius: Theme.R.small))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(strategy.title)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Theme.C.ink)
+                Text(strategy.description)
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.C.ink3)
+            }
+
+            Spacer(minLength: 8)
+
+            Text("\(count)")
+                .font(.monoCount)
+                .foregroundStyle(count > 0 ? Theme.C.ink : Theme.C.ink3)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(.rect)
+        .opacity(count > 0 ? 1.0 : 0.55)
     }
 }

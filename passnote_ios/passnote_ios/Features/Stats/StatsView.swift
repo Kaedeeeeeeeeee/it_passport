@@ -14,7 +14,12 @@ struct StatsView: View {
             if entitlement.isPro {
                 proContent
             } else {
-                lockedView
+                ProUpsell(
+                    icon: "chart.bar.xaxis",
+                    title: "学習統計",
+                    message: "Pro で進捗グラフと弱点分析が解放",
+                    action: { showPaywall = true },
+                )
             }
         }
         .navigationTitle("Stats")
@@ -58,31 +63,30 @@ struct StatsView: View {
             }
             .padding(20)
         }
+        .paperBackground()
     }
 
     // MARK: Overview
 
     private func overviewCard(_ o: Stats.Overview) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("概要").font(.headline)
-            HStack(spacing: 16) {
-                statBlock("正答率", value: percent(o.accuracy), tint: .accentColor)
-                statBlock("解答数", value: "\(o.total)", tint: .blue)
-                statBlock("習得", value: "\(o.mastered)", tint: .green)
-                statBlock("連続日数", value: "\(o.streak)", tint: .orange)
+        cardSection(title: "概要") {
+            HStack(spacing: 12) {
+                statBlock("正答率", value: percent(o.accuracy), tint: Theme.C.accent)
+                statBlock("解答数", value: "\(o.total)", tint: Theme.C.ink)
+                statBlock("習得", value: "\(o.mastered)", tint: Theme.C.correct)
+                statBlock("連続日数", value: "\(o.streak)", tint: Theme.C.flag)
             }
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 16))
     }
 
     private func statBlock(_ label: String, value: String, tint: Color) -> some View {
         VStack(spacing: 4) {
             Text(value)
-                .font(.title2.weight(.bold).monospacedDigit())
+                .font(.system(size: 22, weight: .semibold).monospacedDigit())
                 .foregroundStyle(tint)
-            Text(label).font(.caption).foregroundStyle(.secondary)
+            Text(label)
+                .font(.tLabel)
+                .foregroundStyle(Theme.C.ink3)
         }
         .frame(maxWidth: .infinity)
     }
@@ -90,20 +94,19 @@ struct StatsView: View {
     // MARK: Daily trend
 
     private func dailyTrendCard(_ days: [Stats.DailyBucket]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("直近 30 日").font(.headline)
+        cardSection(title: "直近 30 日") {
             Chart {
                 ForEach(days) { d in
                     BarMark(
                         x: .value("Date", d.date, unit: .day),
                         y: .value("Total", d.total),
                     )
-                    .foregroundStyle(.secondary.opacity(0.4))
+                    .foregroundStyle(Theme.C.line)
                     BarMark(
                         x: .value("Date", d.date, unit: .day),
                         y: .value("Correct", d.correct),
                     )
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Theme.C.accent)
                 }
             }
             .chartYAxis {
@@ -111,64 +114,82 @@ struct StatsView: View {
             }
             .frame(height: 160)
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 16))
     }
 
     // MARK: Category breakdown
 
     private func categoryBreakdownCard(_ cats: [Stats.CategoryStat]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("分野別").font(.headline)
-            ForEach(cats) { c in
-                HStack {
-                    Text(label(for: c.category))
-                        .frame(width: 120, alignment: .leading)
-                    ProgressView(value: c.accuracy)
-                        .tint(tint(for: c.accuracy))
-                    Text(percent(c.accuracy))
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                        .frame(width: 48, alignment: .trailing)
+        cardSection(title: "分野別") {
+            VStack(alignment: .leading, spacing: 14) {
+                ForEach(cats) { c in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(label(for: c.category))
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Theme.C.ink)
+                                .frame(width: 120, alignment: .leading)
+                            ProgressView(value: c.accuracy)
+                                .tint(tint(for: c.accuracy))
+                            Text(percent(c.accuracy))
+                                .font(.monoCount)
+                                .foregroundStyle(Theme.C.ink2)
+                                .frame(width: 44, alignment: .trailing)
+                        }
+                        Text("\(c.correct) / \(c.total)")
+                            .font(.system(size: 11))
+                            .foregroundStyle(Theme.C.ink3)
+                            .padding(.leading, 120)
+                    }
                 }
-                Text("\(c.correct) / \(c.total)")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
             }
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 16))
     }
 
     // MARK: Exam matrix
 
     private func examMatrixCard(_ exams: [Stats.ExamStat]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("過去問別").font(.headline)
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(exams) { e in
+        cardSection(title: "過去問別") {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(exams.enumerated()), id: \.element.id) { idx, e in
                     HStack {
-                        Text(e.examCode).font(.callout)
+                        Text(e.examCode)
+                            .font(.system(size: 14))
+                            .foregroundStyle(Theme.C.ink)
                         Spacer()
                         Text("\(e.correct) / \(e.total)")
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.secondary)
+                            .font(.monoCount)
+                            .foregroundStyle(Theme.C.ink3)
                         Text(percent(e.accuracy))
-                            .font(.caption.monospacedDigit())
+                            .font(.system(size: 12, weight: .semibold).monospacedDigit())
                             .foregroundStyle(tint(for: e.accuracy))
-                            .frame(width: 56, alignment: .trailing)
+                            .frame(width: 52, alignment: .trailing)
+                    }
+                    .padding(.vertical, 10)
+                    if idx != exams.count - 1 {
+                        Rectangle()
+                            .fill(Theme.C.line)
+                            .frame(height: 1)
                     }
                 }
             }
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 16))
     }
 
     // MARK: Helpers
+
+    @ViewBuilder
+    private func cardSection<Content: View>(
+        title: LocalizedStringKey,
+        @ViewBuilder _ content: () -> Content,
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            MarkerTitle(text: title, size: 20)
+                .padding(.leading, 4)
+            PaperCard {
+                content()
+            }
+        }
+    }
 
     private func percent(_ d: Double) -> String {
         "\(Int(round(d * 100)))%"
@@ -176,10 +197,10 @@ struct StatsView: View {
 
     private func tint(for accuracy: Double) -> Color {
         switch accuracy {
-        case 0.8...: .green
-        case 0.6..<0.8: .accentColor
-        case 0.4..<0.6: .orange
-        default: .red
+        case 0.8...:    Theme.C.accent
+        case 0.6..<0.8: Theme.C.accentMuted
+        case 0.4..<0.6: Theme.C.flag
+        default:        Theme.C.wrong
         }
     }
 
@@ -191,28 +212,5 @@ struct StatsView: View {
         case .integrated: "総合"
         case nil: "その他"
         }
-    }
-
-    // MARK: Locked
-
-    private var lockedView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "chart.bar.xaxis")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-            Text("学習統計").font(.title2.bold())
-            Text("Pro で進捗グラフと弱点分析が解放")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            Button { showPaywall = true } label: {
-                Text("Pro にアップグレード")
-                    .frame(maxWidth: 260)
-                    .padding(.vertical, 8)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-        }
-        .padding(40)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
