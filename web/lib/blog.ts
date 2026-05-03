@@ -5,6 +5,8 @@ import matter from "gray-matter";
 
 const ROOT = path.join(process.cwd(), "content/blog");
 
+export type FaqItem = { q: string; a: string };
+
 export type PostMeta = {
   slug: string;
   title: string;
@@ -13,6 +15,9 @@ export type PostMeta = {
   date: string;
   tags: string[];
   cover: string | null;
+  /** Optional Q&A list. When present, the post page emits a
+   *  FAQPage JSON-LD block so Google can render rich results. */
+  faq: FaqItem[];
 };
 
 export type Post = PostMeta & {
@@ -27,6 +32,7 @@ type Frontmatter = {
   tags?: string[];
   cover?: string | null;
   status?: string;
+  faq?: FaqItem[];
 };
 
 function localeDir(locale: string): string {
@@ -59,6 +65,18 @@ async function readRaw(
 }
 
 function toMeta(slug: string, fm: Frontmatter): PostMeta {
+  const faq = Array.isArray(fm.faq)
+    ? fm.faq
+        .filter(
+          (item): item is FaqItem =>
+            !!item &&
+            typeof item.q === "string" &&
+            typeof item.a === "string" &&
+            item.q.trim() !== "" &&
+            item.a.trim() !== "",
+        )
+        .map((item) => ({ q: item.q.trim(), a: item.a.trim() }))
+    : [];
   return {
     slug,
     title: fm.title ?? slug,
@@ -66,6 +84,7 @@ function toMeta(slug: string, fm: Frontmatter): PostMeta {
     date: fm.date ?? "1970-01-01",
     tags: Array.isArray(fm.tags) ? fm.tags.map(String) : [],
     cover: fm.cover ?? null,
+    faq,
   };
 }
 

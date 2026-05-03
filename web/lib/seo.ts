@@ -155,6 +155,25 @@ export function articleSchema(opts: {
   };
 }
 
+/** schema.org FAQPage — emit when a post has explicit Q&A blocks worth
+ *  surfacing as Google rich results. Each answer can be plain text or
+ *  short markdown; we strip nothing, since FAQPage tolerates inline
+ *  formatting in the answer body. */
+export function faqSchema(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+}
+
 const BREADCRUMB_HOME: Record<Locale, string> = {
   ja: "ホーム",
   zh: "首页",

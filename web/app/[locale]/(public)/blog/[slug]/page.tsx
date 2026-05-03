@@ -13,6 +13,7 @@ import {
   breadcrumbSchema,
   buildAlternates,
   buildOpenGraph,
+  faqSchema,
   homeBreadcrumb,
 } from "@/lib/seo";
 
@@ -189,10 +190,13 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     locale,
   );
 
+  const faq = post.faq.length > 0 ? faqSchema(post.faq) : null;
+
   return (
     <article className="max-w-[720px] mx-auto px-6 sm:px-9 py-12 sm:py-16">
       <JsonLd data={article} />
       <JsonLd data={breadcrumb} />
+      {faq ? <JsonLd data={faq} /> : null}
       <Link
         href="/blog"
         className="text-[12.5px] text-ink-3 hover:text-ink-2 no-underline"
