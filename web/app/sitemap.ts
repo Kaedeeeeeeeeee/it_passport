@@ -44,19 +44,13 @@ function entries(
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // Top-level paths (free + private indexes that still reside in the public
-  // route tree). The private surfaces are covered in robots.ts disallow.
-  const staticPaths = [
-    "/",
-    "/home",
-    "/library",
-    "/pricing",
-    "/exam",
-    "/review",
-    "/stats",
-    "/exams",
-    "/blog",
-  ];
+  // Public/SEO surfaces only. Auth-gated routes (/home, /exam, /review,
+  // /stats, /library, /account, /settings) are deliberately excluded —
+  // listing them in the sitemap caused Google to follow them and hit a
+  // 307 redirect to /login, which inflated "Page with redirect" errors
+  // in Search Console and wasted crawl budget. They're also covered in
+  // robots.ts disallow.
+  const staticPaths = ["/", "/pricing", "/exams", "/blog"];
 
   const out: MetadataRoute.Sitemap = [];
   for (const p of staticPaths) {

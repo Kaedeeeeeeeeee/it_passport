@@ -10,7 +10,10 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Authenticated/private surfaces shouldn't be crawled. Public/SEO
-      // surfaces (/, /library, /pricing, /exams, /category) stay open.
+      // surfaces (/, /pricing, /exams, /category, /blog) stay open.
+      // /library is currently auth-gated (lives under (shell)) so it's
+      // disallowed for now; making it a public catalog landing is a
+      // future TODO.
       disallow: [
         "/api/",
         "/practice/",
@@ -21,6 +24,8 @@ export default function robots(): MetadataRoute.Robots {
         "/home/",
         "/review/",
         "/stats/",
+        "/library/",
+        "/login/",
       ],
     },
     sitemap: `${BASE_URL}/sitemap.xml`,

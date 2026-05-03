@@ -16,7 +16,10 @@ Three layers stacked on the same dataset:
    `web/data/` + `web/public/figures/` for the web app.
 2. **Web app** (`web/`) — Next.js 16 App Router + next-intl + Supabase
    + Stripe + Vercel Analytics. The user-facing IT Passport practice
-   site at https://it-passport-steel.vercel.app .
+   site at https://passnote.app (production custom domain).
+   `it-passport-steel.vercel.app` is the auto-generated Vercel preview
+   domain; both serve the same app, but all canonical tags / sitemap /
+   `NEXT_PUBLIC_SITE_URL` point to passnote.app.
 3. **Database & integrations** (`supabase/`, Vercel project config) —
    Postgres tables (profiles, attempts, sessions, ai_explanations) and
    their migrations.
@@ -131,7 +134,8 @@ On Vercel/CI it falls back to the committed copy under `web/data/`.
 ```bash
 cd web
 vercel deploy --prod --yes --scope=zhangs-projects-a5619c97
-# wait for "readyState": "READY" — domain is https://it-passport-steel.vercel.app
+# wait for "readyState": "READY" — production domain is https://passnote.app
+# (vercel.app subdomain also serves the deploy but canonicalizes to passnote.app)
 ```
 
 GitHub auto-deploy is **not** wired yet — every prod deploy is manual
@@ -192,9 +196,12 @@ debugging similar weirdness.
 
 - **GitHub → Vercel auto-deploy**: not connected. Every prod ship is
   `vercel deploy --prod --yes --scope=...`.
-- **Custom domain**: site is on `*.vercel.app`. Buying a domain and
-  setting it in Vercel Dashboard → Domains will require updating
-  `NEXT_PUBLIC_SITE_URL` (env) and the Stripe webhook endpoint URL.
+- **Custom domain**: ✅ done. `passnote.app` is the production domain
+  (`NEXT_PUBLIC_SITE_URL=https://passnote.app` on Vercel). The
+  `*.vercel.app` subdomain still serves the same deploy but every page
+  has `<link rel="canonical" href="https://passnote.app/...">`, so
+  Google indexes only passnote.app. The Stripe webhook endpoint URL
+  should target passnote.app as well.
 - **消費税 / Stripe Tax**: deferred. Currently 免税事業者 (個人事業主,
   < ¥10M annual revenue) so we don't actually collect or remit
   consumption tax. Legal page deliberately omits "税込". When revenue

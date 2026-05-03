@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Link } from "@/i18n/navigation";
 
 type Props = {
   searchParams: Promise<{ next?: string; error?: string }>;
+};
+
+// /login is a transient gateway, not search-result content. Keep it out
+// of Google's index — otherwise variants like /zh/login?next=... show
+// up as duplicate-without-canonical entries in Search Console.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
 };
 
 export default async function LoginPage({ searchParams }: Props) {

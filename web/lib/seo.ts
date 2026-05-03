@@ -29,16 +29,29 @@ export function localizedUrl(path: string, locale: string): string {
 }
 
 /** Build the `alternates` block for `generateMetadata`: canonical to the
- *  current locale's URL plus hreflang variants for every locale. */
+ *  current locale's URL plus hreflang variants for every locale that
+ *  actually has the resource.
+ *
+ *  `availableLocales` defaults to all configured locales — pass an
+ *  explicit subset for content like blog posts that may not have all
+ *  translations (otherwise Google would follow hreflang to URLs that
+ *  return 404, triggering "Not found" errors in Search Console). */
 export function buildAlternates(
   path: string,
   locale: string,
+  availableLocales: readonly string[] = routing.locales,
 ): NonNullable<Metadata["alternates"]> {
   const languages: Record<string, string> = {};
-  for (const l of routing.locales) {
+  for (const l of availableLocales) {
     languages[l] = localizedUrl(path, l);
   }
-  languages["x-default"] = localizedUrl(path, routing.defaultLocale);
+  // x-default points to the default locale's URL only when that locale
+  // has the resource; otherwise pick the first available locale so the
+  // hreflang cluster stays self-consistent.
+  const xDefaultLocale = availableLocales.includes(routing.defaultLocale)
+    ? routing.defaultLocale
+    : availableLocales[0] ?? locale;
+  languages["x-default"] = localizedUrl(path, xDefaultLocale);
   return {
     canonical: localizedUrl(path, locale),
     languages,

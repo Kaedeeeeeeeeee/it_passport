@@ -6,8 +6,8 @@ import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Link } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
-import { getPost } from "@/lib/blog";
+import { type Locale, routing } from "@/i18n/routing";
+import { availableLocalesFor, getPost } from "@/lib/blog";
 import {
   articleSchema,
   breadcrumbSchema,
@@ -41,6 +41,7 @@ export async function generateMetadata({
   const common = await getTranslations({ locale, namespace: "common" });
   const siteName = common("appName");
   const path = `/blog/${slug}`;
+  const available = await availableLocalesFor(slug, routing.locales);
   const og = buildOpenGraph({
     locale,
     title: post.title,
@@ -56,7 +57,7 @@ export async function generateMetadata({
     description: post.description,
     openGraph: og.openGraph,
     twitter: og.twitter,
-    alternates: buildAlternates(path, locale),
+    alternates: buildAlternates(path, locale, available),
   };
 }
 

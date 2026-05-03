@@ -96,3 +96,19 @@ export async function getPost(
   const meta = toMeta(slug, raw.data);
   return { ...meta, body: raw.content };
 }
+
+/** Return the locales for which a post with this slug exists (and isn't
+ *  a draft). Used by per-post `generateMetadata` so hreflang only points
+ *  to URLs that resolve — emitting hreflang to a missing locale causes
+ *  Google to crawl a 404. */
+export async function availableLocalesFor(
+  slug: string,
+  locales: readonly string[],
+): Promise<string[]> {
+  const out: string[] = [];
+  for (const l of locales) {
+    const raw = await readRaw(l, slug);
+    if (raw && raw.data.status !== "draft") out.push(l);
+  }
+  return out;
+}
