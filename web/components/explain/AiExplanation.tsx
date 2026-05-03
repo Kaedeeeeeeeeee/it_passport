@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { Link } from "@/i18n/navigation";
+import { useSubscribeModal } from "@/components/subscribe/SubscribeModal";
 import { track } from "@/lib/analytics";
 import type { ChoiceLetter } from "@/lib/types";
 
@@ -10,7 +10,6 @@ type State =
   | { kind: "idle" }
   | { kind: "loading" }
   | { kind: "ready"; text: string }
-  | { kind: "paywall" }
   | { kind: "error"; message: string };
 
 export function AiExplanation({
@@ -23,13 +22,13 @@ export function AiExplanation({
   isPro: boolean;
 }) {
   const t = useTranslations("aiExplanation");
-  const common = useTranslations("common");
   const locale = useLocale();
+  const { open: openSubscribeModal } = useSubscribeModal();
   const [state, setState] = useState<State>({ kind: "idle" });
 
   function handleClick() {
     if (!isPro) {
-      setState({ kind: "paywall" });
+      openSubscribeModal("ai_explanation");
       return;
     }
     void load();
@@ -44,9 +43,11 @@ export function AiExplanation({
         body: JSON.stringify({ questionId, userAnswer, language: locale }),
       });
       if (res.status === 402) {
-        // Server-side gate caught a non-Pro request (defense in depth in case
-        // the prop is stale). Surface the same paywall UI.
-        setState({ kind: "paywall" });
+        // Defense in depth: server caught a non-Pro request even though
+        // our prop said otherwise (stale session, etc). Open the same
+        // paywall modal as the client-side check would have.
+        openSubscribeModal("ai_explanation:server_402");
+        setState({ kind: "idle" });
         return;
       }
       if (!res.ok) {
@@ -64,39 +65,8 @@ export function AiExplanation({
   if (state.kind === "ready") {
     return (
       <div className="rounded-[var(--radius)] border border-line bg-surface p-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
-        <div className="t-label mb-2 flex items-center gap-2">
-          {t("title")}
-          <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
-            {common("proBadge")}
-          </span>
-        </div>
+        <div className="t-label mb-2">{t("title")}</div>
         {state.text}
-      </div>
-    );
-  }
-
-  if (state.kind === "paywall") {
-    return (
-      <div className="rounded-[var(--radius)] border border-flag/40 bg-flag/5 p-5">
-        <div className="flex items-start gap-4">
-          <div className="flex-1 space-y-1.5">
-            <div className="t-label flex items-center gap-2">
-              {t("title")}
-              <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
-                {common("proBadge")}
-              </span>
-            </div>
-            <p className="text-[13px] leading-[1.7] text-ink-2">
-              {t("paywallBody")}
-            </p>
-          </div>
-          <Link
-            href="/pricing"
-            className="btn btn-primary !text-[12px] !py-1.5 !px-3 no-underline shrink-0"
-          >
-            {t("paywallCta")}
-          </Link>
-        </div>
       </div>
     );
   }
@@ -104,12 +74,7 @@ export function AiExplanation({
   return (
     <div className="rounded-[var(--radius)] border border-line bg-surface p-4">
       <div className="flex items-center gap-3">
-        <div className="t-label flex-1 flex items-center gap-2">
-          {t("title")}
-          <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px normal-case">
-            {common("proBadge")}
-          </span>
-        </div>
+        <div className="t-label flex-1">{t("title")}</div>
         {state.kind === "idle" ? (
           <button
             type="button"

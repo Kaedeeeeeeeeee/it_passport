@@ -159,6 +159,11 @@
     "paywallBody": "AI 解析为 Pro 会员专属功能。升级到 Pro 后可查看每道题的正确答案解析、错误选项分析以及相关考纲术语，多语言支持。",
     "paywallCta": "升级 Pro"
   },
+  "subscribeModal": {
+    "title": "升级到 Pro 会员",
+    "body": "这是 Pro 会员功能。月费 {price},一口气解锁所有助你合格的功能。",
+    "dismiss": "暂不升级"
+  },
   "localeSwitcher": {
     "label": "语言",
     "ja": "日本語",

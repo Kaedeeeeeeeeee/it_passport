@@ -159,6 +159,11 @@
     "paywallBody": "AI explanations are a Pro-tier feature. Upgrade to read why each answer is correct, why the others are wrong, and the syllabus terms involved — in your language.",
     "paywallCta": "Go Pro"
   },
+  "subscribeModal": {
+    "title": "Upgrade to Pro",
+    "body": "This is a Pro-only feature. {price} per month unlocks everything that gets you to the cert in one stretch.",
+    "dismiss": "Not now"
+  },
   "localeSwitcher": {
     "label": "Language",
     "ja": "日本語",

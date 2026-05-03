@@ -159,6 +159,11 @@
     "paywallBody": "AI 解説は Pro 会員限定の機能です。Pro にアップグレードして、各問題の正解理由・誤答分析・関連用語をすべての言語で確認できるようになります。",
     "paywallCta": "Pro へ"
   },
+  "subscribeModal": {
+    "title": "Pro 会員になる",
+    "body": "この機能は Pro 会員限定です。月額 {price} で、合格まで一気に走り抜ける機能がすべて使えます。",
+    "dismiss": "今は閉じる"
+  },
   "localeSwitcher": {
     "label": "言語",
     "ja": "日本語",

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import { useSubscribeModal } from "./subscribe/SubscribeModal";
 import { Icon, type IconName } from "./Icon";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 
@@ -33,6 +34,7 @@ export function Sidebar({ user }: Props) {
   const locale = useLocale();
   const t = useTranslations("sidebar");
   const common = useTranslations("common");
+  const { open: openSubscribeModal } = useSubscribeModal();
   const isProUser = user?.isPro ?? false;
 
   return (
@@ -57,28 +59,43 @@ export function Sidebar({ user }: Props) {
       <nav className="flex flex-col gap-0.5">
         {ITEMS.map((it) => {
           const active = isActive(pathname, it.href);
-          const showProBadge = it.pro && !isProUser;
+          const proGated = it.pro && !isProUser;
           const cls = [
-            "group flex items-center gap-3 px-2.5 py-2 rounded-sm text-[13.5px] no-underline",
+            "group flex items-center gap-3 px-2.5 py-2 rounded-sm text-[13.5px] no-underline w-full text-left",
             active
               ? "bg-surface text-accent-ink font-semibold shadow-[inset_2px_0_0_var(--accent)]"
               : "text-ink-2 font-medium hover:bg-surface",
           ].join(" ");
-          return (
-            <Link key={it.href} href={it.href} className={cls}>
+          const inner = (
+            <>
               <Icon name={it.icon} size={16} />
               <span className="flex-1 flex justify-between items-baseline">
                 <span>{t(it.key)}</span>
-                {showProBadge ? (
-                  <span className="text-[9px] font-semibold tracking-[0.08em] text-flag border border-flag/60 rounded-sm px-1.5 py-px">
-                    {common("proBadge")}
-                  </span>
-                ) : (
-                  <span className="text-[10px] text-ink-3 font-normal tracking-[0.04em]">
-                    {t(`${it.key}Sub`)}
-                  </span>
-                )}
+                <span className="text-[10px] text-ink-3 font-normal tracking-[0.04em]">
+                  {t(`${it.key}Sub`)}
+                </span>
               </span>
+            </>
+          );
+          // Non-Pro user clicking a Pro feature: intercept and open the
+          // subscribe modal instead of navigating (the destination would
+          // server-side requirePro and redirect to /pricing anyway, but
+          // a modal keeps the user in context).
+          if (proGated) {
+            return (
+              <button
+                key={it.href}
+                type="button"
+                onClick={() => openSubscribeModal(`sidebar:${it.key}`)}
+                className={cls}
+              >
+                {inner}
+              </button>
+            );
+          }
+          return (
+            <Link key={it.href} href={it.href} className={cls}>
+              {inner}
             </Link>
           );
         })}

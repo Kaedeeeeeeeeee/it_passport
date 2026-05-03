@@ -12,7 +12,15 @@ import { track as vercelTrack } from "@vercel/analytics";
 export type EventName =
   | "practice_started"
   | "exam_finished"
-  | "explanation_generated";
+  | "explanation_generated"
+  // Paywall funnel: fired the moment the subscribe modal opens, regardless
+  // of which Pro feature triggered it. The `source` prop carries the
+  // surface (e.g. "sidebar:exam", "ai_explanation").
+  | "paywall_shown"
+  // Fired when the user clicks the primary "subscribe" CTA inside the
+  // modal — i.e. starts heading to /pricing. Drop-off between this and
+  // checkout completion is the conversion-rate signal we care about.
+  | "paywall_cta_clicked";
 
 export type Props = Record<string, string | number | boolean | null>;
 
