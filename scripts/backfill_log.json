@@ -1,0 +1,117 @@
+[
+  {
+    "question_id": "2016h28h-95",
+    "status": "no_figure",
+    "description": "relevant figure not found"
+  },
+  {
+    "question_id": "2009h21a-97",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2009h21a-97",
+      "2009h21a-98",
+      "2009h21a-99",
+      "2009h21a-100"
+    ],
+    "figure_path": "figures/2009h21a_ip_qs/p040_backfill.jpeg",
+    "type": "diagram",
+    "description": "販売管理業務に関するデータベースの構造（図1）と請求書の様式（図2）",
+    "confidence": 0.88
+  },
+  {
+    "question_id": "2010h22a-89",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2010h22a-89",
+      "2010h22a-90",
+      "2010h22a-91",
+      "2010h22a-92"
+    ],
+    "figure_path": "figures/2010h22a_ip_qs/p035_backfill.jpeg",
+    "type": "table",
+    "description": "サイズ区分（3辺計・重量）と地区A〜Dの組合せによる料金表（表1）",
+    "confidence": 0.86
+  },
+  {
+    "question_id": "2012h24a-85",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2012h24a-85",
+      "2012h24a-86",
+      "2012h24a-87",
+      "2012h24a-88"
+    ],
+    "figure_path": "figures/2012h24a_ip_qs/p033_backfill.jpeg",
+    "type": "table",
+    "description": "売上分析を行うための表計算ソフトのワークシート（図1）",
+    "confidence": 0.9
+  },
+  {
+    "question_id": "2012h24h-85",
+    "status": "no_figure",
+    "description": "relevant figure not found"
+  },
+  {
+    "question_id": "2012h24h-89",
+    "status": "no_figure",
+    "description": "relevant figure not found"
+  },
+  {
+    "question_id": "2012h24h-97",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2012h24h-97",
+      "2012h24h-98",
+      "2012h24h-99",
+      "2012h24h-100"
+    ],
+    "figure_path": "figures/2012h24h_ip_qs/p044_backfill.jpeg",
+    "type": "diagram",
+    "description": "ISBNコード13桁の各桁(a1〜a12, X)と重み(1,3,1,3...)の対応関係を示す模式図。",
+    "confidence": 0.93
+  },
+  {
+    "question_id": "2013h25a-85",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2013h25a-85",
+      "2013h25a-86",
+      "2013h25a-87",
+      "2013h25a-88"
+    ],
+    "figure_path": "figures/2013h25a_ip_qs/p031_backfill.jpeg",
+    "type": "gantt",
+    "description": "N社の商品開発プロジェクトのガントチャート(4月〜10月の各タスクの当初計画・変更計画・実績の横棒)。",
+    "confidence": 0.96
+  },
+  {
+    "question_id": "2013h25a-93",
+    "status": "no_figure",
+    "description": "relevant figure not found"
+  },
+  {
+    "question_id": "2013h25a-97",
+    "status": "no_figure",
+    "description": "relevant figure not found"
+  },
+  {
+    "question_id": "2015h27h-93",
+    "status": "applied",
+    "is_group": true,
+    "members_updated": [
+      "2015h27h-93",
+      "2015h27h-94",
+      "2015h27h-95",
+      "2015h27h-96"
+    ],
+    "figure_path": "figures/2015h27h_ip_qs/p041_backfill.jpeg",
+    "type": "table",
+    "description": "売上高の損益分析を行うためのワークシート（表計算ソフトの画面）",
+    "confidence": 0.92
+  }
+]
