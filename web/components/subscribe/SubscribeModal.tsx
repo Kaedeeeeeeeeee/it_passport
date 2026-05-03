@@ -43,20 +43,13 @@ export function SubscribeModalProvider({ children }: { children: ReactNode }) {
   const pricingT = useTranslations("pricing");
   const price = pricingT("proPrice");
 
-  // Read pricing.proFeatures.* one entry at a time (next-intl v4 message
-  // arrays). Stop at the first missing key so the modal stays in sync if
-  // the array shrinks. Computed once per locale change via useMemo so we
-  // don't trigger the react-hooks/set-state-in-effect lint rule.
+  // pricing.proFeatures is an i18n message array. next-intl v4 doesn't
+  // throw on missing indices — it returns the literal key path — so we
+  // can't probe by index. Use t.raw() to get the underlying array
+  // directly, which is the documented way to read array messages.
   const features = useMemo(() => {
-    const out: string[] = [];
-    for (let i = 0; i < 10; i++) {
-      try {
-        out.push(pricingT(`proFeatures.${i}`));
-      } catch {
-        break;
-      }
-    }
-    return out;
+    const raw = pricingT.raw("proFeatures");
+    return Array.isArray(raw) ? (raw as string[]) : [];
   }, [pricingT]);
 
   const open = useCallback((source: Source) => {
@@ -74,10 +67,10 @@ export function SubscribeModalProvider({ children }: { children: ReactNode }) {
       <dialog
         ref={dialogRef}
         className="
+          m-auto
           rounded-[var(--radius-lg)] border border-line bg-surface p-0
           backdrop:bg-ink/40
           w-[92vw] max-w-[420px]
-          open:animate-none
         "
       >
         <div className="p-6 sm:p-7">
