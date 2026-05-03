@@ -360,9 +360,9 @@
     "publishedAt": "{date}",
     "tagsLabel": "タグ",
     "relatedPostsLabel": "関連記事",
-    "ctaEyebrow": "登録不要・無料",
-    "ctaTitle": "記事をブックマークしても合格しません",
-    "ctaBody": "今この瞬間、過去問 1 問解くほうが合格に 1mm 近づきます。全 2,800 問 + AI 解説、登録は 30 秒。",
+    "ctaEyebrow": "次のステップ",
+    "ctaTitle": "読み終えたら、過去問で試してみる",
+    "ctaBody": "この記事の内容を、実際の過去問で確認できます。全 2,800 問と AI 解説。登録は 30 秒、無料で始められます。",
     "ctaPrimary": "無料で始める",
     "ctaSecondary": "公式過去問を見る"
   },

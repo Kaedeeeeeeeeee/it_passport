@@ -360,9 +360,9 @@
     "publishedAt": "{date}",
     "tagsLabel": "标签",
     "relatedPostsLabel": "相关文章",
-    "ctaEyebrow": "免登录·免费",
-    "ctaTitle": "收藏这篇文章不会让你合格",
-    "ctaBody": "读完不如做一道。全部 2,800 题 + AI 解析,30 秒注册立刻开始。",
+    "ctaEyebrow": "下一步",
+    "ctaTitle": "读完之后，去真题中验证一下",
+    "ctaBody": "本文涉及的内容，可以在真实的真题中检验。全部 2,800 题 + AI 解析,30 秒注册,免费开始。",
     "ctaPrimary": "免费开始",
     "ctaSecondary": "查看官方真题"
   },

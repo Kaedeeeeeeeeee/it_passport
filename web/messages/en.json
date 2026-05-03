@@ -360,9 +360,9 @@
     "publishedAt": "{date}",
     "tagsLabel": "Tags",
     "relatedPostsLabel": "Related posts",
-    "ctaEyebrow": "Free · No commitment",
-    "ctaTitle": "Bookmarking won't get you the cert",
-    "ctaBody": "One past question right now beats one more saved tab. 2,800 questions + AI explanations, 30-second sign-up.",
+    "ctaEyebrow": "Next step",
+    "ctaTitle": "Now try it on real questions",
+    "ctaBody": "Take what you just read into the actual past exam. 2,800 questions with AI explanations. 30-second sign-up, free to start.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "Browse official past exams"
   },
