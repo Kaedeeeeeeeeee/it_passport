@@ -1,0 +1,84 @@
+[
+  {
+    "question_id": "2010h22h-77",
+    "status": "applied",
+    "type": "graph",
+    "confidence": 0.95,
+    "figures_added": [
+      "figures/2010h22h_ip_qs/p032_choice_ア.jpeg",
+      "figures/2010h22h_ip_qs/p032_choice_イ.jpeg",
+      "figures/2010h22h_ip_qs/p032_choice_ウ.jpeg",
+      "figures/2010h22h_ip_qs/p032_choice_エ.jpeg"
+    ],
+    "preserved_stem_figures": 4
+  },
+  {
+    "question_id": "2011h23a-57",
+    "status": "applied",
+    "type": "er_diagram",
+    "confidence": 0.95,
+    "figures_added": [
+      "figures/2011h23a_ip_qs/p021_choice_ア.jpeg",
+      "figures/2011h23a_ip_qs/p021_choice_イ.jpeg",
+      "figures/2011h23a_ip_qs/p021_choice_ウ.jpeg",
+      "figures/2011h23a_ip_qs/p021_choice_エ.jpeg"
+    ],
+    "preserved_stem_figures": 1
+  },
+  {
+    "question_id": "2013h25a-37",
+    "status": "applied",
+    "type": "scope_arrow",
+    "confidence": 0.85,
+    "figures_added": [
+      "figures/2013h25a_ip_qs/p013_choice_ア.jpeg",
+      "figures/2013h25a_ip_qs/p013_choice_イ.jpeg",
+      "figures/2013h25a_ip_qs/p013_choice_ウ.jpeg",
+      "figures/2013h25a_ip_qs/p013_choice_エ.jpeg"
+    ],
+    "preserved_stem_figures": 0
+  },
+  {
+    "question_id": "2014h26h-90",
+    "status": "applied",
+    "type": "graph",
+    "confidence": 0.95,
+    "figures_added": [
+      "figures/2014h26h_ip_qs/p039_choice_ア.jpeg",
+      "figures/2014h26h_ip_qs/p039_choice_イ.jpeg",
+      "figures/2014h26h_ip_qs/p039_choice_ウ.jpeg",
+      "figures/2014h26h_ip_qs/p039_choice_エ.jpeg"
+    ],
+    "preserved_stem_figures": 4
+  },
+  {
+    "question_id": "2015h27h-86",
+    "status": "applied",
+    "type": "schema_variant",
+    "confidence": 0.95,
+    "figures_added": [
+      "figures/2015h27h_ip_qs/p034_choice_ア.jpeg",
+      "figures/2015h27h_ip_qs/p034_choice_イ.jpeg",
+      "figures/2015h27h_ip_qs/p034_choice_ウ.jpeg",
+      "figures/2015h27h_ip_qs/p034_choice_エ.jpeg"
+    ],
+    "preserved_stem_figures": 0
+  },
+  {
+    "question_id": "2017h29a-30",
+    "status": "choice_format_fixed",
+    "from": "figure_choices",
+    "to": "vertical"
+  },
+  {
+    "question_id": "2024r06-41",
+    "status": "choice_format_fixed",
+    "from": "figure_choices",
+    "to": "vertical"
+  },
+  {
+    "status": "stale_path_rewrites",
+    "count": 12,
+    "notes": "rewrote 'figure:ocr_out/figures/...' → 'figure:figures/...' so the existing paths align with what /public/figures actually serves"
+  }
+]

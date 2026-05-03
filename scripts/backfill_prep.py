@@ -39,22 +39,40 @@ DOWNLOAD_DIR = REPO_ROOT / "download"
 OCR_MD_DIR = REPO_ROOT / "ocr_out" / "markdown"
 OUT_DIR = REPO_ROOT / "ocr_out" / "backfill_pages"
 MANIFEST_PATH = REPO_ROOT / "ocr_out" / "backfill_manifest.json"
+PRIOR_LOG_PATH = REPO_ROOT / "scripts" / "backfill_log.json"
 
 PAGE_SPLIT_RE = re.compile(r"<!-- page (\d+) -->")
 
 NUMBERED_FIG_RE = re.compile(r"図\s*[0-9０-９]")
 NUMBERED_TABLE_RE = re.compile(r"表\s*[0-9０-９]")
+# Less-ambiguous patterns that strongly indicate a visual element on the
+# same page: directional references, named diagram types, etc.
+RELAXED_FIG_RE = re.compile(
+    r"次の(図|表)|下図|下表|下記の(図|表)|(図|表)のように|"
+    r"以下の(図|表)|状態遷移図|フローチャート|"
+    r"ER\s*図|E[-－]R\s*図|アローダイアグラム|"
+    r"散布図|ヒストグラム|系統図|パレート図|レーダーチャート"
+)
 MARKDOWN_IMG_RE = re.compile(r"!\[[^\]]*\]\([^)]+\)")
 RENDER_DPI = 150
 
 
-def references_numbered_figure(text: str) -> bool:
-    """True when the text uses an explicit numbered reference like 図1
-    or 表2. Bare 図/表 are excluded — they're too ambiguous (図書館,
-    意図, 代表 etc.)."""
+def references_figure(text: str) -> bool:
+    """True when the text references a visual element via either an
+    explicit numbered reference (図1, 表2) or the broader set of
+    directional / named-diagram-type patterns. Bare 図/表 are still
+    excluded — too ambiguous (図書館, 意図, 代表, 表す etc.)."""
     if not text:
         return False
-    return bool(NUMBERED_FIG_RE.search(text) or NUMBERED_TABLE_RE.search(text))
+    return bool(
+        NUMBERED_FIG_RE.search(text)
+        or NUMBERED_TABLE_RE.search(text)
+        or RELAXED_FIG_RE.search(text)
+    )
+
+
+# Backwards-compatible alias for any external callers.
+references_numbered_figure = references_figure
 
 
 def context_has_image(text: str) -> bool:
@@ -94,20 +112,19 @@ def find_candidates(questions: list[dict]) -> tuple[list[dict], list[tuple[str, 
             continue
         if q.get("integrated_group_id"):
             continue
-        if references_numbered_figure(q.get("question") or ""):
+        if references_figure(q.get("question") or ""):
             per_q.append(q)
 
     # Group: integrated_context says 図N/表N, no image markdown in context
+    # yet. (We don't filter on per-member figures — the per-question
+    # figures might cover a different figure within that question, while
+    # the shared context still needs its own.)
     group_rows: list[tuple[str, list[dict]]] = []
     for gid, members in groups.items():
         ctx = members[0].get("integrated_context") or ""
-        if not references_numbered_figure(ctx):
+        if not references_figure(ctx):
             continue
         if context_has_image(ctx):
-            continue
-        # Only flag groups whose context says 図N/表N AND none of the
-        # member figures is already populated (rare but defensive).
-        if any((m.get("figures") or []) for m in members):
             continue
         group_rows.append((gid, members))
 
@@ -199,6 +216,25 @@ def main() -> int:
     print(f"per-question candidates: {len(per_q)}")
     print(f"group-context candidates: {len(group_rows)} groups, "
           f"{sum(len(m) for _, m in group_rows)} member questions")
+
+    # Skip anything already processed in a previous backfill run — both
+    # successes (status=applied) and definitive vision rejections
+    # (status=no_figure). low_confidence / failures stay in the queue
+    # so they get retried.
+    prior_skip: set[str] = set()
+    if PRIOR_LOG_PATH.exists():
+        try:
+            prior = json.loads(PRIOR_LOG_PATH.read_text("utf-8"))
+            for entry in prior:
+                if entry.get("status") in ("applied", "no_figure"):
+                    prior_skip.add(entry["question_id"])
+            if prior_skip:
+                print(f"skipping {len(prior_skip)} already-processed entries from prior log")
+        except Exception as e:
+            print(f"WARN: could not read prior log: {e}")
+    per_q = [q for q in per_q if q["id"] not in prior_skip]
+    group_rows = [(gid, members) for gid, members in group_rows
+                  if members[0]["id"] not in prior_skip]
 
     # Open each source PDF only once and cache it.
     pdf_cache: dict[str, fitz.Document] = {}
