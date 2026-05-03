@@ -332,6 +332,10 @@
     "sectionLabel": "5 题体验",
     "sectionTitle": "免登录·5 题体验",
     "sectionBody": "从真实考题中精选 5 道。AI 解析与全部 2,800 题需登录后查看。",
+    "tapHint": "点击选项作答 ↓",
+    "correctFeedback": "答对了！",
+    "wrongFeedback": "答错了。正解：{answer}",
+    "tryAgain": "再试一次",
     "previewExplanation": "登录后查看 AI 解析",
     "ctaButton": "全部 2,800 题 + AI 解析 → 免费开始"
   },

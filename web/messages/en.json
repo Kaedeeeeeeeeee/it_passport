@@ -332,6 +332,10 @@
     "sectionLabel": "Try 5 questions",
     "sectionTitle": "Try 5 questions — no signup",
     "sectionBody": "Five real past-exam questions. AI explanations and all 2,800 questions unlock after sign-up.",
+    "tapHint": "Tap a choice to answer ↓",
+    "correctFeedback": "Correct!",
+    "wrongFeedback": "Not quite. Answer: {answer}",
+    "tryAgain": "Try again",
     "previewExplanation": "Sign in to see the AI explanation",
     "ctaButton": "All 2,800 questions + AI explanations → Start free"
   },

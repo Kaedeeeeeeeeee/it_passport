@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { SampleQuestionCard } from "@/components/landing/SampleQuestionCard";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
-import { Markdown } from "@/components/md/Markdown";
 import { Link, redirect } from "@/i18n/navigation";
 import { getProfile } from "@/lib/auth";
 import { categoryLabel } from "@/lib/exam-terms";
-import { allQuestions, CHOICE_LETTERS, questionById, exams } from "@/lib/questions";
-import type { ChoiceLetter, Question } from "@/lib/types";
+import { allQuestions, questionById, exams } from "@/lib/questions";
+import type { Question } from "@/lib/types";
 
 /** Hand-picked sample questions for the public landing page. Five short
  *  vertical-choice items with no figures, taken across recent exams and
@@ -122,50 +122,20 @@ export default async function LandingPage() {
             </p>
 
             <ol className="space-y-4">
-              {sampleQuestions.map((q, i) => (
-                <li key={q.id} className="card" style={{ padding: 20 }}>
-                  <div className="flex items-baseline justify-between gap-3 mb-2.5">
-                    <div className="t-mono text-[11.5px] text-ink-3">
-                      {q.exam_code} · #{i + 1}
-                    </div>
-                    {q.category && q.category !== "integrated" ? (
-                      <div className="t-label">
-                        {categoryLabel(q.category, examTerms)}
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className="text-[14px] leading-[1.85]">
-                    <Markdown figures={q.figures}>{q.question}</Markdown>
-                  </div>
-                  <ul className="mt-4 space-y-2">
-                    {CHOICE_LETTERS.map((letter) => {
-                      const text = q.choices[letter];
-                      if (!text) return null;
-                      return (
-                        <li
-                          key={letter}
-                          className="flex items-start gap-3 rounded-[var(--radius)] border border-line bg-bg px-3 py-2 text-[13px] leading-[1.75]"
-                        >
-                          <span className="t-mono text-[12.5px] text-ink-3 shrink-0 w-5">
-                            {letter}
-                          </span>
-                          <span className="flex-1">{text}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-ink-3">
-                    <span>
-                      <span className="t-label mr-1.5">
-                        {answerLetters(q.answer).join(" / ")}
-                      </span>
-                    </span>
-                    <span className="text-ink-3">
-                      {sampleT("previewExplanation")}
-                    </span>
-                  </div>
-                </li>
-              ))}
+              {sampleQuestions.map((q, i) => {
+                const categoryText =
+                  q.category && q.category !== "integrated"
+                    ? categoryLabel(q.category, examTerms)
+                    : "";
+                return (
+                  <SampleQuestionCard
+                    key={q.id}
+                    q={q}
+                    index={i}
+                    categoryText={categoryText}
+                  />
+                );
+              })}
             </ol>
 
             <div className="mt-8 flex justify-center">
@@ -243,11 +213,6 @@ export default async function LandingPage() {
       </footer>
     </div>
   );
-}
-
-/** Split multi-answer letters like "ア/ウ" into the two letters. */
-function answerLetters(answer: string): ChoiceLetter[] {
-  return answer.split("/").filter(Boolean) as ChoiceLetter[];
 }
 
 function FeatureCard({

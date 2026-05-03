@@ -332,6 +332,10 @@
     "sectionLabel": "5問体験",
     "sectionTitle": "登録不要・5問体験",
     "sectionBody": "実際の過去問から 5 問。AI 解説と全 2,800 問は登録後に。",
+    "tapHint": "選択肢をタップして解答 ↓",
+    "correctFeedback": "正解！",
+    "wrongFeedback": "残念。正解は {answer}",
+    "tryAgain": "もう一度",
     "previewExplanation": "AI 解説は登録すると見られます",
     "ctaButton": "全 2,800 問 + AI 解説 → 無料で始める"
   },
