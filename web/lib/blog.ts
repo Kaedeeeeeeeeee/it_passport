@@ -131,3 +131,33 @@ export async function availableLocalesFor(
   }
   return out;
 }
+
+/** Pick up to `n` posts most relevant to `slug` in the same locale.
+ *  Ranking: tag-overlap count first, then date desc.
+ *  When no other post shares any tag (or the current post has none), fall
+ *  back to the newest-N excluding the current post. Returns an empty array
+ *  if the locale has fewer than n+1 posts (so the caller can hide the
+ *  whole "related" section gracefully). */
+export async function getRelatedPosts(
+  slug: string,
+  locale: string,
+  n = 3,
+): Promise<PostMeta[]> {
+  const all = await getAllPosts(locale);
+  const others = all.filter((p) => p.slug !== slug);
+  if (others.length < n) return [];
+  const current = all.find((p) => p.slug === slug);
+  const currentTags = new Set(current?.tags ?? []);
+  const scored = others.map((p) => {
+    let overlap = 0;
+    for (const t of p.tags) if (currentTags.has(t)) overlap++;
+    return { post: p, overlap };
+  });
+  scored.sort((a, b) => {
+    if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+    return a.post.date < b.post.date ? 1 : a.post.date > b.post.date ? -1 : 0;
+  });
+  // If no overlap anywhere, this is the newest-N (already sorted by date
+  // through getAllPosts → others). Either way, slice top N.
+  return scored.slice(0, n).map((s) => s.post);
+}

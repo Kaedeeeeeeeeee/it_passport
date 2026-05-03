@@ -358,7 +358,13 @@
     "indexSubtitle": "学习法 / 备考小贴士",
     "readMore": "继续阅读 →",
     "publishedAt": "{date}",
-    "tagsLabel": "标签"
+    "tagsLabel": "标签",
+    "relatedPostsLabel": "相关文章",
+    "ctaEyebrow": "免登录·免费",
+    "ctaTitle": "收藏这篇文章不会让你合格",
+    "ctaBody": "读完不如做一道。全部 2,800 题 + AI 解析,30 秒注册立刻开始。",
+    "ctaPrimary": "免费开始",
+    "ctaSecondary": "查看官方真题"
   },
   "legalNav": {
     "terms": "用户协议",

@@ -4,6 +4,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import { EndOfPostCta } from "@/components/blog/EndOfPostCta";
+import { RelatedPosts } from "@/components/blog/RelatedPosts";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Link } from "@/i18n/navigation";
 import { type Locale, routing } from "@/i18n/routing";
@@ -88,14 +90,30 @@ const MDX_COMPONENTS = {
   }: {
     href?: string;
     children?: React.ReactNode;
-  }) => (
-    <a
-      href={href}
-      className="text-accent underline underline-offset-2 hover:no-underline"
-    >
-      {children}
-    </a>
-  ),
+  }) => {
+    const linkClass =
+      "text-accent underline underline-offset-2 hover:no-underline";
+    // Internal absolute paths get the locale-aware Link so navigation is
+    // SPA-style (Next.js prefetch + RSC payload, no full reload). External
+    // URLs and hash-only anchors stay native <a>.
+    if (href && href.startsWith("/")) {
+      return (
+        <Link href={href} className={linkClass}>
+          {children}
+        </Link>
+      );
+    }
+    return (
+      <a
+        href={href}
+        className={linkClass}
+        target={href?.startsWith("http") ? "_blank" : undefined}
+        rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+      >
+        {children}
+      </a>
+    );
+  },
   blockquote: ({ children }: { children?: React.ReactNode }) => (
     <blockquote className="border-l-2 border-accent pl-4 my-5 text-ink-2 italic">
       {children}
@@ -242,6 +260,9 @@ export default async function BlogPostPage({ params }: { params: Params }) {
           }}
         />
       </div>
+
+      <RelatedPosts slug={slug} locale={locale as Locale} />
+      <EndOfPostCta />
     </article>
   );
 }

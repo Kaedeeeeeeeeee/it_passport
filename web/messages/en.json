@@ -358,7 +358,13 @@
     "indexSubtitle": "Tips for IT Passport prep",
     "readMore": "Read more →",
     "publishedAt": "{date}",
-    "tagsLabel": "Tags"
+    "tagsLabel": "Tags",
+    "relatedPostsLabel": "Related posts",
+    "ctaEyebrow": "Free · No commitment",
+    "ctaTitle": "Bookmarking won't get you the cert",
+    "ctaBody": "One past question right now beats one more saved tab. 2,800 questions + AI explanations, 30-second sign-up.",
+    "ctaPrimary": "Start free",
+    "ctaSecondary": "Browse official past exams"
   },
   "legalNav": {
     "terms": "Terms",

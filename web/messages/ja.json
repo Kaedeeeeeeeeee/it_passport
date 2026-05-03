@@ -358,7 +358,13 @@
     "indexSubtitle": "学習法・備考のヒント",
     "readMore": "続きを読む →",
     "publishedAt": "{date}",
-    "tagsLabel": "タグ"
+    "tagsLabel": "タグ",
+    "relatedPostsLabel": "関連記事",
+    "ctaEyebrow": "登録不要・無料",
+    "ctaTitle": "記事をブックマークしても合格しません",
+    "ctaBody": "今この瞬間、過去問 1 問解くほうが合格に 1mm 近づきます。全 2,800 問 + AI 解説、登録は 30 秒。",
+    "ctaPrimary": "無料で始める",
+    "ctaSecondary": "公式過去問を見る"
   },
   "legalNav": {
     "terms": "利用規約",
