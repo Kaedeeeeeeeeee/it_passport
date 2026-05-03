@@ -1,0 +1,68 @@
+---
+title: "Relational Databases and SQL Basics | IT Passport Exam Prep"
+description: "Covers relational database (RDB) structure, primary keys, foreign keys, normalization, and SQL SELECT/INSERT/UPDATE/DELETE — key topics frequently tested on the IT Passport exam."
+date: "2026-04-26"
+tags: ["IT Passport", "Technology", "Database"]
+cover: null
+---
+
+## What is a Relational Database?
+
+A database that manages data in tables (rows and columns) is called a relational database (RDB). Based on the theory proposed by E.F. Codd in 1970, it is still used in mainstream systems like MySQL, PostgreSQL, Oracle, and SQL Server. Its biggest feature is the ability to link multiple tables through relationships, making it possible to maintain data integrity that is difficult to achieve with simple file management.
+
+## Key Terminology
+
+### Rows and Columns
+
+A **row (record/tuple)** represents a single data entry, while a **column (field/attribute)** refers to a data item such as "Name" or "Grade." The simple structure where actual values sit at the intersection of rows and columns supports ease of operation via SQL.
+
+### Keys
+
+A **Primary Key** is a column that uniquely identifies each row; it cannot be NULL or duplicated. A **Foreign Key** is a column that references the primary key of another table, maintaining referential integrity. Keys that could serve as a primary key but are not chosen are called **candidate keys**. Distinguishing these three types is a recurring topic in multiple-choice questions.
+
+### Normalization
+
+Normalization is a design technique to eliminate data redundancy. The exam frequently covers the first through third normal forms: **First Normal Form (1NF)** eliminates repeating groups so each cell holds a single value; **Second Normal Form (2NF)** removes partial functional dependencies; **Third Normal Form (3NF)** removes transitive functional dependencies. Many questions ask you to determine which normal form a given table is in, so organizing these definitions in advance can directly boost your score.
+
+## SQL Basics
+
+### Data Manipulation Language (DML)
+
+```sql
+SELECT Name, Age FROM Students WHERE Grade = 3;
+INSERT INTO Students (StudentID, Name) VALUES ('S001', 'Yamada');
+UPDATE Students SET Grade = 4 WHERE StudentID = 'S001';
+DELETE FROM Students WHERE StudentID = 'S001';
+```
+
+### Data Definition Language (DDL)
+
+```sql
+CREATE TABLE Students (StudentID CHAR(4) PRIMARY KEY, Name VARCHAR(50));
+ALTER TABLE Students ADD Grade INT;
+DROP TABLE Students;
+```
+
+### Frequently Tested SQL Clauses
+
+Use **WHERE** to filter conditions, **ORDER BY** to sort, and **GROUP BY** to aggregate data into groups. **JOIN** is used to combine multiple tables (inner joins, outer joins, etc.) and is often paired with **aggregate functions** (COUNT, SUM, AVG, MAX, MIN).
+
+## Transactions and ACID
+
+Transaction reliability is guaranteed by the ACID properties: **A**tomicity, **C**onsistency, **I**solation, and **D**urability. The acronym formed by their initials is a common exam topic. **COMMIT** finalizes a transaction, while **ROLLBACK** undoes it — be sure to understand the difference between these two commands.
+
+## Exam Focus for the IT Passport
+
+The exam frequently includes questions that require reading a simple SELECT statement and determining its output. The main areas of focus are: identifying the roles of primary and foreign keys, judging the normalization level of a given table (determining which normal form it is in), and recognizing ACID property terminology. You only need to be able to "read" SQL; writing complex queries from scratch is not required.
+
+## Related Terms
+
+In contrast to RDBs, **NoSQL** (document databases, key-value stores, etc.) offers strong scalability but often lacks strict consistency guarantees. The software that manages and operates an RDB itself is called a Database Management System (DBMS), with MySQL and PostgreSQL being prime examples.
+
+## Study Tips
+
+Repeating the "SELECT ~ FROM ~ WHERE ~" syntax aloud helps it sink in faster. Memorizing primary keys, foreign keys, and candidate keys by applying them to concrete examples like "Student ID" prevents confusion. For normalization, working through the first through third normal forms with actual table examples once each will give you a visual grasp of the differences between the definitions.
+
+## Summary
+
+The exam centers on three areas: terminology identification, SQL reading comprehension, and normalization level judgment. For comprehensive practice on the Technology domain, check out the [Technology Summary](/category/technology); for full-length practice, head to the [Mock Exam](/exam).

@@ -1,0 +1,71 @@
+---
+title: "NoSQL and Big Data: Differences from RDB for the IT Passport Exam"
+description: "Organize the four types of NoSQL databases (KVS, Document, Column-oriented, Graph), the 5Vs of Big Data, and Data Lakes for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Big Data"]
+cover: null
+---
+
+## What is NoSQL?
+
+NoSQL stands for "Not Only SQL" and is a general term for non-relational databases other than relational databases (RDB). They are characterized by high-speed processing of large volumes of data and schema flexibility, and have become widely popular with the expansion of Big Data and web services. A major difference from RDB is that they do not have a fixed table structure.
+
+## Four Types of NoSQL
+
+### KVS (Key-Value Store)
+
+A KVS (Key-Value Store) is the simplest form, storing data as key-value pairs. It offers fast read and write operations and is resilient to high traffic. Representative products include Redis, Memcached, and DynamoDB.
+
+### Document-Oriented DB
+
+Document-oriented databases store data in units called "documents," such as JSON or XML formats. They are schema-less, allowing flexible structural changes. Notable examples include MongoDB and CouchDB.
+
+### Column-Oriented DB
+
+Column-oriented databases store data by column. They excel at aggregation queries and are well-suited for Big Data analysis. Cassandra and HBase are well-known examples.
+
+### Graph DB
+
+Graph databases store relationships between data using nodes and edges. They are powerful in fields dealing with complex relationships, such as social network friend connections, recommendation systems, and knowledge graphs. A representative product is Neo4j.
+
+## NoSQL vs RDB Comparison
+
+| Aspect | RDB | NoSQL |
+| --- | --- | --- |
+| Data Model | Tables (rows and columns) | Diverse (KVS, Document, etc.) |
+| Schema | Fixed | Flexible, schema-less |
+| Consistency | Strong (ACID) | Weaker (BASE) |
+| Scaling | Vertical scaling (CPU upgrade) | Horizontal scaling (adding servers) |
+| Use Cases | Business systems, accounting | Web, Big Data |
+
+## What is Big Data?
+
+Big Data is defined by characteristics known as the 5Vs: Volume (vast amounts), Velocity (generated and processed quickly), Variety (diversity of structured and unstructured data), Veracity (data accuracy), and Value (ability to create value from it). Examples of its use include recommendation engines, demand forecasting, and fraud detection.
+
+## Data Lake vs Data Warehouse
+
+A Data Lake is storage that accumulates raw data as-is, regardless of whether it is structured or unstructured. In contrast, a Data Warehouse (DWH) is a repository of data pre-formatted for easy analysis. For more details, see [Data Warehouse and BI](/blog/data-warehouse-bi).
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, questions often require correctly matching the four types of NoSQL with their respective uses. Questions comparing the differences between RDB and NoSQL, as well as those asking about each element of the 5Vs of Big Data, are also common. Mastering these points will help you secure points reliably.
+
+### Typical Past Exam Question Patterns
+
+- "Which NoSQL type stores data as key-value pairs?" → KVS
+- "Which of the following is not included in the 5V characteristics of Big Data?"
+
+## Related Terms
+
+- RDB and SQL ([Basics of Relational Databases and SQL](/blog/rdb-sql))
+- Normalization ([Database Normalization](/blog/db-normalization))
+- Data Warehouse and BI ([Data Warehouse and BI](/blog/data-warehouse-bi))
+- AI and Machine Learning ([Basics of AI and Machine Learning](/blog/ai-ml-basics))
+
+## Study Tips
+
+Memorizing the four types of NoSQL in the order "KVS, Document, Column, Graph" makes it easier to organize. For the 5Vs of Big Data, remember the initials (Volume, Velocity, Variety, Veracity, Value) as a set. A one-line comparison—RDB prioritizes consistency, NoSQL prioritizes scalability—is also useful for exam preparation.
+
+## Summary
+
+If you reliably memorize the four types of NoSQL and the 5Vs of Big Data, you can consistently score points on related questions. For further practice in the Technology domain, visit the [Technology Summary](/category/technology). To try a full-length practice exam, use the [Mock Exam](/exam).

@@ -1,0 +1,76 @@
+---
+title: "How HTTP and HTTPS Work: Status Codes and TLS Explained for the IT Passport Exam"
+description: "A clear breakdown of the differences between HTTP and HTTPS, the structure of requests and responses, and key status codes (200, 404, 500) for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Networking"]
+cover: null
+---
+
+## What is HTTP?
+
+HTTP stands for HyperText Transfer Protocol and is the fundamental protocol for web page communication. It uses port 80. HTTP is stateless, meaning it does not retain information from previous requests.
+
+## What is HTTPS?
+
+HTTPS stands for HTTP Secure and is the protocol that encrypts HTTP using SSL/TLS. It uses port 443. Its major feature is the ability to prevent eavesdropping and tampering of communications. Details on SSL/TLS are explained in [Encryption Basics](/blog/encryption-basics).
+
+## HTTP Request Methods
+
+Among HTTP request methods, GET is used to retrieve (read) data, POST is used to send (create) data, PUT is used to update (full replace) data, DELETE is used to delete data, and PATCH is used to partially update data. Make sure to correctly distinguish the role of each method.
+
+## HTTP Status Codes
+
+| Code | Category | Meaning | Example |
+| --- | --- | --- | --- |
+| 1xx | Informational | Processing | 100 Continue |
+| 2xx | Success | OK | 200 OK |
+| 3xx | Redirection | Moved | 301 Moved Permanently, 302 Temporary |
+| 4xx | Client Error | Request-side mistake | 401 Unauthorized, 403 Forbidden, 404 Not Found |
+| 5xx | Server Error | Server-side mistake | 500 Internal Server Error, 503 Service Unavailable |
+
+## Cookies and Sessions
+
+### Cookies
+
+Cookies are small pieces of data stored in the browser. They are used to maintain login status and identify users, functioning as a mechanism to give state to stateless HTTP.
+
+### Sessions
+
+Sessions are user state information held on the server side. By identifying session IDs via cookies, per-user management is achieved.
+
+## Related Protocols
+
+| Protocol | Purpose | Port |
+| --- | --- | --- |
+| HTTP | Web | 80 |
+| HTTPS | Encrypted Web | 443 |
+| FTP | File Transfer | 21 |
+| SSH | Remote Login | 22 |
+| SMTP | Email Sending | 25 |
+| POP3 | Email Receiving | 110 |
+| IMAP | Email Receiving | 143 |
+| DNS | Name Resolution | 53 |
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, the differences between HTTP and HTTPS (port numbers, encryption), major status codes (200, 404, 500), the distinction between GET and POST, and the purpose of cookies are frequently tested. Make sure to master these topics.
+
+### Typical Past Exam Question Patterns
+
+- "What is the port number for HTTPS?" type → 443
+- "What is the status code when a file is not found?" type → 404
+
+## Related Terms
+
+- TCP/IP Protocol ([Basics of TCP/IP Protocol](/blog/tcp-ip))
+- Encryption and SSL/TLS ([Encryption Basics](/blog/encryption-basics))
+- Authentication and Authorization ([Differences Between Authentication and Authorization](/blog/auth-vs-authz))
+- DNS Name Resolution ([How DNS Works](/blog/dns-toha))
+
+## Study Tips
+
+Memorize port numbers: HTTP is 80, HTTPS is 443. For status codes, remember the category classifications (2 Success, 3 Redirection, 4 Client Error, 5 Server Error) and the meanings of 200, 404, and 500.
+
+## Summary
+
+By understanding the differences between HTTP and HTTPS, status codes, and cookies, you can reliably score points on related questions. For Technology area exercises, see the [Technology Summary](/category/technology), and for full-length practice, use the [Mock Exam](/exam).

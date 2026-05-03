@@ -1,0 +1,70 @@
+---
+title: "Character Codes: ASCII, Unicode, UTF-8, Shift_JIS Differences Explained for the IT Passport Exam"
+description: "Organize the basics of character codes (ASCII, Unicode, UTF-8, Shift_JIS, EUC-JP) and the causes of mojibake (garbled text) for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Character Codes"]
+cover: null
+---
+
+## What Are Character Codes?
+
+Character codes are rules for representing characters as numbers inside a computer. It is helpful to understand them in two parts: the code system (a mapping table of characters and numbers) and the encoding method (how numbers are converted into byte sequences).
+
+## Major Character Codes
+
+### ASCII
+
+ASCII is a basic code established in 1963 that uses 7 bits to represent uppercase letters, lowercase letters, digits, and symbols. Note that it cannot represent Japanese characters.
+
+### JIS Code Systems
+
+The JIS code systems are Japanese codes based on Japanese Industrial Standards. **JIS X 0208** includes 6,879 characters, including kanji. Common encoding methods include **Shift_JIS (SJIS)**, widely used on Windows systems, and **EUC-JP**, used on UNIX systems.
+
+### Unicode Systems
+
+The Unicode system is an international standard for uniformly handling characters from all over the world. Representative encoding methods include **UTF-8**, a variable-length encoding (1 to 4 bytes) that is the mainstream web standard; **UTF-16**, which is basically fixed at 2 bytes (with supplementary characters using 4 bytes); and **UTF-32**, which always uses 4 bytes.
+
+## Main Causes of Mojibake (Garbled Text)
+
+The main cause of mojibake is using different character codes on the sending and receiving sides. For example, it occurs when trying to interpret a UTF-8 page as Shift_JIS. This can be prevented by explicitly specifying the character code in the HTTP header or with `<meta charset="UTF-8">` in HTML.
+
+## How to Choose a Character Code
+
+| Use Case | Recommended Code |
+| --- | --- |
+| International web | UTF-8 |
+| Compatibility with existing Windows files | Shift_JIS (maintain compatibility) |
+| General new development | UTF-8 |
+
+## Related Terms
+
+### BOM (Byte Order Mark)
+
+The BOM is an identification mark at the beginning of a file indicating the byte order. For UTF-8, you need to be aware of whether a BOM is present or not.
+
+### Surrogate Pairs
+
+Surrogate pairs are a mechanism in UTF-16 for representing characters that cannot be expressed in 2 bytes (such as emoji) using 4 bytes.
+
+## Key Points for the IT Passport Exam
+
+The IT Passport exam tests comparisons of the features of ASCII, Shift_JIS, and UTF-8, the purpose of Unicode (unifying the world's characters), and the causes of mojibake.
+
+### Typical Past Exam Question Patterns
+
+- "Which character code uniformly represents characters from around the world?" → Unicode
+- "Which character code is the standard for the web?" → UTF-8
+
+## Related Terms
+
+- Compression ([Compression (Lossless/Lossy) and JPEG/PNG/MP3](/blog/compression-formats))
+- Number Base Conversion ([Binary, Hexadecimal, and Logical Operations](/blog/binary-logic))
+- HTTP ([How HTTP/HTTPS Works](/blog/http-https))
+
+## Study Tips
+
+Learn the three families (ASCII, JIS systems, Unicode systems). The current mainstream is **UTF-8**. Understanding that mojibake is caused by a mismatch between the sending and receiving codes is effective exam preparation.
+
+## Summary
+
+If you grasp the lineage of major character codes, the dominance of UTF-8, and the causes of mojibake, you can score points on related questions. For comprehensive practice on the Technology domain, see the [Technology Summary](/category/technology). For a full-length practice test, use the [Mock Exam](/exam).

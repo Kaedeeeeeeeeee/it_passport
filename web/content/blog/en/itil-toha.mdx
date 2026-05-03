@@ -1,0 +1,53 @@
+---
+title: "What is ITIL? Explaining the Basics of Service Management for the IT Passport Exam"
+description: "Explains the purpose of ITIL, the global standard for IT service management, and its key processes—such as service desk, incident management, and problem management—for the IT Passport exam."
+date: "2026-04-26"
+tags: ["IT Passport", "Management", "ITIL"]
+cover: null
+---
+
+## What is ITIL? (In a Nutshell)
+
+**ITIL (Information Technology Infrastructure Library)** is a collection of best practices for IT service management originating from the UK government, now managed by AXELOS. The latest version is **ITIL 4**, revamped in 2019 and restructured around the Service Value System. In the exam, the focus is on the purpose of each process rather than minor version differences.
+
+## Key Processes of Service Management
+
+### Service Desk (Single Point of Contact)
+
+This is a single point of contact (SPOC) that centrally handles user inquiries and fault reports. It distinguishes between first-line support (resolving issues with known solutions) and escalation to specialized teams (second-line support).
+
+### Incident Management
+
+This process aims to **restore** a "business-stopped or quality-degraded" state as quickly as possible. Since root cause analysis is not its goal, temporary fixes like server reboots are valid measures. Investigating the root cause is left to problem management.
+
+### Problem Management
+
+This process identifies the **root cause (RCA: Root Cause Analysis)** of incidents and implements permanent solutions. Known errors are registered in a "Known Error Database" to speed up responses when they recur. The difference between incident management and problem management is a frequent exam topic.
+
+### Change Management
+
+This process evaluates the impact of system changes in advance and releases them safely through an approval workflow. Emergency changes (reviewed by an emergency CAB) and normal changes follow different procedures, and this distinction is sometimes tested.
+
+### Configuration Management
+
+Configuration information for hardware, software, licenses, etc., is centrally managed in a **CMDB (Configuration Management Database)**, supporting the assessment of impact scope during changes.
+
+## SLA and SLM
+
+An **SLA (Service Level Agreement)** is a document that promises quality between a service provider and the user, including metrics such as uptime (e.g., 99.9%), response time, and recovery time. **SLM (Service Level Management)** is the ongoing activity of maintaining and improving the SLA. Both are tested together. An uptime of 99.9% corresponds to approximately 8.76 hours of downtime per year.
+
+## Exam Points for the IT Passport
+
+The most frequently asked questions involve the difference in purpose between "incident management vs. problem management." SLA metrics (uptime, response time, recovery time) and service desk classifications (local / central / virtual) are also repeatedly tested.
+
+## Related Terms
+
+BCP ([What is BCP](/blog/bcp-toha)) is a business continuity plan for crises, which differs in purpose from ITIL's focus on routine operational quality management. [Basics of Encryption](/blog/encryption-basics) and [Difference Between Authentication and Authorization](/blog/auth-vs-authz) are also related as security topics.
+
+## Study Tips
+
+A reliable way to remember is by the verbs: incident management = **restore**, problem management = **identify root cause**. It's efficient to focus on the core processes above and SLA/SLM rather than the detailed terminology of ITIL 4.
+
+## Summary
+
+ITIL is the global standard for service management, and the core tested in the exam is understanding the five processes and the SLA. For comprehensive practice on the Management domain, see [Management Summary](/category/management); for a full-length simulation, go to [Practice Exam](/exam).

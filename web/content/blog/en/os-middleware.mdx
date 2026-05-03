@@ -1,0 +1,82 @@
+---
+title: "OS (Operating System) vs. Middleware | IT Passport Exam Prep"
+description: "Organize the role of the OS (process, memory, file management), the features of Windows, macOS, Linux, iOS, and Android, and the positioning of middleware for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "OS"]
+cover: null
+---
+
+## Software Hierarchy
+
+```
+┌──────────────────┐
+│   Application    │  e.g., Word, Chrome
+├──────────────────┤
+│   Middleware     │  e.g., DBMS, Web Server
+├──────────────────┤
+│ Operating System │  e.g., Windows, Linux
+├──────────────────┤
+│    Hardware      │  e.g., CPU, Memory
+└──────────────────┘
+```
+
+## Role of the OS (Operating System)
+
+### Process Management
+
+The OS manages the allocation of multiple processes (running programs) to the CPU. This enables concurrent processing (multitasking), allowing multiple apps to run simultaneously. Scheduling methods such as round-robin and priority-based scheduling are used.
+
+### Memory Management
+
+Allocating memory to each process is a role of the OS. Using virtual memory, it can make it appear as if there is more memory available than physically exists. It manages this efficiently with techniques like paging and swapping.
+
+### File Management
+
+The OS handles the creation, reading/writing, and permission management of files and directories. Representative file systems include NTFS for Windows, APFS for macOS, and ext4 for Linux.
+
+### Device Management
+
+The OS controls input/output devices and communicates with hardware via device drivers. It allows for the unified handling of various devices such as keyboards, mice, and printers.
+
+### Security
+
+User authentication and access permission management are also critical OS tasks. In multi-user environments, it controls access to prevent unauthorized viewing of other users' files.
+
+## Major Operating Systems
+
+| OS | Developer | Primary Use |
+| --- | --- | --- |
+| Windows | Microsoft | Desktop, Server |
+| macOS | Apple | Apple PCs |
+| Linux | Community | Server, Embedded |
+| Unix | AT&T lineage | Server, Scientific Computing |
+| iOS | Apple | iPhone, iPad |
+| Android | Google | Smartphones, Tablets |
+| Chrome OS | Google | Chromebooks |
+
+## What is Middleware?
+
+Middleware is software that mediates between the OS and applications. It provides common functions to applications, increasing the efficiency of application development. Typical examples include Database Management Systems (MySQL, PostgreSQL) and Web Servers (Apache, nginx). Application servers (Tomcat) and messaging systems (Kafka) are also classified as middleware.
+
+## Key Points for the IT Passport Exam
+
+First, grasp the four-layer software structure. The three major roles of the OS—process management, memory management, and file management—are frequently tested. Also understand the primary uses of each major OS and the positioning of middleware.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following is a correct role of the OS?" type
+- "Which software category do DBMS and Web servers belong to?" type → Middleware
+
+## Related Terms
+
+- Virtualization Technology ([Virtualization, Containers, and Docker](/blog/virtualization-container))
+- Databases ([Relational Databases and SQL Basics](/blog/rdb-sql))
+- CPU and Memory ([Differences Between CPU, Memory, and Storage](/blog/cpu-memory-storage))
+
+## Study Tips
+
+Memorize the four layers in the order "H-OS-M-A" (Hardware, OS, Middleware, Application) for easy recall. Remember the five main OS functions: process, memory, file, device, and security. Be sure to memorize three representative examples of middleware: DBMS, Web Server, and Application Server.
+
+## Summary
+
+If you master the four-layer structure, the roles of the OS, and specific examples of middleware, you can reliably score points on related questions. For comprehensive practice in the Technology domain, check out the [Technology Summary](/category/technology), and for a full-length practice test, visit the [Mock Exam](/exam).

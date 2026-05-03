@@ -1,0 +1,57 @@
+---
+title: "Firewall, WAF, IDS/IPS Differences | IT Passport Exam Prep"
+description: "A breakdown of the roles, operating layers, and key exam points for the representative security devices—firewall, WAF, IDS, and IPS—that protect networks, tailored for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## Why Multiple Security Devices Are Necessary
+
+Attacks occur at various layers of the OSI reference model, so defense devices suited to each layer are required. The four types—firewall (FW), WAF, IDS, and IPS—frequently appear in the security domain of the IT Passport exam. Their roles are divided by "which layer they inspect" and "whether they only detect or also block."
+
+## Comparison Table of the 4 Devices
+
+| Device | Main Operating Layer | Defense Target | Action |
+| --- | --- | --- | --- |
+| Firewall (FW) | Network layer to Transport layer | Communication control by IP address and port number | Block |
+| WAF | Application layer | Attacks on web applications (SQL injection, XSS, etc.) | Block |
+| IDS | Network layer to Application layer | Signs of unauthorized intrusion | Detection only |
+| IPS | Network layer to Application layer | Signs of unauthorized intrusion | Detection + Block |
+
+If you can reproduce this table from memory, you'll be able to handle most frequently asked questions. For details on the OSI reference model layers, please refer to [OSI Reference Model 7 Layers](/blog/osi-model).
+
+## Firewall (FW)
+
+A firewall is the most basic perimeter defense device, installed at the boundary between an internal network and the outside. Communication control methods include "allowlist" (only explicitly permitted traffic passes) and "blocklist" approaches. The three representative types are packet filtering, stateful inspection, and application gateway. However, a firewall has the limitation that it cannot inspect the contents of HTTP (such as the request body).
+
+## WAF (Web Application Firewall)
+
+A WAF is a firewall dedicated to web applications, inspecting the content of HTTP/HTTPS requests. Examples of attacks it can prevent include SQL injection, cross-site scripting (XSS), CSRF, and invalid input values. The WAF complements application-layer attacks that a firewall cannot see.
+
+## Difference Between IDS and IPS
+
+An IDS (Intrusion Detection System) only detects intrusions and logs/notifies them; it does not stop communications. In contrast, an IPS (Intrusion Prevention System) automatically detects and blocks intrusions. However, note the risk that false positives may stop legitimate communications. In the exam, remembering "detection only = IDS, blocking included = IPS" by their verbs directly leads to scoring points.
+
+## Key Exam Points for the IT Passport Exam
+
+Identifying the roles of the four devices is a frequent topic, especially the differences in defense targets between FW and WAF, and the differences in operation between IDS and IPS. Questions may also appear in the context of selecting devices to place in a DMZ (demilitarized zone), or within zero-trust and multi-layered defense scenarios.
+
+### Typical Past Exam Question Patterns
+
+- "Which device prevents attacks on web applications?" type → WAF
+- "Which device only detects intrusions?" type → IDS
+
+## Related Terms
+
+- Encryption and SSL/TLS ([Basics of Encryption](/blog/encryption-basics))
+- Difference between Authentication and Authorization ([Authentication vs Authorization](/blog/auth-vs-authz))
+- TCP/IP Port Numbers ([Basics of TCP/IP Protocol](/blog/tcp-ip))
+
+## Study Tips
+
+Organizing the four devices in a table along the three axes of "layer," "defense target," and "action" makes it easier to sort out. Personifying them—FW = gatekeeper at the entrance, WAF = dedicated security guard for web apps, IDS = surveillance camera, IPS = surveillance camera with alarm—is also an effective way to memorize. Understanding them together with concepts like DMZ and multi-layered defense will help you apply your knowledge.
+
+## Summary
+
+If you can distinguish the operating layers and defense targets of the four devices, you can reliably score points on frequently asked questions. For comprehensive practice on the Technology domain, check out [Technology Summary](/category/technology); for a full-length practice exam, head to [Mock Exam](/exam).

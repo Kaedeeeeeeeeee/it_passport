@@ -1,0 +1,55 @@
+---
+title: "Cryptography Basics: Public Key, Symmetric Key, and Hash Explained for the IT Passport"
+description: "A breakdown of the differences between symmetric encryption, public key encryption, and hash functions—core concepts in information security—along with how SSL/TLS, digital signatures, and PKI work, tailored for the IT Passport exam."
+date: "2026-04-26"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## Why Encryption Is Necessary
+
+Encryption is essential for preventing eavesdropping, data leaks, and tampering over communication channels. In the IT Passport exam, this is a frequently tested topic in the security domain, with multiple questions appearing each time. You need to accurately understand the characteristics of each method and how their use cases differ.
+
+## Three Categories of Encryption Methods
+
+### Symmetric Encryption (Secret Key Cryptography)
+
+This method uses **the same key** for both encryption and decryption. Because it is fast, it is suitable for encrypting large volumes of data. Representative algorithms include **AES** and 3DES, with AES being the current mainstream choice. Its weakness is the key distribution problem: you must separately ensure a secure way to deliver the same key to each communication partner.
+
+### Public Key Encryption (Asymmetric Cryptography)
+
+This method uses a key pair: **encrypt with the public key and decrypt with the private key** (or conversely, sign with the private key and verify with the public key). Representative algorithms include **RSA** and elliptic curve cryptography. It solves the key distribution problem of symmetric encryption, but processing speed is slower than symmetric methods. In practice, a hybrid approach is adopted: the public key is used to securely send the "symmetric key itself" to the other party, and the actual data is then encrypted with that symmetric key.
+
+### Hash Functions
+
+A hash function is a one-way function that converts input of any length into a fixed-length string (hash value). Representative algorithms include **SHA-256** and SHA-3; MD5 and SHA-1 have known vulnerabilities and are deprecated. Hash functions are used in a wide range of applications, including password storage, tamper detection, and digital signatures.
+
+## SSL/TLS
+
+This is the standard protocol for encrypting communication between a web browser and a web server. HTTPS is HTTP combined with SSL/TLS, and the padlock icon in the URL bar is its indicator. During the TLS handshake, the public key method is used to securely share a symmetric key, after which all subsequent communication is encrypted with that symmetric key—a hybrid approach.
+
+## Digital Signatures and PKI
+
+A **digital signature** is created by encrypting the hash of a message with the sender's private key; the recipient verifies it using the sender's public key. **PKI (Public Key Infrastructure)** is a framework where a Certificate Authority (CA) guarantees public keys via digital certificates. What the exam particularly asks about is "what a digital signature guarantees": it ensures **authenticity and tamper detection**, but it does **not guarantee confidentiality**—this is a key point for getting the correct answer.
+
+## Key Points for the IT Passport Exam
+
+Repeatedly tested topics include comparing the characteristics of symmetric and public key encryption (speed, key management, use cases), the one-way nature and collision resistance of hashes, the role of SSL/TLS and the meaning of HTTPS, and the difference between digital signatures and encryption.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following best describes a characteristic of public key encryption?"
+- "Which of the following can be verified using a digital signature?"
+
+## Related Terms
+
+- Authentication vs. Authorization ([Authentication vs. Authorization](/blog/auth-vs-authz))
+- BCP and Information Security Policy ([What is BCP?](/blog/bcp-toha))
+
+## Study Tips
+
+To avoid confusion, remember the contrast: symmetric encryption is "fast / key sharing is a challenge," while public key encryption is "slow but solves the key distribution problem." Drawing the flow of the hybrid method (use public key to deliver symmetric key → then communicate using symmetric key) once will help it stick. Repeatedly confirm that a digital signature guarantees "authenticity and tamper detection," not confidentiality.
+
+## Summary
+
+The core of frequently tested questions lies in the three methods, the flow of the hybrid approach, and the role of digital signatures. For comprehensive practice on the Technology domain, see the [Technology Summary](/category/technology); for a full-length practice exam, go to the [Mock Exam](/exam).

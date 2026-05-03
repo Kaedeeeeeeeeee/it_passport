@@ -1,0 +1,69 @@
+---
+title: "What Is a VPN? | Mechanisms, Types, and Telework Use | IT Passport Exam Prep"
+description: "A breakdown of VPN (Virtual Private Network) mechanisms, the differences between IPsec and SSL-VPN, and their use in telework and site-to-site connections, organized for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Networking"]
+cover: null
+---
+
+## What Is a VPN?
+
+VPN stands for Virtual Private Network, a technology that builds a virtual private line over the public internet. Because data can be sent and received securely through an encrypted tunnel, it is cheaper than a dedicated line while still flexibly connecting locations.
+
+## Main Uses of VPN
+
+### Site-to-Site VPN
+
+Site-to-site VPN is used to securely connect headquarters, branch offices, and data centers. It is widely adopted as a substitute for dedicated lines, contributing to cost reduction.
+
+### Remote Access VPN
+
+Remote access VPN is a technology for securely connecting to a corporate network from telework locations or business trips. Since it allows access to internal systems from a home PC, it is essential for enabling remote work.
+
+## Key VPN Technologies
+
+### IPsec VPN
+
+IPsec VPN, short for IP Security, is a technology that performs encryption and authentication at the IP layer. It is often used for site-to-site VPN and uses UDP port 500 (IKE protocol) when traversing firewalls.
+
+### SSL-VPN
+
+SSL-VPN uses the SSL/TLS protocol and can be connected via a browser alone, requiring no client software. Due to this characteristic, it is well-suited for remote access VPN.
+
+## VPN Advantages and Disadvantages
+
+### Advantages
+
+A key advantage of VPN is that encryption prevents eavesdropping and tampering of communications. It is cheaper and more flexible than dedicated lines, making it easier to support multiple locations and remote work.
+
+### Disadvantages
+
+A downside is that communication quality can be unstable since it relies on the internet. Additionally, there are costs for introducing VPN devices or software, and the VPN server itself can become an attack target—many intrusion cases have been reported when vulnerabilities are left unaddressed.
+
+## Relationship with Zero Trust
+
+In the traditional view, connecting via VPN meant the internal network was considered trustworthy. However, in zero trust, all access is verified, making the idea of complementing or replacing VPN important. Details are explained in the separate article "[Zero Trust Architecture](/blog/zero-trust)."
+
+## Key Points for the IT Passport Exam
+
+For the IT Passport exam, you need to understand the concept of a virtual private line as the purpose of VPN. Also, the differences between IPsec and SSL-VPN, how they are used in telework, and the role of encryption are frequent topics.
+
+### Typical Past Exam Question Patterns
+
+- "Which technology builds a virtual private line over a public network?" → VPN
+- "Which VPN can be used from a browser?" → SSL-VPN
+
+## Related Terms
+
+- TCP/IP Protocol ([TCP/IP Protocol Basics](/blog/tcp-ip))
+- Encryption ([Encryption Basics](/blog/encryption-basics))
+- Zero Trust ([Zero Trust Architecture](/blog/zero-trust))
+- Firewall ([Firewall, WAF, IDS/IPS](/blog/firewall-toha))
+
+## Study Tips
+
+As a study tip, remember VPN simply as a "virtual private line." Distinguishing IPsec for site-to-site and SSL-VPN for remote access by use case makes it easier to organize. Understanding that the encrypted tunnel is the core is important.
+
+## Summary
+
+In summary, if you grasp the purpose of VPN, the two types, and their respective uses, you can reliably score points on related questions. For comprehensive practice in the Technology domain, use the "[Technology Summary](/category/technology)" page; to try a full-length practice test, use the "[Mock Exam](/exam)."

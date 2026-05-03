@@ -1,0 +1,57 @@
+---
+title: "TCP/IP Protocol Basics｜IT Passport Exam Prep"
+description: "Organize the high-frequency foundational knowledge of the Internet's backbone—the TCP/IP 4-layer model, differences between TCP and UDP, IP addresses, port numbers, and more."
+date: "2026-04-26"
+tags: ["IT Passport", "Technology", "Networking"]
+cover: null
+---
+
+## What is TCP/IP?
+
+TCP/IP is the standard protocol suite used on the Internet and in most corporate LANs. While the OSI reference model has 7 layers, TCP/IP simplifies this into 4 layers: Application, Transport, Internet, and Link. It is a collective term for over 100 protocols, including "TCP" and "IP," forming the foundation of modern network communication.
+
+## The 4-Layer Model and Representative Protocols
+
+| Layer | Role | Representative Protocols |
+| --- | --- | --- |
+| Application Layer | Application-specific communication | HTTP, HTTPS, SMTP, POP3, IMAP, FTP, DNS, DHCP |
+| Transport Layer | End-to-end communication | TCP, UDP |
+| Internet Layer | Path selection / routing | IP, ICMP, ARP |
+| Link Layer | Physical communication | Ethernet, Wi-Fi |
+
+The correspondence with the OSI model is explained in [OSI Reference Model 7 Layers](/blog/osi-model).
+
+## Differences Between TCP and UDP
+
+| Aspect | TCP | UDP |
+| --- | --- | --- |
+| Connectivity | Connection-oriented (3-way handshake) | Connectionless |
+| Reliability | Guarantees order, retransmission, acknowledgments | None |
+| Speed | Slower (higher overhead) | Faster |
+| Use Cases | Web, email, file transfer | DNS, video streaming, VoIP, online games |
+
+On the exam, judgment questions like "Which is used for video streaming?" → UDP, "Which for web browsing?" → TCP are common. Remembering TCP as "reliability-focused" and UDP as "speed-focused" will help you decide their uses without hesitation.
+
+## IP Addresses and Port Numbers
+
+An IP address is a number that identifies a device on a network. There are two standards: IPv4 (32-bit, approximately 4.3 billion addresses) and IPv6 (128-bit). The differences between private and global IP addresses, as well as translation via NAT, are also frequent exam topics. Port numbers (0–65535) distinguish multiple applications within the same device and, combined with an IP address, identify a specific communication destination.
+
+### Frequently Tested Port Numbers
+
+- 80: HTTP, 443: HTTPS, 25: SMTP, 110: POP3, 143: IMAP, 22: SSH, 21: FTP, 53: DNS
+
+## Key Points for the IT Passport Exam
+
+The most frequent topics are comparing the characteristics of TCP and UDP, and matching port numbers to their uses. Be sure to also review the roles of DNS (a mechanism that converts domain names to IP addresses) and DHCP (a mechanism that automatically assigns IP addresses). Differences between IPv4 and IPv6 (address length and notation format) are also asked in multiple-choice questions.
+
+## Related Terms
+
+SSL/TLS, which supports encrypted communication for HTTPS, is explained in [Encryption Basics](/blog/encryption-basics). For the mechanism of authenticated tokens in API communication, refer to [Authentication vs. Authorization](/blog/auth-vs-authz).
+
+## Study Tips
+
+Associate TCP with "reliability" and UDP with "speed" in short phrases to avoid confusion on usage selection questions. Focus on memorizing the 8 frequently tested port numbers (HTTP=80, HTTPS=443, SMTP=25, POP3=110, IMAP=143, SSH=22, FTP=21, DNS=53) completely. The flow of DNS name resolution (browser → cache → DNS server → IP) will stick better if you diagram it once.
+
+## Summary
+
+The three core high-frequency topics are the 4-layer model, the differences between TCP and UDP, and major port numbers. For comprehensive practice on the Technology domain, proceed to [Technology Summary](/category/technology); to test your skills in a real-exam format, go to [Practice Exam](/exam).

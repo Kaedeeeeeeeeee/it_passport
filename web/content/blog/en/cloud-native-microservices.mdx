@@ -1,0 +1,65 @@
+---
+title: "Cloud Native and Microservices | IT Passport Exam Prep"
+description: "A structured overview of cloud native concepts, the differences between microservices and monoliths, and their relationship with APIs and containers for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Cloud"]
+cover: null
+---
+
+## What is Cloud Native?
+
+Cloud native is an approach to designing and developing applications that fully leverages the advantages of cloud computing. Rather than simply migrating existing systems to the cloud, applications are designed with the cloud environment in mind. The standardization of this concept is promoted by the CNCF (Cloud Native Computing Foundation).
+
+## The Four Elements of Cloud Native
+
+The four key elements that make up cloud native are containers, microservices, dynamic orchestration, and DevOps/CI-CD. Containers are a technology that eliminates differences in execution environments, explained in detail in [Virtualization, Containers, and Docker](/blog/virtualization-container). Dynamic orchestration uses Kubernetes to automatically deploy containers, enabling the automated deployment covered in [What is DevOps](/blog/devops-toha).
+
+## Monolith vs. Microservices
+
+| Aspect | Monolith | Microservices |
+| --- | --- | --- |
+| Structure | A single, large application | A group of small, independent services |
+| Communication | Internal function calls | API (HTTP/REST, gRPC) |
+| Deployment | All-at-once | Independent per service |
+| Scaling | Scale the entire application | Scale only the needed services |
+| Failure | Risk of full system outage | Limited blast radius |
+| Development | Requires cross-team coordination | Enables parallel development |
+
+## Advantages of Microservices
+
+The biggest advantage of microservices is the ability to deploy each service independently. Since changes to one part do not affect the whole, frequent updates are possible with lower risk. You have the freedom to choose the best programming language or database for each service, and you can achieve efficient scalability by scaling only the high-load parts. If one service fails, the risk of the entire system going down is limited.
+
+## Disadvantages of Microservices
+
+On the other hand, microservices come with increased complexity. You need to manage inter-service communication and distributed transactions, and operational burdens like monitoring and log aggregation become greater. Ensuring data consistency in a distributed environment is also a technically difficult challenge.
+
+## APIs and Microservices
+
+APIs are fundamental for connecting microservices. Representative APIs include REST API, the most widely used HTTP-based option; GraphQL, which allows you to fetch only the data you need; and gRPC, developed by Google for high-speed binary communication.
+
+## Serverless (FaaS)
+
+The leading example of serverless computing is FaaS (Function as a Service). This approach delegates execution to the cloud at the function level, eliminating the need for infrastructure management and charging only for what you run. Notable services include AWS Lambda and Google Cloud Functions.
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, questions about the four elements of cloud native are common. Be sure to understand the differences between monoliths and microservices, and remember that advantages of microservices include independent deployment and fault tolerance. The relationship with APIs and containers is also part of the test scope.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following correctly describes a characteristic of microservice architecture?"
+- "Which technology is used for inter-service communication?" → API
+
+## Related Terms
+
+- Virtualization and Containers ([Virtualization, Containers, and Docker](/blog/virtualization-container))
+- DevOps ([What is DevOps](/blog/devops-toha))
+- SaaS/PaaS/IaaS ([Differences between SaaS, PaaS, and IaaS](/blog/saas-paas-iaas))
+
+## Study Tips
+
+Make sure to memorize the four elements of cloud native (containers, microservices, orchestration, and DevOps). Understanding the contrast between a monolith as a single, unified block and microservices as fragmented, independent services makes it easier to organize. The role of APIs as the key to inter-service communication is also important.
+
+## Summary
+
+If you grasp the four elements of cloud native and the differences between monoliths and microservices, you can score points on related questions. For further practice in the Technology domain, check out the [Technology Summary](/category/technology). For exam-style preparation, use the [Practice Exam](/exam).

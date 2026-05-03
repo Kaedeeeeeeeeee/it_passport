@@ -1,0 +1,76 @@
+---
+title: "Algorithms and Computational Complexity: Big O Notation and the Basics of Search and Sort for the IT Passport Exam"
+description: "A summary of algorithm fundamentals, linear search and binary search, bubble sort and quicksort, and Big O notation for computational complexity, tailored for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Algorithms"]
+cover: null
+---
+
+## What is an Algorithm?
+
+An algorithm is a procedure for solving a problem. Even when achieving the same result, the choice of procedure can greatly affect processing speed and efficiency. The IT Passport exam tests your ability to evaluate algorithm efficiency using computational complexity (Big O notation).
+
+## Computational Complexity (Big O Notation)
+
+| Notation | Meaning | Example |
+| --- | --- | --- |
+| O(1) | Constant time, independent of input size | Array index access |
+| O(log n) | Logarithmic time | Binary search |
+| O(n) | Linear time | Linear search |
+| O(n log n) | Linearithmic time | Quicksort, Merge sort |
+| O(n²) | Quadratic time | Bubble sort, Selection sort |
+| O(2ⁿ) | Exponential time | Exhaustive search (practically unusable) |
+
+Computational complexity is extremely important as a metric for roughly understanding how much processing slows down as data volume increases. O(1) and O(log n) are fast, while O(n²) and O(2ⁿ) become drastically slower as data grows.
+
+## Search Algorithms
+
+### Linear Search
+
+Linear search looks for a target value by comparing elements from the beginning of an array sequentially. Its computational complexity is O(n), and it can be used even when the data is not sorted. However, because processing time increases linearly with a large number of data items, its efficiency is not very good.
+
+### Binary Search
+
+Binary search works on a sorted array by comparing the target value to the middle element and repeatedly halving the search range to find the target quickly. Its computational complexity is O(log n), and the increase in processing time is minimal even as the amount of data grows. However, it requires the data to be sorted in ascending or descending order beforehand.
+
+## Sorting Algorithms
+
+### Bubble Sort
+
+Bubble sort repeatedly compares adjacent elements and swaps them if they are in the wrong order to achieve sorting. Its computational complexity is O(n²). While the algorithm is simple, it is not suitable for sorting large amounts of data.
+
+### Selection Sort
+
+Selection sort repeatedly finds the minimum value from the unsorted portion and places it at the beginning. Its computational complexity is O(n²), and like bubble sort, it is not efficient.
+
+### Insertion Sort
+
+Insertion sort builds a sorted portion of the array by inserting each new element into its correct position. Its computational complexity is O(n²), but it performs quickly on data that is nearly sorted.
+
+### Quicksort
+
+Quicksort selects a pivot value, partitions the data into groups smaller and larger than the pivot, and recursively sorts them. Its average computational complexity is O(n log n), and it is widely used as a representative example of a practical, fast sorting algorithm.
+
+### Merge Sort
+
+Merge sort divides the array in half, sorts each half, and then merges them together to sort the entire array. Its computational complexity is O(n log n) even in the worst case, providing stable performance.
+
+## Key Points for the IT Passport Exam
+
+The exam frequently tests the differences between linear search and binary search, as well as the differences between O(n) and O(log n) complexity. For the computational complexity of each sorting algorithm, understanding *why* that complexity arises, rather than just memorizing it, will help you score points.
+
+### Typical Past Exam Question Patterns
+- "Which search is fastest on a sorted array?" type → Binary search
+- "Which sort works by swapping adjacent elements?" type → Bubble sort
+
+## Related Terms
+- Data structures ([Data Structures (Arrays, Lists, Stacks, Queues, Trees)](/blog/data-structures))
+- Number base conversion ([Binary, Hexadecimal, and Logical Operations](/blog/binary-logic))
+
+## Study Tips
+
+For search algorithms, focus on the differences between linear search and binary search. Remember that using binary search requires the data to be sorted. For sorting algorithms, it helps to organize them into two main groups: the O(n²) group (bubble, selection, insertion) and the O(n log n) group (quick, merge).
+
+## Summary
+
+Understanding representative examples of computational complexity along with search and sort algorithms will help you reliably score points in the Technology domain of the exam. To deepen your knowledge further, refer to the [Technology Summary](/category/technology), and to practice in an exam-like format, try the [Practice Exam](/exam).

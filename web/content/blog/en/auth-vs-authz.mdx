@@ -1,0 +1,48 @@
+---
+title: "Authentication vs. Authorization: OAuth, MFA, and SSO Explained for the IT Passport Exam"
+description: "Explains the difference between authentication and authorization, and covers frequently tested security terms for the IT Passport exam, including multi-factor authentication (MFA), single sign-on (SSO), OAuth, and SAML."
+date: "2026-04-26"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## Authentication and Authorization Are Different
+
+**Authentication** confirms "Who are you?", while **Authorization** determines "What are you allowed to do?". Authentication always comes first, and authorization is decided based on its result. Understanding this sequence—logging in to verify your identity (authentication) → granting permissions based on your role (authorization)—will help you answer most multiple-choice questions on the exam.
+
+## The Three Factors of Authentication
+
+Authentication relies on three factors: **Knowledge (What you know)**, **Possession (What you have)**, and **Inherence (What you are)**. Knowledge includes passwords, PINs, and security questions. Possession includes IC cards, smartphone apps, and hardware tokens. Inherence includes fingerprints, face, iris, and vein patterns. A key point frequently tested is that "using the same factor twice does **not** constitute multi-factor authentication"—for example, a password and a security question are two steps but not multi-factor authentication.
+
+## Multi-Factor Authentication (MFA) and Two-Step Verification
+
+**Multi-factor authentication (MFA)** combines two or more different factors from the three categories above. For example, combining a password (knowledge) with a smartphone notification (possession) creates multi-factor authentication. **Two-step verification** refers to going through two authentication steps; it can use the same factor twice, but its security strength is lower than MFA.
+
+## Single Sign-On (SSO)
+
+Single sign-on (SSO) is a mechanism that allows you to log in once and automatically access multiple services. It not only improves user convenience but also offers management benefits such as centralized ID management and the ability to immediately block access for departing employees. Common implementations include **SAML**, widely used between internal corporate systems, and **OpenID Connect**, built on top of OAuth 2.0.
+
+## OAuth and OpenID Connect
+
+**OAuth 2.0** is a protocol for **authorization**, used for delegating permissions—for example, "grant this app limited access to my Google account." **OpenID Connect (OIDC)** is an **authentication** protocol that extends OAuth 2.0, with "Log in with Google" being a typical example. The contrast between OAuth (authorization) and OpenID Connect (authentication) is frequently tested, so be sure to distinguish them clearly.
+
+## Access Control Methods
+
+**Role-based access control (RBAC)** assigns users roles such as administrator or general user, and sets permissions for each role. **Attribute-based access control (ABAC)** is a more flexible method that dynamically determines permissions by combining user attributes, resource attributes, and environmental attributes.
+
+## Key Points for the IT Passport Exam
+
+Questions center on identifying authentication vs. authorization terms, classifying the three factors, and selecting correct combinations for MFA. The advantages and disadvantages of SSO, as well as the difference in roles between OAuth and OpenID Connect, are also frequently tested.
+
+## Related Terms
+
+- Encryption methods and PKI ([Basics of Encryption](/blog/encryption-basics))
+- ITIL service desk and access management ([What is ITIL?](/blog/itil-toha))
+
+## Study Tips
+
+Practice summing up authentication as "Who?" and authorization as "What can they do?" in a single line, so you can decide instantly when reading a question. Remember the three factors as "**something you know, something you have, something you are**," and clearly distinguish MFA as "two or more different factors" from two-step verification as "two steps."
+
+## Summary
+
+Mastering the difference between authentication and authorization, the three factors, and the uses of MFA, SSO, and OAuth will prepare you for nearly all frequently tested questions. For comprehensive practice on the Technology domain, see the [Technology Summary](/category/technology); for a full-length practice exam, go to the [Mock Exam](/exam).

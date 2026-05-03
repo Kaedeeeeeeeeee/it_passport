@@ -1,0 +1,72 @@
+---
+title: "SLA and Availability Calculation | IT Passport Exam Prep"
+description: "A summary of key SLA metrics, availability formulas, and downtime conversion for 99.9% and 99.99%, tailored for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Management", "SLA"]
+cover: null
+---
+
+## What is an SLA?
+
+SLA stands for Service Level Agreement. It is a document that guarantees the quality of a service in numerical terms between a service provider and a user. It plays a central role in ITIL service management (see [What is ITIL](/blog/itil-toha)).
+
+## Key Metrics Listed in an SLA
+
+### Availability
+
+Availability refers to the percentage of time a service is operating normally. The formula is **MTBF ÷ (MTBF + MTTR) × 100%**. MTBF stands for Mean Time Between Failures, and MTTR stands for Mean Time To Repair.
+
+### Response Time
+
+Response time is the time from sending a request to receiving the first response.
+
+### Throughput
+
+Throughput refers to the number of items that can be processed per unit of time.
+
+### Recovery Time Objective (RTO)
+
+The Recovery Time Objective is the target time for recovery after a failure occurs (explained in detail in [What is BCP](/blog/bcp-toha)).
+
+## Availability and Annual Downtime Conversion
+
+| Availability | Annual Downtime (Allowed) |
+| --- | --- |
+| 90% | 36.5 days |
+| 99% | 3.65 days |
+| 99.9% (Three Nines) | 8.76 hours |
+| 99.99% (Four Nines) | 52.6 minutes |
+| 99.999% (Five Nines) | 5.26 minutes |
+
+Each additional nine reduces the downtime by a factor of 10. A common exam question is, "How many hours of downtime per year does 99.9% availability allow?" The answer is **approximately 8.76 hours**.
+
+## Availability Calculation Example
+
+If one year is 365 days (8760 hours), then 8.76 hours of downtime results in 99.9% availability. Also, if MTBF is 100 hours and MTTR is 1 hour, the availability is calculated as 100 ÷ 101 × 100, which is approximately **99%**.
+
+## Provisions for SLA Violations
+
+When an SLA is violated, penalty clauses typically stipulate a reduction in service fees. Additionally, incident reporting obligations require a report on the cause of the violation.
+
+## Key Points for the IT Passport Exam
+
+Be sure to memorize the availability formula (MTBF ÷ (MTBF + MTTR)). The annual downtime for 99.9% availability is approximately 8.76 hours. The difference between SLA and SLM (Service Level Management) is also a frequently tested point.
+
+### Typical Past Exam Question Patterns
+
+- "What is the availability when MTBF = 100 and MTTR = 5?"
+- "What is the approximate annual allowable downtime for 99.99% availability?"
+
+## Related Terms
+
+- ITIL Service Management ([What is ITIL](/blog/itil-toha))
+- BCP RTO/RPO ([What is BCP](/blog/bcp-toha))
+- Facility Management ([Facility Management](/blog/facility-management))
+
+## Study Tips
+
+It helps to memorize the availability formula by saying it out loud: "MTBF divided by (MTBF plus MTTR)." Also, remember the relationship that "each additional nine reduces downtime by a factor of 10." Memorize "99.9% = 8.76 hours/year" as a single phrase.
+
+## Summary
+
+By understanding the availability formula and the relationship between the number of nines and downtime, you can reliably score points on SLA-related questions. For comprehensive practice on the Management domain, see the [Management Summary](/category/management); for full-length practice, use the [Mock Exam](/exam).

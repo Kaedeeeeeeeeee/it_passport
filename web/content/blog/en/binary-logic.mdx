@@ -1,0 +1,83 @@
+---
+title: "Basics of Binary, Hexadecimal, and Logical Operations | IT Passport Exam Prep"
+description: "A review of conversion methods between binary, decimal, and hexadecimal numbers, as well as the logical operation rules for AND, OR, NOT, and XOR, within the scope of the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Computer Basics"]
+cover: null
+---
+
+## Why Computers Use Binary
+
+The internal circuits of a computer operate using two states: electrical ON/OFF. This makes binary, which uses only 0 and 1, an excellent fit for circuit design. In the IT Passport exam, questions on radix conversion and logical operations are regularly asked in the Technology field.
+
+## Radix Conversion
+
+### Decimal to Binary
+
+To convert a decimal number to binary, repeatedly divide the original number by 2 and arrange the remainders from bottom to top. For example, to convert 13: 13÷2=6 remainder 1, 6÷2=3 remainder 0, 3÷2=1 remainder 1, 1÷2=0 remainder 1, resulting in **1101**.
+
+### Binary to Decimal
+
+To convert binary to decimal, add up the weight of each digit (1, 2, 4, 8, 16…). For example, 1101 is calculated as 1×8 + 1×4 + 0×2 + 1×1 = **13**.
+
+### Hexadecimal
+
+Hexadecimal uses 16 characters (0–9 and A–F) to represent one digit. A corresponds to 10, B to 11, … F to 15. Since 4 binary digits equal 1 hexadecimal digit, conversion can be done mechanically. For example, binary 11010110 splits into upper 4 bits 1101=D and lower 4 bits 0110=6, giving hexadecimal **D6**.
+
+### Quick Conversion Reference Table
+
+| Decimal | Binary | Hexadecimal |
+| --- | --- | --- |
+| 0 | 0000 | 0 |
+| 5 | 0101 | 5 |
+| 10 | 1010 | A |
+| 15 | 1111 | F |
+| 255 | 11111111 | FF |
+
+## Logical Operations
+
+### AND (Logical Conjunction)
+
+In an AND operation, the result is 1 only when both bits are 1; otherwise, it is 0. For example, calculating 1010 AND 1100 leaves only the digits where both are 1, resulting in 1000.
+
+### OR (Logical Disjunction)
+
+In an OR operation, the result is 1 if at least one bit is 1, and 0 only when both are 0. For example, 1010 OR 1100 gives 1110, since each digit has at least one 1.
+
+### NOT (Negation)
+
+A NOT operation is a unary operation that flips 0 and 1. If the input is 1, it outputs 0; if 0, it outputs 1. For example, NOT 1010 flips each bit to become 0101.
+
+### XOR (Exclusive OR)
+
+In an XOR operation, the result is 1 if the two bits are different, and 0 if they are the same. For example, 1010 XOR 1100 gives 0110, since only the differing digits become 1.
+
+### Truth Table
+
+| A | B | AND | OR | XOR |
+| --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 0 |
+
+## Key Points for the IT Passport Exam
+
+Conversion calculations from decimal to binary and binary to hexadecimal are frequently tested. Calculation problems based on the truth tables of the four logical operations also appear regularly. Additionally, be prepared for problems involving mask processing that apply bitwise operations.
+
+### Typical Past Exam Question Patterns
+
+- "What is the decimal representation of binary 1101?" type
+- "What is the result of the logical operation 1100 XOR 1010?" type
+
+## Related Terms
+
+- Character codes and data representation ([OSI Reference Model 7 Layers](/blog/osi-model))
+
+## Study Tips
+
+Be sure to memorize powers of 2 (1, 2, 4, 8, 16, 32, 64, 128, 256). For logical operations, being able to write out the truth table from scratch is a shortcut to passing. For hexadecimal conversion, mechanically memorizing the procedure of "grouping 4 binary digits at a time" will reliably earn you points.
+
+## Summary
+
+Mastering radix conversion and the truth tables for logical operations will let you reliably score points on calculation problems. For comprehensive practice in the Technology field, check out the [Technology Summary](/category/technology), and for a full-length practice test, head to the [Mock Exam](/exam).

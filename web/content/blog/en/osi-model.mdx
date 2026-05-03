@@ -1,0 +1,49 @@
+---
+title: "Memorizing the 7 Layers of the OSI Model | IT Passport Exam Prep"
+description: "A breakdown of the roles, representative protocols, and mapping to TCP/IP for the 7 layers of the OSI Reference Model, tailored for the IT Passport exam."
+date: "2026-04-26"
+tags: ["IT Passport", "Technology", "Network"]
+cover: null
+---
+
+## What is the OSI Reference Model?
+
+The **OSI (Open Systems Interconnection) Reference Model** is a conceptual model for network communications defined by the ISO (International Organization for Standardization). It divides communication functions into seven layers, with each layer operating independently. The OSI model is not an actual implementation but a "division of labor map" for roles; in real-world internet communication, TCP/IP is the dominant standard.
+
+## Roles and Representative Protocols of the 7 Layers
+
+| Layer | Name | Role | Representative Protocols / Devices |
+| --- | --- | --- | --- |
+| 7 | Application Layer | Application-specific interactions | HTTP, SMTP, FTP, DNS |
+| 6 | Presentation Layer | Character encoding, encryption, compression | SSL/TLS, JPEG, ASCII |
+| 5 | Session Layer | Establishment and maintenance of communication sessions | NetBIOS, RPC |
+| 4 | Transport Layer | End-to-end communication, reliability | TCP, UDP |
+| 3 | Network Layer | Path selection (routing) | IP / Router |
+| 2 | Data Link Layer | Communication between adjacent nodes, error detection | Ethernet, MAC / Switch |
+| 1 | Physical Layer | Electrical signals, physical cables | RJ-45, Fiber optic / Repeater, Hub |
+
+A common mnemonic to remember the order of the 7 layers (reading from the Application layer down to the Physical layer) is "**A-P-S-T-N-D-P**". A good strategy is to first memorize the mnemonic, then associate one representative protocol with each layer to solidify your memory.
+
+## Mapping to the TCP/IP Model
+
+TCP/IP is an implementation-oriented 4-layer model (Application, Transport, Internet, Link). The three OSI layers of Application, Presentation, and Session are combined into a single "Application Layer" in TCP/IP. The correspondence between the two models often appears on the exam, so check the details in [TCP/IP Protocol Basics](/blog/tcp-ip).
+
+## Network Devices by Layer
+
+The correspondence between each layer and its responsible device is a classic exam question. The Physical layer uses repeaters and hubs; the Data Link layer uses bridges and switches (L2 switches); the Network layer uses routers and L3 switches; and the Application layer uses proxies and gateways. Since questions often come in the format "Which layer does a router operate on?", memorize the layer names and their devices as a set.
+
+## Key Points for the IT Passport Exam
+
+Combinations like "Which layer does the IP protocol operate on?" → Network layer, "Which layer do TCP and UDP operate on?" → Transport layer, and "Which layer does a router operate on?" → Network layer are repeatedly tested. Encapsulation (the mechanism where each layer adds a header to the upper-layer data) is also a frequent topic. Drawing the encapsulation flow yourself once will deepen your understanding.
+
+## Related Terms
+
+Details on each TCP/IP protocol are explained in [TCP/IP Protocol Basics](/blog/tcp-ip). For encryption handled by the Presentation layer, see [Encryption Basics](/blog/encryption-basics), and for authentication at the Application layer, refer to [Authentication vs. Authorization](/blog/auth-vs-authz).
+
+## Study Tips
+
+After memorizing the 7 layers with a mnemonic, associate one representative protocol with each layer. Learn the three-point set of "layer," "device," and "protocol" in a table format, and try drawing the encapsulation diagram yourself once. This will prepare you for almost all question patterns.
+
+## Summary
+
+If you master the three-point set of the 7 layers, key protocols, and responsible devices, you can reliably answer the frequently tested questions in this area. For comprehensive practice in the Technology domain, proceed to [Technology Summary](/category/technology), and to test your skills in a real-exam format, head to the [Practice Exam](/exam).

@@ -1,0 +1,89 @@
+---
+title: "Database Normalization: Organizing First through Third Normal Forms for the IT Passport Exam"
+description: "Organize the purpose of database normalization, the procedures for first through third normal forms, and functional dependency with concrete examples for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Database"]
+cover: null
+---
+
+## Purpose of Normalization
+
+Database normalization aims to eliminate data redundancy and maintain consistency. It helps prevent inconsistencies (update anomalies) during updates. In the IT Passport exam, the procedures from first normal form to third normal form are frequently tested.
+
+## What is Functional Dependency?
+
+Functional dependency refers to a relationship where "if A is determined, B is uniquely determined." It is denoted as A → B. For example, if a student ID determines a name, it is expressed as student ID → name.
+
+## First Normal Form (1NF)
+
+In first normal form, repeating groups are eliminated, and each cell holds only one value. An example of an unnormalized form is a row containing multiple subject names. After normalization, it is recorded as one row per student per subject.
+
+## Second Normal Form (2NF)
+
+Second normal form satisfies first normal form and eliminates partial functional dependencies. Columns that depend on only part of the primary key are separated into another table. For example, in a composite key (student ID + subject code), if the name column depends only on the student ID, the name column is moved to a separate table.
+
+## Third Normal Form (3NF)
+
+Third normal form satisfies second normal form and eliminates transitive functional dependencies. Relationships like "primary key → column X → column Y" are separated. For example, if there is a dependency of student ID → department code → department name, the part "department code → department name" is separated into another table.
+
+## Normalization Examples
+
+### Unnormalized Form
+
+| Student ID | Name | Subjects | Grades |
+| --- | --- | --- | --- |
+| S001 | Yamada | Japanese, Math | 80, 75 |
+
+### First Normal Form
+
+| Student ID | Name | Subject | Grade |
+| --- | --- | --- | --- |
+| S001 | Yamada | Japanese | 80 |
+| S001 | Yamada | Math | 75 |
+
+### Second and Third Normal Forms (Separated into Student Table and Grade Table)
+
+Student Table:
+
+| Student ID | Name |
+| --- | --- |
+| S001 | Yamada |
+
+Grade Table:
+
+| Student ID | Subject | Grade |
+| --- | --- | --- |
+| S001 | Japanese | 80 |
+| S001 | Math | 75 |
+
+## Advantages and Disadvantages of Normalization
+
+### Advantages
+
+Advantages of normalization include saving storage capacity by eliminating redundancy. It prevents update inconsistencies and ensures data consistency.
+
+### Disadvantages
+
+On the other hand, a disadvantage is that queries become more complex and slower due to increased joins (JOIN). Intentional denormalization is sometimes done for speed, as seen in data warehouses.
+
+## Key Points in the IT Passport Exam
+
+In the IT Passport exam, judgment questions about first through third normal forms are common. Understanding functional dependency is required, and the advantages of normalization—such as eliminating redundancy and ensuring consistency—are tested.
+
+### Typical Past Exam Question Patterns
+
+- "What normal form is the given table in?" type
+- "Which is the correct purpose of normalization?" type
+
+## Related Terms
+
+- Relational database ([Basics of Relational Databases and SQL](/blog/rdb-sql))
+- NoSQL and Big Data ([NoSQL and Big Data](/blog/nosql-bigdata))
+
+## Study Tips
+
+As a study tip, remembering by action—"1NF = eliminate repetition, 2NF = eliminate partial dependency, 3NF = eliminate transitive dependency"—is effective. We recommend illustrating with the arrow of functional dependency "A → B" and trying to normalize a table example yourself once.
+
+## Summary
+
+If you grasp the procedures of each normal form and functional dependency, you can reliably score points on normalization problems. For comprehensive practice in the Technology domain, visit [Technology Summary](/category/technology), and for a full-length practice test, go to [Mock Exam](/exam).

@@ -1,0 +1,58 @@
+---
+title: "Data Warehouse, Data Mart, and BI Tools | IT Passport Exam Prep"
+description: "A structured overview of data warehouses (DWH), data marts, BI tools, ETL, and their differences from data lakes, tailored for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Data Analysis"]
+cover: null
+---
+
+## The Big Picture of Data Utilization
+
+Data accumulated daily in operational systems (OLTP) is extracted, transformed, and loaded through ETL processing, then consolidated into a data warehouse (DWH). Afterward, it is visualized and analyzed using BI tools to support business decision-making. This entire sequence forms the big picture of data utilization.
+
+## Data Warehouse (DWH)
+
+A data warehouse (DWH) is a database specialized for analytical purposes, storing historical data from multiple operational systems over long periods. Its key feature is that data is essentially appended and never overwritten. Notable services include Snowflake, Amazon Redshift, and Google BigQuery.
+
+## Data Mart
+
+A data mart is a subset of a DWH, shaped for a specific department or analytical goal. Examples include sales marts, marketing marts, and finance marts. Data marts are smaller than a DWH and offer the advantage of faster response times.
+
+## Data Lake
+
+A data lake is a system that stores raw data as-is, regardless of whether it is structured or unstructured. Data is processed and analyzed later as needed. It is well-suited for big data and AI training data storage; details are covered in [NoSQL and Big Data](/blog/nosql-bigdata).
+
+## ETL
+
+ETL stands for Extract, Transform, and Load—a processing pipeline used to migrate data from operational systems to a DWH. In recent years, the ELT approach (Load first, then Transform) has also become widespread.
+
+## BI Tools
+
+BI (Business Intelligence) tools are software that analyze and visualize accumulated data to support business decision-making. Representative tools include Tableau, Microsoft Power BI, Looker, and Google Data Studio. They offer features such as dashboards, reports, pivot analysis, and drill-downs.
+
+## OLAP (Multidimensional Analysis)
+
+OLAP (Online Analytical Processing) is a technology for performing multidimensional analysis on a DWH. It uses operations like slice, dice, drill-down, and roll-up to extract data from various perspectives.
+
+## Key Points for the IT Passport Exam
+
+The exam frequently covers DWH characteristics (append-only, long-term retention, analytical use), the three steps of ETL, the purpose of BI tools, and the differences between data lakes and DWHs. Mastering these topics will help you secure points.
+
+### Typical Past Exam Question Patterns
+
+- "Which process transfers data from operational systems to a DWH?" → ETL
+- "Which tool supports data analysis and visualization?" → BI
+
+## Related Terms
+
+- NoSQL and Big Data ([NoSQL and Big Data](/blog/nosql-bigdata))
+- AI and Machine Learning ([AI and Machine Learning Basics](/blog/ai-ml-basics))
+- DX ([What is DX?](/blog/dx-toha))
+
+## Study Tips
+
+It is important to memorize the big picture of data utilization as the flow: "Operations → ETL → DWH → BI." Clearly distinguish between a DWH (processed data) and a data lake (raw data). Also, understanding the ETL acronym (Extract, Transform, Load) in order will make exam questions easier to handle.
+
+## Summary
+
+By connecting the characteristics of a DWH, the ETL process, and the role of BI tools, you can reliably score points on database questions in the Technology domain. For comprehensive practice in the Technology area, check out the [Technology Summary](/category/technology), and for full-length exam simulations, use the [Mock Exam](/exam).

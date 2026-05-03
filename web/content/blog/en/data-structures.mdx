@@ -1,0 +1,75 @@
+---
+title: "Data Structures Basics: Arrays, Lists, Stacks, Queues, and Trees for the IT Passport Exam"
+description: "A breakdown of basic data structures tested on the IT Passport exam, including arrays, linked lists, stacks (LIFO), queues (FIFO), trees, and hash tables."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Data Structures"]
+cover: null
+---
+
+## What Are Data Structures?
+
+Data structures are formats for efficiently storing and manipulating data. Choosing the right structure for a given use case can significantly impact processing speed and memory efficiency.
+
+## Linear Structures
+
+### Array
+
+An array stores data of the same type in contiguous memory locations. Access is fast at **O(1)** using an index. However, inserting or deleting elements requires shifting subsequent elements, taking O(n) time, which is a known weakness.
+
+### Linked List
+
+In a linked list, each element is connected by a "data" field and a "pointer to the next element." Insertion and deletion can be done in **O(1)** if the position is known, but indexed access takes O(n).
+
+### Stack (LIFO)
+
+A stack is a **LIFO (Last In First Out)** data structure. The main operations are push (add) and pop (remove). Real-world examples include function call history, Undo functionality, and the browser's back button.
+
+### Queue (FIFO)
+
+A queue is a **FIFO (First In First Out)** data structure. Operations are enqueue (add) and dequeue (remove). It is used in printer spooling and message queues.
+
+### Double-Ended Queue (Deque)
+
+A queue that allows adding and removing from both ends. It combines characteristics of both stacks and queues.
+
+## Hierarchical Structures
+
+### Tree
+
+A tree is a hierarchical structure with parent-child relationships. It consists of nodes and edges. Key terms include root, leaf, depth, and height.
+
+### Binary Tree
+
+A binary tree is a tree where each node has at most two children. In a binary search tree, nodes are arranged so that left < parent < right, enabling search in O(log n).
+
+## Other Structures
+
+### Hash Table
+
+A hash table uses a hash function to convert a key into an index for storing values. It enables search, insertion, and deletion in O(1) on average, but requires collision handling (e.g., chaining or open addressing).
+
+### Graph
+
+A graph represents relationships using nodes and edges. It is used in network diagrams, social media friend connections, and map routes.
+
+## Key Points for the IT Passport Exam
+
+The difference between stacks (LIFO) and queues (FIFO) is frequently tested. Also, be sure to understand the computational complexity of access and insertion for arrays vs. linked lists, as well as tree terminology (root, leaf, depth).
+
+### Typical Past Exam Question Patterns
+
+- "Which data structure uses Last In First Out?" → Stack
+- "Which data structure is suitable for a printer's print queue?" → Queue
+
+## Related Terms
+
+- Algorithms and Computational Complexity ([Algorithms and Complexity](/blog/algorithms-complexity))
+- Databases ([Relational Databases and SQL Basics](/blog/rdb-sql))
+
+## Study Tips
+
+Think of LIFO as a stack of plates and FIFO as a queue (line) to make them easier to remember. Contrast characteristics: "Array = fast access, List = fast insertion." Drawing a diagram of tree terms (root, leaf) once will deepen your understanding.
+
+## Summary
+
+By mastering linear and hierarchical structures, distinguishing LIFO/FIFO, and understanding the characteristics of each data structure, you can reliably score points on data structure questions. For comprehensive practice in the Technology domain, visit the [Technology Summary](/category/technology); for full-length practice, try the [Mock Exam](/exam).

@@ -1,0 +1,66 @@
+---
+title: "Virtualization, Containers, Docker｜IT Passport Exam Prep"
+description: "A breakdown of the differences between virtual machines (VMs) and containers, types of hypervisors, and the basics of Docker and Kubernetes for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Virtualization"]
+cover: null
+---
+
+## What is Virtualization?
+
+Virtualization is a technology that creates **logical virtual environments** on top of physical hardware. This technology makes it possible to run multiple systems simultaneously. Specifically, it can make a single server appear as if it were multiple servers, or conversely, consolidate multiple servers to be treated as one. The main benefits of virtualization include efficient resource utilization, cost reduction, and improved system scalability.
+
+## Two Major Virtualization Methods
+
+### Server Virtualization (VM / Hypervisor Type)
+
+In server virtualization (VM / hypervisor type), software called a hypervisor runs on the physical hardware and manages multiple virtual machines (VMs). Each VM has its own completely independent operating system and behaves as a separate system. For example, you can run Windows and Linux simultaneously on a single physical server. However, a characteristic is that startup takes from tens of seconds to several minutes, and resource consumption is high. Representative products include VMware, Hyper-V, and KVM.
+
+#### Two Types of Hypervisors
+
+There are two types of hypervisors. Type 1 (bare-metal) is installed directly onto the hardware; examples include VMware ESXi and Hyper-V. Type 2 (hosted) runs on top of an existing OS; examples include VirtualBox and VMware Workstation. The difference is that Type 1 offers higher performance, while Type 2 can leverage the functions of the host OS.
+
+### Container-Based Virtualization
+
+Container-based virtualization shares the host OS kernel and packages only the application and its dependent libraries to run. This offers advantages such as startup in seconds (very fast) and low resource consumption. However, it has the limitation that it can only run on the same type of OS as the host OS. The representative platform for container-based virtualization is **Docker**.
+
+## Docker
+
+Docker is the leading platform for container-based virtualization, widely used since 2013. Container definitions are written as code in a file called a **Dockerfile**. Additionally, a registry called **Docker Hub** is used for sharing container images.
+
+## Kubernetes (k8s)
+
+Kubernetes (k8s) is an **orchestration** tool that automatically deploys, scales, and recovers large numbers of containers. It was originally developed by Google and is now managed by the CNCF (Cloud Native Computing Foundation). It is widely adopted as the standard technology for container management in large-scale systems.
+
+## Summary of Differences Between VMs and Containers
+
+| Aspect | VM | Container |
+| --- | --- | --- |
+| OS | Unique to each VM | Shared with host OS |
+| Startup Speed | Slow | Fast |
+| Resource Consumption | High | Low |
+| Isolation | High | Medium |
+| OS Type | Any | Same as host |
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, questions asking about the differences between VMs and containers are common. It is especially important to correctly understand the differences in startup speed, resource consumption, and isolation. Also remember the distinction between Type 1 and Type 2 hypervisors. Additionally, it is important to know the respective roles of Docker and Kubernetes.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following correctly describes the difference between a container and a virtual machine?" type
+- "Which open-source platform manages containers?" type → Docker
+
+## Related Terms
+
+- Cloud services ([Differences between SaaS, PaaS, IaaS](/blog/saas-paas-iaas))
+- Microservices ([Cloud Native and Microservices](/blog/cloud-native-microservices))
+- DevOps ([What is DevOps](/blog/devops-toha))
+
+## Study Tips
+
+As a study tip, first grasp the difference that VMs virtualize the OS itself, whereas containers package only the application. For hypervisors, distinguish that Type 1 is installed directly on the hardware, while Type 2 runs on top of an existing OS. Also, remember that Docker is a platform for handling containers themselves, while Kubernetes is a tool for orchestrating containers.
+
+## Summary
+
+If you understand the differences between VMs and containers, as well as the roles of Docker and Kubernetes, you should be able to score points on related questions. For comprehensive practice on the Technology domain, refer to the [Technology Summary](/category/technology), and to work on exam-format questions, use the [Practice Exam](/exam).

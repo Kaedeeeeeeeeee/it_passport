@@ -1,0 +1,62 @@
+---
+title: "DHCP and Automatic IP Address Assignment | IT Passport Exam Prep"
+description: "A breakdown of DHCP (Dynamic Host Configuration Protocol), the flow of automatic IP address acquisition, lease time, and when to use fixed IP vs. DHCP, tailored for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Network"]
+cover: null
+---
+
+## What is DHCP?
+
+DHCP (Dynamic Host Configuration Protocol) is a protocol that automatically assigns configuration information, such as IP addresses, to devices connected to a network. It eliminates the need for manual setup, preventing input errors and address duplication. The server communicates using UDP port 67, and the client uses UDP port 68.
+
+## Why DHCP is Necessary
+
+Manually setting IP addresses makes configuration errors (duplication or typos) more likely and creates a heavy management burden for many devices. For mobile devices like laptops and smartphones, reconfiguration every time they connect to a different network is impractical. With DHCP, devices become ready to communicate automatically just by connecting to the network.
+
+## Information Assigned by DHCP
+
+A DHCP server distributes the IP address, subnet mask, default gateway, and DNS server address to the client. It also notifies the client of the lease period, during which the assigned IP address can be used.
+
+## DHCP Communication Flow (DORA)
+
+Address assignment via DHCP occurs in four steps. First, the client broadcasts a query across the network: "Is there a DHCP server?" (Discover). Next, the server responds with a candidate: "How about this IP address?" (Offer). The client then requests: "Please give me that IP address" (Request), and the server confirms: "OK, it's assigned" (Acknowledge). Remember this sequence as DORA.
+
+## Lease Period
+
+Assigned IP addresses have an expiration date (lease period). The client attempts to renew the lease when half the period has passed; if successful, it can continue using the address. If the lease expires, the address is released and must be reacquired.
+
+## When to Use Fixed IP vs. DHCP
+
+| Use Case | Recommendation |
+| --- | --- |
+| General PCs, smartphones | DHCP (automatic) |
+| Servers, printers | Fixed IP (needs a constant address) |
+| Network equipment | Fixed IP |
+
+## DHCP Security Issues
+
+Exploiting DHCP's mechanism allows for DHCP spoofing attacks, where a rogue DHCP server distributes false information. As a countermeasure, enable DHCP snooping on switches to allow only legitimate DHCP servers.
+
+## Key Points for the IT Passport Exam
+
+The exam frequently tests DHCP's purpose (automatic IP address assignment), the types of information assigned, the order of the DORA flow, and when to use fixed IP vs. DHCP. Master these basics.
+
+### Typical Past Exam Question Patterns
+
+- "Which protocol automatically assigns IP addresses?" → DHCP
+- "Which of the following is NOT information assigned by DHCP?"
+
+## Related Terms
+
+- TCP/IP Protocol ([TCP/IP Protocol Basics](/blog/tcp-ip))
+- DNS Name Resolution ([How DNS Works](/blog/dns-toha))
+- VPN ([What is VPN](/blog/vpn-toha))
+
+## Study Tips
+
+Memorize DHCP's role in one line: "dynamically distributes IP addresses." Repeat the DORA sequence out loud to lock it in memory. Understand the distinction: use fixed IP for devices like servers and printers that always need the same address, and DHCP for everything else.
+
+## Summary
+
+If you grasp DHCP's purpose, the DORA flow, and the information it distributes, you can reliably score points on related questions. For comprehensive practice in the Technology domain, check out the [Technology Summary](/category/technology), or use the [Practice Exam](/exam) for full-length simulation.

@@ -1,0 +1,94 @@
+---
+title: "Types of Cyber Attacks Summary: Malware, Ransomware, and Targeted Attacks Organized for the IT Passport Exam"
+description: "Organizes the types of cyber attacks and countermeasures tested on the IT Passport exam, including ransomware, targeted attacks, SQL injection, XSS, phishing, and DoS."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## Why Learn the Types of Attacks
+
+In the past five years (2021–2025), the IT Passport exam has included 43 security-related questions. This area is the most frequently tested, and if you can identify attack names along with their purposes and countermeasures as a set, you can handle many questions. Test takers should prioritize mastering this field.
+
+## Types of Malware
+
+### Virus
+
+A virus infects by attaching itself to existing files and begins its activity when executed. When an infected file is opened, it spreads to other files, so caution is necessary.
+
+### Worm
+
+A worm self-replicates and spreads autonomously over a network. Since it does not require a host file, its infection progresses very quickly.
+
+### Trojan Horse
+
+A Trojan horse disguises itself as legitimate software to infiltrate a system. It actually operates for purposes like remote control or information theft, and its inconspicuous nature makes it dangerous.
+
+### Ransomware
+
+Ransomware encrypts files and demands a ransom in exchange for decryption. This has appeared in 3 questions over the past five years, and since the WannaCry incident in 2017, corporate damage has become severe. Because recovering encrypted data is difficult, preemptive backups are crucial.
+
+### Spyware / Keylogger
+
+Spyware and keyloggers eavesdrop on user operations and keystrokes, then send the data externally. Since personal information and passwords are targeted, countermeasures with security software are necessary.
+
+## Attacks Targeting Communication Paths
+
+### Targeted Attack (APT)
+
+A targeted attack is an advanced method that focuses on a specific organization over a long period. It infiltrates via email attachments or zero-day vulnerabilities and is extremely difficult to detect. The core countermeasure is defense in depth, as no single defense can fully prevent it.
+
+### Man-in-the-Middle Attack (MITM)
+
+A man-in-the-middle attack intercepts the communication path to eavesdrop on or tamper with data. Using HTTPS or VPNs encrypts the communication and helps prevent this attack.
+
+### DoS / DDoS Attack
+
+DoS and DDoS attacks overwhelm a service with a massive number of requests, causing it to stop. Introducing a CDN or WAF to distribute and filter traffic can serve as a countermeasure.
+
+## Attacks on Web Applications
+
+### SQL Injection
+
+SQL injection is an attack that embeds SQL statements into input values to manipulate the database illegally. Effective countermeasures include using placeholders and escaping input values, with [WAF](/blog/firewall-toha) also used as a supplementary measure.
+
+### Cross-Site Scripting (XSS)
+
+Cross-site scripting is an attack that injects malicious JavaScript into a web page, causing it to execute in other users' browsers. Applying HTML escaping and CSP (Content Security Policy) are effective countermeasures.
+
+### CSRF (Cross-Site Request Forgery)
+
+CSRF is an attack that forces a logged-in user to execute unintended actions. Introducing token authentication can prevent unauthorized requests.
+
+## Social Engineering
+
+### Phishing
+
+Phishing is a method that steals authentication information using fake emails or websites that impersonate legitimate services. Variants include spear phishing (targeting individuals) and business email compromise (BEC).
+
+### Shoulder Surfing
+
+Shoulder surfing is a classic method of peeking at a screen over someone's shoulder while they are typing. Physical countermeasures include using screen filters and being aware of your surroundings.
+
+## Key Points on the IT Passport Exam
+
+Matching attack names with their descriptions is the most common question type, and you should aim to secure these points reliably. Important countermeasures for each attack include encryption, enhanced authentication, WAF, and education. Additionally, understanding concepts like zero trust and defense in depth is necessary.
+
+### Typical Past Exam Question Patterns
+
+- "Which attack encrypts files and demands a ransom?" type → Ransomware
+- "Which attack targets a specific organization over a long period?" type → Targeted attack
+
+## Related Terms
+
+- How to use defense devices ([Firewall, WAF, IDS/IPS](/blog/firewall-toha))
+- Encryption and SSL/TLS ([Basics of Encryption](/blog/encryption-basics))
+- Authentication and Authorization ([Difference Between Authentication and Authorization](/blog/auth-vs-authz))
+
+## Study Tips
+
+Creating a table with three columns—attack name, target, and countermeasure—makes it easier to organize. Categorize attacks into four groups: malware, communication path targeting, web application targeting, and social engineering. It is important to clearly distinguish between similar names (e.g., XSS and CSRF).
+
+## Summary
+
+If you learn attack classifications and countermeasures as a set, you can reliably score points on frequently tested security questions. For comprehensive practice on the Technology domain, use the [Technology Summary](/category/technology), and for full-length practice, use the [Mock Exam](/exam).

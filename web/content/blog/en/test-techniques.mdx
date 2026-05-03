@@ -1,0 +1,62 @@
+---
+title: "Testing Techniques: White Box, Black Box, and Test Levels Organized for the IT Passport Exam"
+description: "Organizes white box testing, black box testing, the four test levels (unit, integration, system, acceptance), and regression testing for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Management", "Testing"]
+cover: null
+---
+
+## Two Major Categories of Testing Techniques
+
+### White Box Testing
+
+White box testing creates test cases by focusing on the program's **internal structure**. The goal is to verify "which branches are taken" and "whether all lines are executed." Coverage metrics include statement coverage, branch coverage, and condition coverage. This technique is mainly used in **unit testing (module testing)**.
+
+### Black Box Testing
+
+Black box testing examines only the **relationship between inputs and outputs** without looking at the program's internals. It is a technique to verify whether the software behaves according to specifications. Major methods include equivalence partitioning, boundary value analysis, and decision tables. Equivalence partitioning groups inputs that produce the same behavior, while boundary value analysis tests at boundary values (e.g., 0, 1, maximum values). Decision tables systematically cover combinations of conditions using a table format.
+
+## Test Levels (V-Model)
+
+| Test Level | Corresponding Design Phase | Description |
+| --- | --- | --- |
+| Unit Testing | Detailed Design | Verifies individual module behavior |
+| Integration Testing | Basic Design | Verifies inter-module cooperation |
+| System Testing | Requirements Definition | Verifies overall system behavior |
+| Acceptance Testing | Business Requirements | User verifies business suitability |
+
+## Other Important Tests
+
+### Regression Testing
+
+Regression testing checks the **impact on existing functionality** after modifications. It is often automated in CI/CD, as explained in detail in [What is DevOps](/blog/devops-toha).
+
+### Load Testing and Performance Testing
+
+Load testing and performance testing verify response times and processing capacity under high traffic.
+
+### Acceptance Testing
+
+Acceptance testing is the final phase where users confirm business suitability. Passing this stage leads to the production release.
+
+## Key Points for the IT Passport Exam
+
+Be sure to grasp the difference in perspective between white box and black box testing. Also important are concrete examples of equivalence partitioning and boundary value analysis, as well as the four test levels and their corresponding design phases.
+
+### Typical Past Exam Question Patterns
+
+- "Which testing technique examines the internal structure of a program?" → White box
+- "Which testing technique selects boundary values?" → Boundary value analysis
+
+## Related Terms
+
+- System development process ([Flow of System Development Process](/blog/sdlc-process))
+- Automated testing in DevOps ([What is DevOps](/blog/devops-toha))
+
+## Study Tips
+
+Memorize by contrasting verbs: white box testing focuses on internal structure, while black box testing focuses on input/output. Memorize the three black box techniques as a set: "equivalence partitioning, boundary value analysis, decision table." Diagramming the V-model correspondences (requirements ↔ acceptance, basic design ↔ integration, etc.) is an effective study method.
+
+## Summary
+
+By mastering the two major categories, the V-model correspondences, and regression testing, you can reliably score points on testing technique questions. For comprehensive practice in the Management domain, visit [Management Summary](/category/management); for a full exam simulation, use the [Mock Exam](/exam).

@@ -1,0 +1,67 @@
+---
+title: "What Is Zero Trust Architecture? Differences from Traditional Perimeter Defense, Organized for the IT Passport Exam"
+description: "Organized for the IT Passport exam: the basic principles of Zero Trust, differences from traditional perimeter defense, and its relationship with SASE and SD-WAN."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## What Is Zero Trust?
+
+The basic principle of Zero Trust is "Never Trust, Always Verify." This concept was proposed by Forrester Research in 2010. Later, with the spread of telework during the COVID-19 pandemic in 2020, its prominence surged.
+
+## Why Traditional Perimeter Defense Is Insufficient
+
+### Traditional: Perimeter Defense Model
+
+The traditional perimeter defense model was based on the premise that "inside the company is trusted, outside is dangerous." It assumed that by protecting the perimeter with a firewall, the internal network was safe, and that accessing from outside via VPN granted the same trusted status as being inside.
+
+### Limitations of Perimeter Defense
+
+However, with the use of cloud services, the boundary of "inside the company" has become blurred. The spread of telework and BYOD has increased cases where devices exist outside the perimeter, and numerous incidents have been reported where internal threats or targeted attacks breached the perimeter.
+
+## Main Principles of Zero Trust
+
+There are five main principles of Zero Trust. First, verify all access based on location, device, and time. Second, apply the principle of least privilege, granting only the minimum necessary access rights. Third, dynamically evaluate permissions based on risk. Fourth, ensure all communications are encrypted. Fifth, log all access and strengthen monitoring.
+
+## Technologies That Realize Zero Trust
+
+### IAM (Identity and Access Management)
+
+IAM centrally manages user authentication and authorization. Thorough implementation of MFA (Multi-Factor Authentication) is especially important. For more on the difference between authentication and authorization, see [Authentication vs. Authorization](/blog/auth-vs-authz).
+
+### EDR / XDR
+
+EDR (Endpoint Detection and Response) and XDR are technologies that detect threats on endpoints or across the entire system. This enables early detection of anomalous behavior.
+
+### Micro-Segmentation
+
+Micro-segmentation divides the network into fine-grained segments and controls connections based on the principle of least privilege. This limits the blast radius in the event of a breach.
+
+### SASE (Secure Access Service Edge)
+
+SASE (Secure Access Service Edge) is an architecture that integrates network and security functions into a unified cloud-delivered service. This enables secure access independent of location.
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, the "Never Trust, Always Verify" principle appears frequently. It is also important to understand the differences from traditional perimeter defense. Questions often cover the thorough implementation of multi-factor authentication and the necessity of Zero Trust in the telework era.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following correctly describes the Zero Trust concept?" type
+- "Which of the following is a difference from traditional perimeter defense?" type
+
+## Related Terms
+
+- Relationship with VPN ([What is VPN?](/blog/vpn-toha))
+- Firewall ([Firewall, WAF, IDS/IPS](/blog/firewall-toha))
+- Authentication and Authorization ([Authentication vs. Authorization](/blog/auth-vs-authz))
+- Cyber Attacks ([Summary of Cyber Attack Types](/blog/cyber-attacks))
+
+## Study Tips
+
+As a study tip, first memorize the one-line principle: "Never Trust, Always Verify." Next, understand the background of the shift from perimeter defense to Zero Trust, specifically the spread of cloud and telework. Finally, keep in mind that least privilege and multi-factor authentication are essential elements.
+
+## Summary
+
+By mastering the principles of Zero Trust, its contrast with perimeter defense, and the technologies that realize it, you can reliably score points on related questions. For comprehensive practice on the Technology domain, see the [Technology Summary](/category/technology). To solve exam-format questions, using the [Practice Exam](/exam) is recommended.

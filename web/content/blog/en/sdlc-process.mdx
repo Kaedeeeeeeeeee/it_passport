@@ -1,0 +1,71 @@
+---
+title: "The Flow of System Development Phases: From Requirements Definition to Operations and Maintenance, Organized for the IT Passport Exam"
+description: "Organized for the IT Passport exam, this post covers the roles and deliverables of each phase in the software development lifecycle (requirements definition, basic design, detailed design, implementation, testing, operations and maintenance)."
+date: "2026-04-27"
+tags: ["IT Passport", "Management", "System Development"]
+cover: null
+---
+
+## The 6 Phases of System Development
+
+| Phase | Main Deliverables | Responsible Party |
+| --- | --- | --- |
+| 1. Requirements Definition | Requirements Definition Document | User + Vendor |
+| 2. Basic Design (External Design) | Basic Design Document, Screen Design Document | Vendor + User Review |
+| 3. Detailed Design (Internal Design) | Detailed Design Document, Database Design Document | Vendor |
+| 4. Implementation (Programming) | Source Code | Vendor |
+| 5. Testing | Test Plan, Test Report | Vendor + User |
+| 6. Operations and Maintenance | Operations Manual, Maintenance Records | Operations Vendor |
+
+## Overview of Each Phase
+
+### Requirements Definition
+
+In the requirements definition phase, the user's business requirements and system requirements are organized. This phase determines "what to build" and is said to be the area of greatest risk for failure. Based on business requirements, functional requirements and non-functional requirements (performance, availability, security, etc.) are clarified.
+
+### Basic Design (External Design)
+
+In basic design (external design), the parts visible to the user—such as screens, forms, and data items—are designed. It is important to obtain agreement on the design content through user review; any discrepancies in understanding here can lead to significant rework in later phases.
+
+### Detailed Design (Internal Design)
+
+In detailed design (internal design), the specifics of internal processing, module partitioning, and database table definitions are carried out. The work is broken down to a granularity where programmers can write code and compiled into a detailed design document.
+
+### Implementation (Programming)
+
+In the implementation phase, coding is performed based on the detailed design document. Code reviews and adherence to coding standards are essential for ensuring quality.
+
+### Testing
+
+The testing phase consists of unit testing, integration testing, system testing, and acceptance testing. In the V-model, design and testing have a corresponding relationship; for example, requirements definition corresponds to acceptance testing.
+
+### Operations and Maintenance
+
+In the operations and maintenance phase, fault handling, feature additions, and performance improvements are carried out. The system is continuously improved in coordination with ITIL service management ([What is ITIL](/blog/itil-toha)).
+
+## Types of Development Models
+
+There are several types of development models. The waterfall model proceeds through the above phases sequentially and is characterized by high rework costs. The agile model develops iteratively in short cycles (detailed in [Agile Development and Scrum](/blog/agile-scrum)). The prototyping model creates and evaluates a prototype early on. The spiral model develops incrementally from parts where requirements are unclear.
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, questions asking about the correspondence between the names of each phase and their deliverables are common. It is especially important to understand the V-model correspondences and the importance of requirements definition.
+
+### Typical Past Exam Question Patterns
+
+- "Which is the deliverable created in the requirements definition phase?" type
+- "Which design phase corresponds to user acceptance testing?" type → Requirements definition
+
+## Related Terms
+
+- Waterfall and Agile ([Agile Development and Scrum](/blog/agile-scrum))
+- PMBOK / WBS ([PMBOK, WBS, and Gantt Charts](/blog/pmbok-wbs))
+- ITIL Operations Phase ([What is ITIL](/blog/itil-toha))
+
+## Study Tips
+
+Memorize the 6 phases of system development in order: requirements definition, basic design, detailed design, implementation, testing, and operations and maintenance. It is effective to learn the correspondence between each phase and its deliverables using a table. In the V-model, keep in mind that upstream design and downstream testing have a symmetrical relationship.
+
+## Summary
+
+If you grasp the order and deliverables of the 6 system development phases, as well as the V-model correspondences, you can score points on development phase-related questions. For comprehensive practice on the Management domain, please use the [Management Summary](/category/management), and for full-length practice, try the [Mock Exam](/exam).

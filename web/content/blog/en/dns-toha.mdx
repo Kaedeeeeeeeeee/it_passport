@@ -1,0 +1,70 @@
+---
+title: "How DNS (Domain Name System) Works｜IT Passport Exam Prep"
+description: "A breakdown of DNS hierarchical structure, name resolution flow, record types (A, MX, CNAME), and DNS caching, organized for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Networking"]
+cover: null
+---
+
+## What is DNS?
+
+DNS (Domain Name System) is a mechanism that converts domain names (e.g., example.com) into IP addresses (e.g., 192.0.2.1) and vice versa. Often called the phonebook of the internet, this communication uses port number 53.
+
+## Hierarchical Structure of Domain Names
+
+```
+www.example.com.
+└─→ Root (.)
+    └─→ TLD (com)
+        └─→ Domain (example)
+            └─→ Subdomain (www)
+```
+
+The hierarchy of a domain name is read from right to left. Top-level domains (TLDs) include .com, .jp, .net, .org, and so on, followed by the domain name and subdomains beneath them.
+
+## Name Resolution Flow
+
+When www.example.com is entered into a browser, it first checks the local DNS cache. If a cache entry exists, that IP address is used. If not, it queries the ISP's DNS resolver. The resolver then queries the root DNS, TLD DNS, and authoritative DNS in order, finally obtaining the IP address and returning it to the browser.
+
+## Types of DNS Records
+
+| Record | Purpose | Example |
+| --- | --- | --- |
+| A | Domain → IPv4 address | example.com → 192.0.2.1 |
+| AAAA | Domain → IPv6 address | example.com → 2001:db8::1 |
+| MX | Mail server specification | mail.example.com |
+| CNAME | Alias (canonical name) | www → example.com |
+| NS | Authoritative DNS server | dns.example.com |
+| TXT | Arbitrary text | SPF, DKIM settings |
+
+## DNS Caching
+
+DNS caching is a mechanism that stores the results of past queries for a certain period of time (TTL). This reduces the load on DNS servers and speeds up name resolution. However, there is also a risk of returning outdated information.
+
+## DNS Security Issues
+
+DNS cache poisoning is an attack that injects false responses to redirect users to malicious sites. DNSSEC is a countermeasure that uses digital signatures to verify authenticity.
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, the role of DNS (converting domain names and IP addresses), hierarchical structure and TLDs, the name resolution flow, and record types (especially A, MX, and CNAME) are frequently tested. Be sure to master these points.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following correctly describes the role of DNS?" type
+- "Which DNS record specifies a mail server?" type → MX
+
+## Related Terms
+
+- TCP/IP protocol ([Basics of TCP/IP Protocol](/blog/tcp-ip))
+- HTTP/HTTPS ([How HTTP/HTTPS Works](/blog/http-https))
+- DHCP ([DHCP and Automatic IP Address Assignment](/blog/dhcp-toha))
+- Cyber attacks ([Summary of Cyber Attack Types](/blog/cyber-attacks))
+
+## Study Tips
+
+When learning DNS, start with the single line "conversion between domain and IP." Drawing the name resolution flow with arrows will deepen your understanding. Remember records by their purpose: A records for IPv4, MX records for mail, and so on.
+
+## Summary
+
+If you grasp the role of DNS, the name resolution flow, and the main record types, you can reliably score points on related questions. For comprehensive practice in the Technology domain, check out the [Technology Summary](/category/technology); for full-length practice, head to the [Practice Exam](/exam).

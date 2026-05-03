@@ -1,0 +1,72 @@
+---
+title: "What is MLOps? Organizing Machine Learning Model Operations Automation for the IT Passport Exam"
+description: "Organizes the concept of MLOps (Machine Learning Operations), its differences from DevOps, data and model management, A/B testing, etc., for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "AI"]
+cover: null
+---
+
+## What is MLOps?
+
+MLOps (Machine Learning Operations) is a methodology for automating and streamlining everything from machine learning model development to operations. It spread around 2018 as the machine learning version of DevOps. It was created to solve the problem that even though machine learning research advances, practical operation is difficult.
+
+## Why MLOps is Necessary
+
+### Challenges Unique to Machine Learning
+
+Machine learning has unique challenges. Data drift, where data trends change over time and model accuracy decreases, is a problem. Additionally, periodic model retraining is necessary. To reproduce the same results, all data, code, and the environment must be recorded. A/B testing is used to compare new and old models.
+
+## Main Components of MLOps
+
+### Data Management
+
+In data management, data version control using tools like DVC and data pipelines that automatically collect and preprocess data are important (see [NoSQL and Big Data](/blog/nosql-bigdata)).
+
+### Model Management
+
+Model management uses a model registry to store and version trained models, and model metadata to record accuracy, training conditions, and datasets.
+
+### Deployment and Operations
+
+Deployment and operations involve model serving, which exposes models as APIs; A/B testing, which compares new and old models in a production environment; and monitoring to detect accuracy degradation (drift).
+
+### Retraining
+
+Retraining is executed automatically on a regular schedule or when drift is detected.
+
+## Differences Between DevOps and MLOps
+
+| Aspect | DevOps | MLOps |
+| --- | --- | --- |
+| Target | Application code | Data, model, code |
+| Version control | Code only | Code + data + model |
+| Testing | Unit, integration | + Data quality, model accuracy |
+| Reproducibility | Relatively easy | Difficult due to data and randomness |
+| Monitoring | Uptime, errors | + Model accuracy, data drift |
+
+## Representative Tools
+
+Representative tools include MLflow for experiment management and model registry, Kubeflow for ML pipelines on Kubernetes, Weights & Biases for experiment tracking, and cloud ML platforms like Vertex AI and Amazon SageMaker. These tools support each stage of MLOps.
+
+## Key Points for the IT Passport Exam
+
+In the IT Passport exam, the purpose of MLOps (automating ML operations), differences from DevOps, data drift and model retraining, and A/B testing are frequently tested. Focus your study on these points.
+
+### Typical Patterns in Past Exam Questions
+
+- "Which is the methodology for automating the operation of machine learning models?" type → MLOps
+- "Which is the change in data trends that causes a decrease in model accuracy?" type → Data drift
+
+## Related Terms
+
+- AI and Machine Learning ([Basics of AI and Machine Learning](/blog/ai-ml-basics))
+- DevOps ([What is DevOps](/blog/devops-toha))
+- Data Science ([Data Science and Data Engineering](/blog/data-science-engineering))
+
+## Study Tips
+
+Remember MLOps concisely as "DevOps + data and model management." Understanding the concept of data drift and grasping the four main components (data management, model management, deployment, retraining) is effective.
+
+## Summary
+
+If you grasp the purpose of MLOps, its differences from DevOps, and its main components, you can reliably score points on related questions. For comprehensive practice in the Technology domain, proceed to [Technology Summary](/category/technology); for a full-length practice test, go to [Mock Exam](/exam).

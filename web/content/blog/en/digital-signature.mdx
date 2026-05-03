@@ -1,0 +1,50 @@
+---
+title: "How Digital Signatures and Timestamps Work | IT Passport Exam Prep"
+description: "A clear breakdown of digital signatures (electronic signatures), the role of timestamps, and the relationship between PKI and Certificate Authorities (CA) as tested on the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Security"]
+cover: null
+---
+
+## What Is a Digital Signature? (In a Nutshell)
+
+A digital signature is a mechanism that proves the sender's identity and that the content of an electronic document has not been tampered with. It is the digital equivalent of a seal or signature in the paper world, but differs in that it is rigorously guaranteed by cryptographic technology. This signature is realized by combining public-key cryptography and hash functions. For prerequisite knowledge, see [Encryption Basics](/blog/encryption-basics).
+
+## The Flow of Signing and Verification
+
+On the sender's side, a hash value of the document is first calculated and then encrypted with the sender's private key. This encrypted data is the digital signature. On the receiver's side, the signature is decrypted using the sender's public key, and the result is checked against a hash value calculated from the received document. If the two match, it proves that the document was sent by the legitimate sender and has not been tampered with.
+
+## What Digital Signatures Guarantee (Frequently Tested)
+
+Digital signatures guarantee two things: authenticity (identity) and integrity (tamper detection). You can confirm that the sender is indeed who they claim to be and that the document has not been altered in transit. However, note that confidentiality is not guaranteed. Because the signature can be verified by anyone, the content of the document itself is not hidden. If confidentiality is required, separate encryption must be used.
+
+## PKI (Public Key Infrastructure) and Certificate Authorities (CA)
+
+The mechanism that answers the question, "Is this public key really Yamada-san's?" is PKI (Public Key Infrastructure). A Certificate Authority (CA) is a trusted third party that issues digital certificates linking a public key to an individual's identity. CAs form a hierarchical structure from a root CA to intermediate CAs and end-user certificates. This chain of trust ensures the validity of public keys.
+
+## Timestamps
+
+A timestamp is a mechanism that proves a specific document existed at a particular point in time. A Time-Stamping Authority (TSA) adds time information to the document's hash value and signs it. When combined with a digital signature, you have all three elements: "who" (the sender), "what" (no tampering), and "when" (the creation time). This mechanism is essential for meeting the requirements of electronic contracts and the Electronic Bookkeeping Act.
+
+## Key Points for the IT Passport Exam
+
+A frequently tested trick question is that confidentiality is not included among the items guaranteed by a digital signature. The role of Certificate Authorities (CA) and the purpose of timestamps (proof of existence at a specific time) are also commonly asked. Additionally, how these technologies are used in electronic contract services is within the exam scope.
+
+### Typical Past Exam Question Patterns
+
+- "Which of the following can be confirmed with a digital signature?" type
+- "Which of the following correctly describes the role of a Certificate Authority?" type
+
+## Related Terms
+
+- Basics of public keys, symmetric keys, and hashes ([Encryption Basics](/blog/encryption-basics))
+- The difference between authentication and authorization ([Authentication vs. Authorization](/blog/auth-vs-authz))
+- Blockchain is also based on signature technology ([What is Blockchain?](/blog/blockchain-toha))
+
+## Study Tips
+
+Be careful not to get the direction wrong: "sign with the private key, verify with the public key." It's helpful to be able to summarize in one sentence that the guarantees are authenticity and integrity, while confidentiality is ensured by a separate technology. Remember that timestamps are simply a mechanism for adding "time," and their purpose differs from that of digital signatures.
+
+## Summary
+
+By organizing the flow and scope of digital signatures, as well as the roles of CAs and TSAs, you can reliably score points on related questions. For comprehensive practice in the Technology domain, the [Technology Summary](/category/technology) is useful. You can experience a full-length mock exam with the [Practice Exam](/exam).

@@ -1,0 +1,69 @@
+---
+title: "Complement Representation and Floating Point | IT Passport Exam Prep"
+description: "A summary of internal computer number representation (negative numbers using two's complement, IEEE 754 floating-point format) for the IT Passport exam."
+date: "2026-04-27"
+tags: ["IT Passport", "Technology", "Computer Basics"]
+cover: null
+---
+
+## Why Use Complements?
+
+Inside a computer, all numbers are represented only as bit strings of 0s and 1s, so a minus sign cannot be used. A special mechanism is needed to represent negative numbers. The widely used solution is complement representation. Using complement representation also offers the advantage that addition and subtraction can be processed by the same circuit.
+
+## One's Complement and Two's Complement
+
+### One's Complement
+
+One's complement is a method of representing negative numbers by inverting all bits (0 becomes 1, 1 becomes 0). For example, in 4 bits, the one's complement of 5 (0101) is 1010. However, this method has the drawback that zero has two representations: +0 (0000) and -0 (1111).
+
+### Two's Complement (Widely Used)
+
+Two's complement is defined as the one's complement plus 1. In this method, zero has a single, unified representation, and addition and subtraction can be processed by the same circuit, making it the standard in modern computers.
+
+## Representing Negative Numbers with Two's Complement
+
+Let's look at the procedure for representing -5 in 4 bits. First, represent +5 as 0101. Next, invert all bits to get 1010 (one's complement). Finally, add 1 to get 1011, which is the two's complement representation of -5. As a check, calculating 5 + (-5) gives 0101 + 1011 = 10000; discarding the 5th bit leaves 0000 = 0, confirming it is correct.
+
+## Range Representable with n Bits
+
+Unsigned integers can represent from 0 to 2ⁿ - 1. Signed integers (two's complement) can represent from -2ⁿ⁻¹ to 2ⁿ⁻¹ - 1, so with 8 bits, values from -128 to +127 are possible.
+
+## Floating-Point Notation
+
+Floating-point notation represents numbers using a sign, a mantissa (significand), and an exponent, in the form "sign × mantissa × 2^exponent." It efficiently handles very large and very small numbers and is widely used in scientific and technical computing. The IEEE 754 standard is adopted as the norm.
+
+### IEEE 754 Single Precision (32 bits)
+
+| Part | Bits | Description |
+| --- | --- | --- |
+| Sign | 1 | + or - |
+| Exponent | 8 | Represented with bias |
+| Mantissa | 23 | Value after the decimal point |
+
+Double precision (64 bits) uses 11 bits for the exponent and 52 bits for the mantissa, offering a wider range and higher precision. The advantage of floating-point is its ability to handle a wide numeric range, but a disadvantage is the potential for errors.
+
+## Floating-Point Errors
+
+Rounding errors occur when approximating numbers that cannot be represented exactly. Loss of significance (catastrophic cancellation) is a phenomenon where subtracting two very close values reduces the number of significant digits. Information loss (absorption) occurs when adding a very large number and a very small number, causing the smaller value to be ignored.
+
+## Key Points for the IT Passport Exam
+
+The procedure for representing negative numbers using two's complement is a frequent topic. You also need to master calculating the range representable with n bits, the difference between floating-point and fixed-point numbers, and the types of errors that occur in floating-point arithmetic.
+
+### Typical Past Exam Question Patterns
+
+- "What is the 8-bit two's complement representation of -1?" type → 11111111
+- "Which of the following is an error that occurs in floating-point arithmetic?" type
+
+## Related Terms
+
+- Number Base Conversion and Logic Operations ([Binary, Hexadecimal, and Logic Operations](/blog/binary-logic))
+- CPU and Memory ([Differences Between CPU, Memory, and Storage](/blog/cpu-memory-storage))
+
+## Study Tips
+
+Practice the two's complement procedure "bit inversion → +1" out loud repeatedly so you can calculate quickly during the actual exam. Memorizing the 8-bit range (-128 to +127) is handy. For error types, remember the set of three: "rounding error, loss of significance, information loss."
+
+## Summary
+
+If you thoroughly understand the three points—the two's complement calculation procedure, the range representable with n bits, and floating-point errors—you can consistently score points on related questions. To systematically study the Technology domain, use the [Technology Summary](/category/technology); to practice in an exam-like format, try the [Practice Exam](/exam).
