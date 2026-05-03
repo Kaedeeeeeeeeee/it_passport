@@ -8,6 +8,7 @@ import {
 import { Noto_Sans_JP, Noto_Serif_JP, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SubscribeModalProvider } from "@/components/subscribe/SubscribeModal";
 import { routing, type Locale } from "@/i18n/routing";
 import { HTML_LANG, OG_LOCALE, SITE_URL } from "@/lib/seo";
 
@@ -139,7 +140,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <JsonLd data={websiteSchema} />
         <JsonLd data={organizationSchema} />
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <SubscribeModalProvider>{children}</SubscribeModalProvider>
         </NextIntlClientProvider>
       </body>
     </html>
