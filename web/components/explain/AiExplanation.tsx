@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { Markdown } from "@/components/md/Markdown";
 import { useSubscribeModal } from "@/components/subscribe/SubscribeModal";
 import { track } from "@/lib/analytics";
 import type { ChoiceLetter } from "@/lib/types";
@@ -64,9 +65,9 @@ export function AiExplanation({
 
   if (state.kind === "ready") {
     return (
-      <div className="rounded-[var(--radius)] border border-line bg-surface p-4 text-[13px] leading-[1.85] text-ink-2 whitespace-pre-wrap">
+      <div className="rounded-[var(--radius)] border border-line bg-surface p-4 text-[13px] leading-[1.85] text-ink-2">
         <div className="t-label mb-2">{t("title")}</div>
-        {state.text}
+        <Markdown>{state.text}</Markdown>
       </div>
     );
   }
