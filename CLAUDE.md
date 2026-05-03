@@ -131,15 +131,30 @@ On Vercel/CI it falls back to the committed copy under `web/data/`.
 
 ## Deploy
 
+**Production deploys are wired to `git push origin main`.** Vercel
+watches the GitHub repo and rebuilds automatically — there's no need
+to run `vercel deploy` by hand. Pushing iOS-only changes also fires a
+build; if you want to skip it, use `[skip ci]` (or just don't push
+those commits with web changes).
+
 ```bash
-cd web
-vercel deploy --prod --yes --scope=zhangs-projects-a5619c97
-# wait for "readyState": "READY" — production domain is https://passnote.app
-# (vercel.app subdomain also serves the deploy but canonicalizes to passnote.app)
+git push origin main
+# Vercel build kicks off automatically — watch progress at
+#   https://vercel.com/zhangs-projects-a5619c97/it-passport
+# Production domain is https://passnote.app (the *.vercel.app
+# subdomain also serves the deploy but canonicalizes to passnote.app).
 ```
 
-GitHub auto-deploy is **not** wired yet — every prod deploy is manual
-via CLI right now. To enable: link the repo in Vercel Dashboard.
+CLI deploy from the repo root does work as a fallback, **but** the
+upload bundle includes the gitignored `dataset/` directory which
+triggers `rsync` calls in `web/scripts/sync-dataset.sh` — Vercel build
+containers don't have rsync, so the build exits 127. Auto-deploy
+sidesteps this because it only sees what's in git, and the script
+exits 0 cleanly when `../dataset/` is missing.
+
+If you must deploy via CLI: either install `rsync` handling/fallback
+in the script, or run the deploy from a tree that doesn't include
+`dataset/` at the top level (e.g. a fresh clone).
 
 ## Operational gotchas (learn-the-hard-way notes)
 
@@ -194,8 +209,10 @@ debugging similar weirdness.
 
 ## What's still manual / unfinished
 
-- **GitHub → Vercel auto-deploy**: not connected. Every prod ship is
-  `vercel deploy --prod --yes --scope=...`.
+- **GitHub → Vercel auto-deploy**: ✅ done. `git push origin main`
+  triggers a production build automatically (configured in the Vercel
+  Dashboard's Git integration). See the Deploy section above for the
+  rsync gotcha if you ever fall back to CLI deploy.
 - **Custom domain**: ✅ done. `passnote.app` is the production domain
   (`NEXT_PUBLIC_SITE_URL=https://passnote.app` on Vercel). The
   `*.vercel.app` subdomain still serves the same deploy but every page

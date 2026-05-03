@@ -29,3 +29,4 @@ build/
 # Don't commit .p8 or .pem keys that may end up next to the project
 *.p8
 *.pem
+.vercel
